@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sweetalertv2/sweetalertv2.dart';
+import 'package:easy_localization/easy_localization.dart';
 
+import '../translations/locale_keys.g.dart';
 import '../widgets/show_list.dart';
 import '../widgets/filter_list.dart';
 import '../widgets/search_box.dart';
@@ -22,12 +24,12 @@ class _ComplaintManagementScreenState extends State<ComplaintManagementScreen> {
   var _init = true;
   String _crit = "NA";
   final String _listType = "complaints";
-  final List _filters = const [
-    'My Complaints',
-    'Pending',
-    'Approved',
-    'Rejected',
-    'All'
+  final List _filters = [
+    LocaleKeys.my_complaints.tr(),
+    LocaleKeys.pending.tr(),
+    LocaleKeys.approved.tr(),
+    LocaleKeys.rejected.tr(),
+    LocaleKeys.all.tr()
   ];
   var _selectedIndex = 1;
   void _filterData(index) {
@@ -56,9 +58,8 @@ class _ComplaintManagementScreenState extends State<ComplaintManagementScreen> {
           srcCmpno: srcCmpno, inclUndr: inclUndr);
     } else {
       SweetAlertV2.show(context,
-          title: "Error",
-          subtitle:
-              "Please enter complaint number and select search under criteria.",
+          title: LocaleKeys.error.tr(),
+          subtitle: LocaleKeys.please_enter_compl.tr(),
           style: SweetAlertV2Style.error);
     }
   }
@@ -87,7 +88,7 @@ class _ComplaintManagementScreenState extends State<ComplaintManagementScreen> {
       });
       if (response['Result'] != "OK") {
         SweetAlertV2.show(context,
-            title: "Error",
+            title: LocaleKeys.error.tr(),
             subtitle: response['Msg'],
             style: SweetAlertV2Style.error);
       }
@@ -98,8 +99,8 @@ class _ComplaintManagementScreenState extends State<ComplaintManagementScreen> {
       print("Error ===> $error");
       if (error != null) {
         SweetAlertV2.show(context,
-            title: "Error",
-            subtitle: "Error while loading registered users.",
+            title: LocaleKeys.error.tr(),
+            subtitle: LocaleKeys.error_while_loading_reg.tr(),
             style: SweetAlertV2Style.error);
       }
     }
@@ -128,7 +129,7 @@ class _ComplaintManagementScreenState extends State<ComplaintManagementScreen> {
         elevation: 0,
         centerTitle: true,
         title: Text(
-          'Complaint Management',
+          LocaleKeys.complt_mngmnt.tr(),
         ),
         actions: [
           IconButton(

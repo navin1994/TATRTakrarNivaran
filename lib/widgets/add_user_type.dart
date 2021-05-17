@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
+
+import '../translations/locale_keys.g.dart';
 
 class AddUserType extends StatefulWidget {
   @override
@@ -20,7 +23,7 @@ class _AddUserTypeState extends State<AddUserType> {
             ),
             Center(
               child: Text(
-                'User Type Form',
+                LocaleKeys.user_type_form.tr(),
                 style: TextStyle(fontSize: 18),
               ),
             ),
@@ -28,11 +31,12 @@ class _AddUserTypeState extends State<AddUserType> {
               padding: EdgeInsets.symmetric(horizontal: 14),
               child: TextFormField(
                 keyboardType: TextInputType.text,
-                decoration: InputDecoration(labelText: "User type"),
+                decoration:
+                    InputDecoration(labelText: LocaleKeys.user_type.tr()),
                 onSaved: (userType) {},
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Please enter user type';
+                    return LocaleKeys.please_enter_user_type.tr();
                   }
                   return null;
                 },
@@ -45,11 +49,12 @@ class _AddUserTypeState extends State<AddUserType> {
               padding: EdgeInsets.symmetric(horizontal: 14),
               child: TextFormField(
                 keyboardType: TextInputType.text,
-                decoration: InputDecoration(labelText: "User level"),
+                decoration:
+                    InputDecoration(labelText: LocaleKeys.user_level.tr()),
                 onSaved: (userType) {},
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Please enter user level';
+                    return LocaleKeys.please_enter_user_level.tr();
                   }
                   return null;
                 },
@@ -65,7 +70,7 @@ class _AddUserTypeState extends State<AddUserType> {
                   onPrimary: Colors.white, // foreground
                 ),
                 child: Text(
-                  'Submit',
+                  LocaleKeys.submit.tr(),
                 ),
                 onPressed: () {},
               ),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sweetalertv2/sweetalertv2.dart';
+import 'package:easy_localization/easy_localization.dart';
 
+import '../translations/locale_keys.g.dart';
 import '../providers/auth.dart';
 
 class ChangePassword extends StatefulWidget {
@@ -23,15 +25,15 @@ class _ChangePasswordState extends State<ChangePassword> {
     print("_pwdController.text => ${_pwdController.text}");
     if (_cnfPwdController.text == "" || _pwdController.text == "") {
       SweetAlertV2.show(context,
-          title: "Error",
-          subtitle: "Please enter password and confirm password.",
+          title: LocaleKeys.error.tr(),
+          subtitle: LocaleKeys.enter_pwd_cnf_pwd.tr(),
           style: SweetAlertV2Style.error);
       return;
     }
     if (_cnfPwdController.text != _pwdController.text) {
       SweetAlertV2.show(context,
-          title: "Error",
-          subtitle: "Password and confirm password doesn't match.",
+          title: LocaleKeys.error.tr(),
+          subtitle: LocaleKeys.password_and_con.tr(),
           style: SweetAlertV2Style.error);
       return;
     }
@@ -52,12 +54,12 @@ class _ChangePasswordState extends State<ChangePassword> {
         _cnfPwdController.clear();
         widget.togglePwdChange();
         SweetAlertV2.show(context,
-            title: "Updated!",
+            title: "${LocaleKeys.updated.tr()}!",
             subtitle: respo['Msg'],
             style: SweetAlertV2Style.success);
       } else {
         SweetAlertV2.show(context,
-            title: "Error",
+            title: LocaleKeys.error.tr(),
             subtitle: respo['Msg'],
             style: SweetAlertV2Style.error);
       }
@@ -68,8 +70,8 @@ class _ChangePasswordState extends State<ChangePassword> {
       print("Error--> $error");
       if (error != null) {
         SweetAlertV2.show(context,
-            title: "Error",
-            subtitle: "Error while changing password.",
+            title: LocaleKeys.error.tr(),
+            subtitle: LocaleKeys.error_while_changing_pass.tr(),
             style: SweetAlertV2Style.error);
       }
     }
@@ -101,19 +103,22 @@ class _ChangePasswordState extends State<ChangePassword> {
                         initialValue: widget.loginId,
                         readOnly: true,
                         decoration: widget.decoration(
-                            icon: Icons.person, hintText: "Login Id"),
+                            icon: Icons.person,
+                            hintText: LocaleKeys.login_id.tr()),
                       ),
                       TextFormField(
                         obscureText: true,
                         controller: _pwdController,
                         decoration: widget.decoration(
-                            icon: Icons.lock, hintText: "New Password"),
+                            icon: Icons.lock,
+                            hintText: LocaleKeys.new_password.tr()),
                       ),
                       TextFormField(
                         obscureText: true,
                         controller: _cnfPwdController,
                         decoration: widget.decoration(
-                            icon: Icons.lock, hintText: "Confirm Password"),
+                            icon: Icons.lock,
+                            hintText: LocaleKeys.cnf_pwd.tr()),
                       ),
                       SizedBox(
                         height: 30,
@@ -130,7 +135,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                           primary: Colors.red, // background
                           onPrimary: Colors.white,
                           textStyle: TextStyle(fontSize: 18)),
-                      label: Text('Cancel'),
+                      label: Text(LocaleKeys.cancel.tr()),
                       icon: Icon(Icons.highlight_remove_outlined),
                       onPressed: widget.togglePwdChange,
                     ),
@@ -140,7 +145,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                           primary: Colors.green, // background
                           onPrimary: Colors.white,
                           textStyle: TextStyle(fontSize: 18)),
-                      label: Text("Submit"),
+                      label: Text(LocaleKeys.submit.tr()),
                       icon: Icon(Icons.check_circle_outline),
                       onPressed: _changePassword,
                     ),

@@ -1,7 +1,10 @@
-import 'package:complaint_management/models/division.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
+
+import '../translations/locale_keys.g.dart';
 import '../providers/divisions.dart';
+import '../models/division.dart';
 
 class AddRange extends StatefulWidget {
   @override
@@ -48,7 +51,7 @@ class _AddRangeState extends State<AddRange> {
             ),
             Center(
               child: Text(
-                'Add Range Form',
+                LocaleKeys.add_range_from.tr(),
                 style: TextStyle(fontSize: 18),
               ),
             ),
@@ -56,11 +59,12 @@ class _AddRangeState extends State<AddRange> {
               padding: EdgeInsets.symmetric(horizontal: 14),
               child: TextFormField(
                 keyboardType: TextInputType.text,
-                decoration: InputDecoration(labelText: "Range Name"),
+                decoration:
+                    InputDecoration(labelText: LocaleKeys.range_name.tr()),
                 onSaved: (userType) {},
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Please enter range name.';
+                    return LocaleKeys.please_enter_range_name.tr();
                   }
                   return null;
                 },
@@ -75,11 +79,12 @@ class _AddRangeState extends State<AddRange> {
                     padding: EdgeInsets.symmetric(horizontal: 14),
                     child: DropdownButtonFormField<Division>(
                       value: selDiv,
-                      decoration: InputDecoration(hintText: 'Select Division'),
+                      decoration: InputDecoration(
+                          hintText: LocaleKeys.select_division.tr()),
                       onSaved: (designation) {},
                       validator: (value) {
                         if (value == null) {
-                          return 'Please select division.';
+                          return LocaleKeys.please_select_division.tr();
                         }
                         return null;
                       },
@@ -106,7 +111,7 @@ class _AddRangeState extends State<AddRange> {
                   onPrimary: Colors.white, // foreground
                 ),
                 child: Text(
-                  'Add Range',
+                  LocaleKeys.add_range.tr(),
                 ),
                 onPressed: () {},
               ),

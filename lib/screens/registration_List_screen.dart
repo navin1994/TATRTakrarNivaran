@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sweetalertv2/sweetalertv2.dart';
+import 'package:easy_localization/easy_localization.dart';
 
+import '../translations/locale_keys.g.dart';
 import '../providers/registered_users.dart';
 import '../widgets/show_list.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/filter_list.dart';
-import '../widgets/search_box.dart';
 
 class RegistrationListScreen extends StatefulWidget {
   static const routeName = '/registration-list-screen';
@@ -18,7 +19,12 @@ class RegistrationListScreen extends StatefulWidget {
 class _RegistrationListScreenState extends State<RegistrationListScreen> {
   final String _listType = "users";
   String _crit = "NA";
-  final List _filters = const ['Pending', 'Approved', 'Rejected', 'Reporting'];
+  final List _filters = [
+    LocaleKeys.pending.tr(),
+    LocaleKeys.approved.tr(),
+    LocaleKeys.rejected.tr(),
+    LocaleKeys.reporting.tr()
+  ];
   var _selectedIndex = 0;
   void _filterData(index) {
     setState(() {
@@ -59,14 +65,16 @@ class _RegistrationListScreenState extends State<RegistrationListScreen> {
               .fetchAndSetRegisteredUsers(filterValue);
       if (response != 0) {
         SweetAlertV2.show(context,
-            title: "Error", subtitle: response, style: SweetAlertV2Style.error);
+            title: LocaleKeys.error.tr(),
+            subtitle: response,
+            style: SweetAlertV2Style.error);
         return;
       }
     } catch (error) {
       if (error != null) {
         SweetAlertV2.show(context,
-            title: "Error",
-            subtitle: "Error while loading registered users.",
+            title: LocaleKeys.error.tr(),
+            subtitle: LocaleKeys.error_while_loading_reg.tr(),
             style: SweetAlertV2Style.error);
       }
     }
@@ -82,7 +90,7 @@ class _RegistrationListScreenState extends State<RegistrationListScreen> {
         elevation: 0,
         centerTitle: true,
         title: Text(
-          'Registration List',
+          LocaleKeys.registration_list.tr(),
         ),
       ),
       drawer: AppDrawer(),

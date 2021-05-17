@@ -3,6 +3,7 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
 import 'package:sweetalertv2/sweetalertv2.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../screens/dashboard-screen.dart';
 import '../config/palette.dart';
@@ -27,6 +28,8 @@ class LoginSignupScreen extends StatefulWidget {
 }
 
 class _LoginSignupScreenState extends State<LoginSignupScreen> {
+  Language selLanguage =
+      Language(language: "English", value: Locale('en', 'US'));
   List<Language> _languages = [
     Language(language: "English", value: Locale('en', 'US')),
     Language(language: "Marathi", value: Locale('mr', 'IN')),
@@ -63,15 +66,60 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   ReportingOfficer selRprtOfcr;
   bool isSignupScreen = false;
 
+  void checkAppUpdate() async {
+    try {
+      final res = await Provider.of<Auth>(context).checkAppVersion();
+      if (res == null) {
+        return;
+      }
+      showDialog(
+        barrierColor: Colors.white,
+        barrierDismissible: false,
+        context: context,
+        builder: (_) => new Dialog(
+          child: Container(
+            height: 200,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(res['Msg']),
+                Flexible(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.blueAccent, // background
+                      onPrimary: Colors.white, // foreground
+                      textStyle: TextStyle(fontSize: 18),
+                    ),
+                    onPressed: () async => await canLaunch(res['rtyp'])
+                        ? await launch(res['rtyp'])
+                        : throw 'Could not launch ${res['rtyp']}',
+                    child: Text(LocaleKeys.update.tr()),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    } catch (error) {
+      print("Error $error");
+      SweetAlertV2.show(context,
+          title: LocaleKeys.error.tr(),
+          subtitle: "Error while checking app version.",
+          style: SweetAlertV2Style.error);
+    }
+  }
+
   @override
   void didChangeDependencies() {
     if (!_init) {
       return;
     }
-    setState(() {
-      _isLoading = true;
-    });
     try {
+      checkAppUpdate();
+      setState(() {
+        _isLoading = true;
+      });
       Provider.of<Divisions>(context, listen: false)
           .fetchAndSetDivisons()
           .then((res) {

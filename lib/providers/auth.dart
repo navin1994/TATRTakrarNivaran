@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:async';
 
-import 'package:complaint_management/models/profile.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
+import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../models/profile.dart';
 import '../models/login.dart';
 import '../models/signup.dart';
 import '../config/env.dart';
@@ -85,6 +86,26 @@ class Auth with ChangeNotifier {
 
   Profile get userProfile {
     return _userProfile;
+  }
+
+  Future checkAppVersion() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String version = packageInfo.version;
+    print("version is: $version");
+    var url = Uri.parse("$api/userapp/applogin");
+    try {
+      final response = await http.post(url,
+          headers: {"Content-Type": "application/json"},
+          body: json.encode({"version": version}));
+      final result = json.decode(response.body);
+      if (result['Result'] == "NOK") {
+        print("Version check response from server:  ${response.body}");
+        return result;
+      }
+    } catch (error) {
+      print("Error while cheking version ==> $error");
+      throw error;
+    }
   }
 
   Future changePassword(String loginId, String pwd) async {

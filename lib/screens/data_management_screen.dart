@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
+import '../translations/locale_keys.g.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/add_category.dart';
 import '../widgets/add_user_type.dart';
@@ -12,7 +14,7 @@ class DataManagementScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         brightness: Brightness.dark,
-        title: Text('Data Management'),
+        title: Text(LocaleKeys.data_management.tr()),
       ),
       drawer: AppDrawer(),
       body: Stack(

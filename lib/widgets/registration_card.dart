@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
+
+import '../translations/locale_keys.g.dart';
 
 class RegistrationCard extends StatelessWidget {
   final int itemIndex;
@@ -23,13 +26,13 @@ class RegistrationCard extends StatelessWidget {
   String _getStatus(String stat) {
     switch (stat) {
       case "NA":
-        return "Pending";
+        return LocaleKeys.pending.tr();
       case "A":
-        return "Approved";
+        return LocaleKeys.approved.tr();
       case "R":
-        return "Rejected";
+        return LocaleKeys.rejected.tr();
       default:
-        return "Pending";
+        return LocaleKeys.pending.tr();
     }
   }
 
@@ -83,14 +86,15 @@ class RegistrationCard extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Text(
-                        'Sevarth Number: $sevarthNumber',
+                        '${LocaleKeys.sevarth_number.tr()}: $sevarthNumber',
                         style: Theme.of(context).textTheme.button,
                       ),
                     ),
                     Expanded(
                       child: ListTile(
-                        title: Text('Name: $name'),
-                        subtitle: Text('Division: $division'),
+                        title: Text('${LocaleKeys.name.tr()}: $name'),
+                        subtitle:
+                            Text('${LocaleKeys.division.tr()}: $division'),
                       ),
                     ),
                     Row(children: [
@@ -100,9 +104,9 @@ class RegistrationCard extends StatelessWidget {
                           vertical: 5, // 5 top and bottom
                         ),
                         decoration: BoxDecoration(
-                          color: _getStatus(status) == 'Approved'
+                          color: _getStatus(status) == LocaleKeys.approved.tr()
                               ? Colors.green.shade400
-                              : _getStatus(status) == 'Pending'
+                              : _getStatus(status) == LocaleKeys.pending.tr()
                                   ? Colors.yellow.shade400
                                   : Colors.red.shade400,
                           borderRadius: BorderRadius.only(
@@ -117,7 +121,8 @@ class RegistrationCard extends StatelessWidget {
                       ),
                       Container(
                           margin: EdgeInsets.only(left: 10),
-                          child: Text("Designation : $designation")),
+                          child: Text(
+                              "${LocaleKeys.designation.tr()} : $designation")),
                     ]),
                   ],
                 ),

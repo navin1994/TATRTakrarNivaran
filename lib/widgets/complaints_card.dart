@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
+
+import '../translations/locale_keys.g.dart';
 
 class ComplaintCard extends StatelessWidget {
   final int itemIndex;
@@ -81,14 +84,14 @@ class ComplaintCard extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Text(
-                        'Comapint ID: $complaintCode',
+                        '${LocaleKeys.complaint_id.tr()}: $complaintCode',
                         style: Theme.of(context).textTheme.button,
                       ),
                     ),
                     Expanded(
                       child: ListTile(
-                        title: Text('Raised By: $name'),
-                        subtitle: Text('Date: $date'),
+                        title: Text('${LocaleKeys.raised_by.tr()}: $name'),
+                        subtitle: Text('${LocaleKeys.date.tr()}: $date'),
                       ),
                     ),
                     Row(
@@ -108,10 +111,10 @@ class ComplaintCard extends StatelessWidget {
                           ),
                           child: Text(
                             status == "A"
-                                ? "Approved"
+                                ? LocaleKeys.approved.tr()
                                 : status == "NA"
-                                    ? "Pending"
-                                    : "Rejected",
+                                    ? LocaleKeys.pending.tr()
+                                    : LocaleKeys.rejected.tr(),
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
@@ -119,7 +122,7 @@ class ComplaintCard extends StatelessWidget {
                           margin: EdgeInsets.only(left: 10),
                           padding: EdgeInsets.only(bottom: 10),
                           child: Text(
-                            'Category: $category',
+                            '${LocaleKeys.category.tr()}: $category',
                             style: Theme.of(context).textTheme.button,
                           ),
                         ),

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
+
+import '../translations/locale_keys.g.dart';
 
 class AddCategory extends StatefulWidget {
   @override
@@ -21,7 +24,7 @@ class _AddCategoryState extends State<AddCategory> {
             ),
             Center(
               child: Text(
-                'Complaint Category Form',
+                LocaleKeys.complaint_category_form.tr(),
                 style: TextStyle(fontSize: 18),
               ),
             ),
@@ -29,11 +32,12 @@ class _AddCategoryState extends State<AddCategory> {
               padding: EdgeInsets.symmetric(horizontal: 14),
               child: TextFormField(
                 keyboardType: TextInputType.text,
-                decoration: InputDecoration(labelText: "Complaint Category"),
+                decoration: InputDecoration(
+                    labelText: LocaleKeys.complaint_category.tr()),
                 onSaved: (userType) {},
                 validator: (value) {
                   if (value.isEmpty) {
-                    return 'Please category of complaint.';
+                    return LocaleKeys.please_category_of_complaint.tr();
                   }
                   return null;
                 },
@@ -45,11 +49,12 @@ class _AddCategoryState extends State<AddCategory> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 14),
               child: DropdownButtonFormField<String>(
-                decoration: InputDecoration(hintText: 'Select Category Level'),
+                decoration: InputDecoration(
+                    hintText: LocaleKeys.select_category_level.tr()),
                 onSaved: (designation) {},
                 validator: (value) {
                   if (value == null) {
-                    return 'Please select category level.';
+                    return LocaleKeys.please_select_category_level.tr();
                   }
                   return null;
                 },
@@ -74,7 +79,7 @@ class _AddCategoryState extends State<AddCategory> {
                   onPrimary: Colors.white, // foreground
                 ),
                 child: Text(
-                  'Add Category',
+                  LocaleKeys.add_category.tr(),
                 ),
                 onPressed: () {},
               ),

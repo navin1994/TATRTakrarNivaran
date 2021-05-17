@@ -151,5 +151,9 @@ abstract class  LocaleKeys {
   static const you_have_already = 'you_have_already';
   static const your_request_is = 'your_request_is';
   static const sel_lang = 'sel_lang';
+  static const desc = 'desc';
+  static const apprv = 'apprv';
+  static const svd = 'svd';
+  static const enter_pwd_cnf_pwd = 'enter_pwd_cnf_pwd';
 
 }

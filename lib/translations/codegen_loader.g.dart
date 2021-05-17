@@ -94,7 +94,7 @@ class CodegenLoader extends AssetLoader{
   "password_and_con": "Password and confirm password doesn't match",
   "password_does_not_ma": "Password does not match with confirm password",
   "pending": "Pending",
-  "please_category_of_complaint": "Please category of complaint",
+  "please_category_of_complaint": "Please select category of complaint",
   "please_enter_compl": "Please enter complaint number and select search under criteria.",
   "please_enter_confirm_pas": "Please enter confirm password",
   "please_enter_description": "Please enter description",
@@ -164,7 +164,11 @@ class CodegenLoader extends AssetLoader{
   "yes": "Yes",
   "you_have_already": "You have already acted on it. Wait for Initiator response.",
   "your_request_is": "Your request is Pending. wait for action from authority.",
-  "sel_lang": "Select Language"
+  "sel_lang": "Select Language",
+  "desc": "Description",
+  "apprv": "Approve",
+  "svd": "Saved",
+  "enter_pwd_cnf_pwd": "Please enter password and confirm password."
 };
 static const Map<String,dynamic> mr_IN = {
   "login": "लॉगिन",
@@ -246,7 +250,7 @@ static const Map<String,dynamic> mr_IN = {
   "password_and_con": "पासवर्ड आणि पुष्टीकरण पासवर्ड जुळत नाही",
   "password_does_not_ma": "कन्फर्म पासवर्ड जुळत नाही आहे ",
   "pending": "प्रलंबित",
-  "please_category_of_complaint": "कृपया तक्रारीची श्रेणी",
+  "please_category_of_complaint": "कृपया तक्रारीची श्रेणी निवडा",
   "please_enter_compl": "कृपया तक्रार क्रमांक प्रविष्ट करा आणि निकषांतर्गत शोध निवडा.",
   "please_enter_confirm_pas": "कृपया पुष्टीकरण पासवर्ड प्रविष्ट करा",
   "please_enter_description": "कृपया वर्णन प्रविष्ट करा",
@@ -316,7 +320,11 @@ static const Map<String,dynamic> mr_IN = {
   "yes": "होय",
   "you_have_already": "आपण यावर आधीच निर्णय घेतला आहे. आरंभिक प्रतिसादाची प्रतीक्षा करा.",
   "your_request_is": "आपली विनंती प्रलंबित आहे. अधिकाराकडून निर्णयाची प्रतीक्षा करा.",
-  "sel_lang": "भाषा निवडा"
+  "sel_lang": "भाषा निवडा",
+  "desc": "वर्णन",
+  "apprv": "मंजूर",
+  "svd": "जतन केले",
+  "enter_pwd_cnf_pwd": "कृपया संकेतशब्द प्रविष्ट करा आणि संकेतशब्दाची पुष्टी करा."
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en_US": en_US, "mr_IN": mr_IN};
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
+import '../translations/locale_keys.g.dart';
 import '../providers/auth.dart';
 import '../screens/login_signup_screen.dart';
 import '../screens/dashboard-screen.dart';
@@ -19,7 +21,7 @@ class AppDrawer extends StatelessWidget {
         child: ListView(
           children: [
             AppBar(
-              title: Text('Hello $_userName'),
+              title: Text('${LocaleKeys.hello.tr()} $_userName'),
               automaticallyImplyLeading: false,
             ),
             Divider(
@@ -28,7 +30,7 @@ class AppDrawer extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.person),
-              title: Text('Profile'),
+              title: Text(LocaleKeys.profile.tr()),
               onTap: () {
                 Navigator.of(context)
                     .pushReplacementNamed(ProfilePageScreen.routeName);
@@ -40,7 +42,7 @@ class AppDrawer extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.dashboard),
-              title: Text('Dashboard'),
+              title: Text(LocaleKeys.dashboard.tr()),
               onTap: () {
                 Navigator.of(context).pushReplacementNamed(Dashboard.routeName);
               },
@@ -51,7 +53,7 @@ class AppDrawer extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.chat),
-              title: Text('Manage Complaints'),
+              title: Text(LocaleKeys.manage_complaints.tr()),
               onTap: () {
                 Navigator.of(context)
                     .pushReplacementNamed(ComplaintManagementScreen.routeName);
@@ -99,7 +101,7 @@ class AppDrawer extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.app_registration),
-              title: Text('Manage Registrations'),
+              title: Text(LocaleKeys.manage_registrations.tr()),
               onTap: () {
                 Navigator.of(context)
                     .pushReplacementNamed(RegistrationListScreen.routeName);
@@ -111,7 +113,7 @@ class AppDrawer extends StatelessWidget {
             ),
             ListTile(
               leading: Icon(Icons.exit_to_app),
-              title: Text('Logout'),
+              title: Text(LocaleKeys.logout.tr()),
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.of(context)

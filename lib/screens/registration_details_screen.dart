@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sweetalertv2/sweetalertv2.dart';
+import 'package:easy_localization/easy_localization.dart';
 
+import '../translations/locale_keys.g.dart';
 import '../providers/registered_users.dart';
 import '../models/registered_user.dart';
 
@@ -11,13 +13,13 @@ class RagistrationDetailsScreen extends StatelessWidget {
   String _getStatus(String stat) {
     switch (stat) {
       case "NA":
-        return "Pending";
+        return LocaleKeys.pending.tr();
       case "A":
-        return "Approved";
+        return LocaleKeys.approved.tr();
       case "R":
-        return "Rejected";
+        return LocaleKeys.rejected.tr();
       default:
-        return "Pending";
+        return LocaleKeys.pending.tr();
     }
   }
 
@@ -29,20 +31,20 @@ class RagistrationDetailsScreen extends StatelessWidget {
             .updateUserStatus(stat, userid);
         if (resp['Result'] == "OK") {
           SweetAlertV2.show(context,
-              title: "Updated!",
+              title: "${LocaleKeys.updated.tr()}!",
               subtitle: resp['Msg'],
               style: SweetAlertV2Style.success);
         } else {
           SweetAlertV2.show(context,
-              title: "Error",
+              title: LocaleKeys.error.tr(),
               subtitle: resp['Msg'],
               style: SweetAlertV2Style.error);
         }
       } catch (error) {
         print("Error => $error");
         SweetAlertV2.show(context,
-            title: "Error",
-            subtitle: "Error while updating the user",
+            title: LocaleKeys.error.tr(),
+            subtitle: LocaleKeys.error_while_updating.tr(),
             style: SweetAlertV2Style.error);
       }
     }
@@ -65,9 +67,9 @@ class RagistrationDetailsScreen extends StatelessWidget {
               vertical: 5, // 5 top and bottom
             ),
             decoration: BoxDecoration(
-              color: _getStatus(userData.stat) == 'Approved'
+              color: _getStatus(userData.stat) == LocaleKeys.approved.tr()
                   ? Colors.green.shade400
-                  : _getStatus(userData.stat) == 'Pending'
+                  : _getStatus(userData.stat) == LocaleKeys.pending.tr()
                       ? Colors.yellow.shade400
                       : Colors.red.shade400,
               borderRadius: BorderRadius.all(
@@ -93,7 +95,8 @@ class RagistrationDetailsScreen extends StatelessWidget {
               //row for each deatails
               ListTile(
                 leading: Icon(Icons.person),
-                title: Text("Sevarth Number: ${userData.uSevarthNo}"),
+                title: Text(
+                    "${LocaleKeys.sevarth_number.tr()}: ${userData.uSevarthNo}"),
               ),
               Divider(
                 height: 0.6,
@@ -102,7 +105,8 @@ class RagistrationDetailsScreen extends StatelessWidget {
 
               ListTile(
                 leading: Icon(Icons.calendar_today),
-                title: Text("Registered Date: ${userData.regon}"),
+                title: Text(
+                    "${LocaleKeys.registered_date.tr()}: ${userData.regon}"),
               ),
 
               Divider(
@@ -111,7 +115,8 @@ class RagistrationDetailsScreen extends StatelessWidget {
               ),
               ListTile(
                 leading: Icon(Icons.phone),
-                title: Text("Mobile No.: ${userData.uMobile}"),
+                title:
+                    Text("${LocaleKeys.mobile_no.tr()}: ${userData.uMobile}"),
               ),
               Divider(
                 height: 0.6,
@@ -119,7 +124,7 @@ class RagistrationDetailsScreen extends StatelessWidget {
               ),
               ListTile(
                 leading: Icon(Icons.email),
-                title: Text("Email Id: ${userData.uEmail}"),
+                title: Text("${LocaleKeys.email_id.tr()}: ${userData.uEmail}"),
               ),
               Divider(
                 height: 0.6,
@@ -127,7 +132,8 @@ class RagistrationDetailsScreen extends StatelessWidget {
               ),
               ListTile(
                 leading: Icon(Icons.badge),
-                title: Text("Designation: ${userData.uDesgNm}"),
+                title:
+                    Text("${LocaleKeys.designation.tr()}: ${userData.uDesgNm}"),
               ),
               Divider(
                 height: 0.6,
@@ -135,7 +141,7 @@ class RagistrationDetailsScreen extends StatelessWidget {
               ),
               ListTile(
                 leading: Icon(Icons.location_on),
-                title: Text("Division: ${userData.uOfcNm}"),
+                title: Text("${LocaleKeys.division.tr()}: ${userData.uOfcNm}"),
               ),
               Divider(
                 height: 0.6,
@@ -143,7 +149,8 @@ class RagistrationDetailsScreen extends StatelessWidget {
               ),
               ListTile(
                 leading: Icon(Icons.person),
-                title: Text("Reporting Officer: ${userData.uReportUNm}"),
+                title: Text(
+                    "${LocaleKeys.reporting_officer.tr()}: ${userData.uReportUNm}"),
               ),
 
               Divider(
@@ -160,7 +167,7 @@ class RagistrationDetailsScreen extends StatelessWidget {
       appBar: AppBar(
         brightness: Brightness.dark,
         centerTitle: true,
-        title: Text('Registration Details'),
+        title: Text(LocaleKeys.registration_details.tr()),
       ),
       body: FutureBuilder(
         future: Provider.of<RegisteredUsers>(context, listen: false)
@@ -187,7 +194,8 @@ class RagistrationDetailsScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          _heading('Registration Details', regUsers.regUser),
+                          _heading(LocaleKeys.registration_details.tr(),
+                              regUsers.regUser),
                           _detailsCard(regUsers.regUser),
                           SizedBox(
                             height: 10,
@@ -201,7 +209,7 @@ class RagistrationDetailsScreen extends StatelessWidget {
                                       primary: Colors.green, // background
                                       onPrimary: Colors.white,
                                       textStyle: TextStyle(fontSize: 18)),
-                                  label: Text('Approve'),
+                                  label: Text(LocaleKeys.apprv.tr()),
                                   icon: Icon(Icons.check_circle_outline),
                                   onPressed: () =>
                                       updateStatus("A", regUsers.regUser.uid),
@@ -218,7 +226,7 @@ class RagistrationDetailsScreen extends StatelessWidget {
                                   label: Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 8),
-                                    child: Text('Reject'),
+                                    child: Text(LocaleKeys.reject.tr()),
                                   ),
                                   onPressed: () {
                                     updateStatus("R", regUsers.regUser.uid);

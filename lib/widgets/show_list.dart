@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
+import '../translations/locale_keys.g.dart';
 import '../screens/complaint_details_screen.dart';
 import '../screens/registration_details_screen.dart';
 import 'complaints_card.dart';
@@ -19,7 +21,7 @@ class ShowList extends StatelessWidget {
         ? Consumer<Complaints>(
             builder: (ctx, cmp, _) => cmp.complaints.length <= 0
                 ? Center(
-                    child: Text("Complaints Not Available"),
+                    child: Text(LocaleKeys.cmpl_not_avlbl.tr()),
                   )
                 : ListView.builder(
                     itemCount: cmp.complaints.length,
@@ -41,7 +43,7 @@ class ShowList extends StatelessWidget {
         : Consumer<RegisteredUsers>(
             builder: (ctx, users, _) => users.registeredUsers.length <= 0
                 ? Center(
-                    child: Text("Users Not Available"),
+                    child: Text(LocaleKeys.users_not_available.tr()),
                   )
                 : ListView.builder(
                     itemCount: users.registeredUsers.length,

@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sweetalertv2/sweetalertv2.dart';
+import 'package:easy_localization/easy_localization.dart';
 
-import '../widgets/app_drawer.dart';
+import '../translations/locale_keys.g.dart';
 import '../config/palette.dart';
 import '../widgets/form_field.dart' as padding;
 import '../providers/categories.dart';
@@ -49,18 +50,18 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
           files = null;
         });
         SweetAlertV2.show(context,
-            title: "Saved!",
+            title: "${LocaleKeys.svd.tr()}!",
             subtitle: res['Msg'],
             style: SweetAlertV2Style.success);
       } else if (res['Result'] == "NOK") {
         SweetAlertV2.show(context,
-            title: "Error",
+            title: LocaleKeys.error.tr(),
             subtitle: res['Msg'],
             style: SweetAlertV2Style.error);
       } else {
         SweetAlertV2.show(context,
-            title: "Error",
-            subtitle: "Error while submit complaint.",
+            title: LocaleKeys.error.tr(),
+            subtitle: LocaleKeys.error_while_submit_com.tr(),
             style: SweetAlertV2Style.error);
       }
     } catch (error) {
@@ -70,8 +71,8 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
       if (error != null) {
         print("Error while complaint form submission => $error");
         SweetAlertV2.show(context,
-            title: "Error",
-            subtitle: "Error while complaint submission.",
+            title: LocaleKeys.error.tr(),
+            subtitle: LocaleKeys.error_while_complaint_sub.tr(),
             style: SweetAlertV2Style.error);
       }
     }
@@ -95,7 +96,9 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
         });
         if (res != 0) {
           SweetAlertV2.show(context,
-              title: "Error", subtitle: res, style: SweetAlertV2Style.error);
+              title: LocaleKeys.error.tr(),
+              subtitle: res,
+              style: SweetAlertV2Style.error);
         }
       });
     } catch (error) {
@@ -105,8 +108,8 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
       });
       print("Error $error");
       SweetAlertV2.show(context,
-          title: "Error",
-          subtitle: "Error while fetching categories",
+          title: LocaleKeys.error.tr(),
+          subtitle: LocaleKeys.error_while_fetching_cate.tr(),
           style: SweetAlertV2Style.error);
     }
     setState(() {
@@ -123,14 +126,14 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
     if (result == null) {
       setState(() {
         files = null;
-        _msg = 'No File Selected';
+        _msg = LocaleKeys.no_file_selected.tr();
       });
     }
     var index = result.files.indexWhere((file) => file.size > 2097152);
     if (index >= 0) {
       setState(() {
         files = null;
-        _msg = 'Selected file size should be less than 2 MB';
+        _msg = LocaleKeys.selected_file_size_.tr();
       });
     }
 
@@ -143,8 +146,8 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
     setState(() {
       files = result.files;
       _msg = files.length == 1
-          ? 'Single file selected'
-          : '${files.length} Files are selected';
+          ? LocaleKeys.single_file_selected.tr()
+          : '${files.length} ${LocaleKeys.files_are_selected.tr()}';
     });
   }
 
@@ -194,13 +197,14 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
                 DropdownButtonFormField<Category>(
                   value: _selCategory,
                   isExpanded: true,
-                  decoration: decoration(hintText: 'Complaint Category'),
+                  decoration:
+                      decoration(hintText: LocaleKeys.complaint_category.tr()),
                   onSaved: (category) {
                     _complaint = Complaint(cmpcatid: category.hdid, desc: "");
                   },
                   validator: (value) {
                     if (value == null) {
-                      return 'Please select complaint category.';
+                      return LocaleKeys.please_complaint_category.tr();
                     }
                     return null;
                   },
@@ -224,14 +228,14 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
                 TextFormField(
                   maxLines: 5,
                   keyboardType: TextInputType.text,
-                  decoration: decoration(hintText: 'Description'),
+                  decoration: decoration(hintText: LocaleKeys.desc.tr()),
                   onSaved: (description) {
                     _complaint = Complaint(
                         cmpcatid: _complaint.cmpcatid, desc: description);
                   },
                   validator: (value) {
                     if (value.isEmpty) {
-                      return 'Please enter description.';
+                      return LocaleKeys.please_enter_description.tr();
                     }
                     return null;
                   },
@@ -245,7 +249,7 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
                         : Colors.purple, // background
                     onPrimary: Colors.white, // foreground
                   ),
-                  child: Text("Upload Files"),
+                  child: Text(LocaleKeys.upload_files.tr()),
                   onPressed: _loadFiles,
                 ),
               ),
@@ -257,7 +261,7 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
                     onPrimary: Colors.white,
                     textStyle: TextStyle(fontSize: 18) // foreground
                     ),
-                child: Text('Submit'),
+                child: Text(LocaleKeys.submit.tr()),
                 onPressed: _submitComplaint,
               ),
             ],
@@ -271,7 +275,7 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("New Complaint"),
+        title: Text(LocaleKeys.new_complaint.tr()),
         centerTitle: true,
         brightness: Brightness.dark,
       ),
@@ -323,7 +327,7 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
                       child: Column(
                         children: [
                           Text(
-                            'Complaint Form',
+                            LocaleKeys.comlaint_form.tr(),
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: 20,

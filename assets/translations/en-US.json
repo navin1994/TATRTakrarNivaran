@@ -78,7 +78,7 @@
   "password_and_con": "Password and confirm password doesn't match",
   "password_does_not_ma": "Password does not match with confirm password",
   "pending": "Pending",
-  "please_category_of_complaint": "Please category of complaint",
+  "please_category_of_complaint": "Please select category of complaint",
   "please_enter_compl": "Please enter complaint number and select search under criteria.",
   "please_enter_confirm_pas": "Please enter confirm password",
   "please_enter_description": "Please enter description",
@@ -148,5 +148,9 @@
   "yes": "Yes",
   "you_have_already": "You have already acted on it. Wait for Initiator response.",
   "your_request_is": "Your request is Pending. wait for action from authority.",
-  "sel_lang": "Select Language"
+  "sel_lang": "Select Language",
+  "desc": "Description",
+  "apprv": "Approve",
+  "svd": "Saved",
+  "enter_pwd_cnf_pwd": "Please enter password and confirm password."
 }

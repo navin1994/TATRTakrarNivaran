@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sweetalertv2/sweetalertv2.dart';
+import 'package:easy_localization/easy_localization.dart';
 
+import '../translations/locale_keys.g.dart';
 import '../models/profile.dart';
 import '../widgets/app_drawer.dart';
 import '../config/palette.dart';
@@ -46,7 +48,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
       });
       if (resp['Result'] != "OK") {
         SweetAlertV2.show(context,
-            title: "Saved",
+            title: '${LocaleKeys.svd.tr()}!',
             subtitle: resp['Msg'],
             style: SweetAlertV2Style.success);
       }
@@ -54,8 +56,8 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
       print("Error ==> $error");
       if (error != null) {
         SweetAlertV2.show(context,
-            title: "Error",
-            subtitle: "Error while getting profile data.",
+            title: LocaleKeys.error.tr(),
+            subtitle: LocaleKeys.error_while_getting_prof.tr(),
             style: SweetAlertV2Style.error);
       }
     }
@@ -93,12 +95,12 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
           _isEditable = false;
         });
         SweetAlertV2.show(context,
-            title: "Saved!",
+            title: "${LocaleKeys.svd.tr()}!",
             subtitle: respo['Msg'],
             style: SweetAlertV2Style.success);
       } else {
         SweetAlertV2.show(context,
-            title: "Error",
+            title: LocaleKeys.error.tr(),
             subtitle: respo['Msg'],
             style: SweetAlertV2Style.error);
       }
@@ -106,8 +108,8 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
       if (error != null) {
         print("Error ===> $error");
         SweetAlertV2.show(context,
-            title: "Error",
-            subtitle: "Error while updating profile data.",
+            title: LocaleKeys.error.tr(),
+            subtitle: LocaleKeys.error_while_updating_prof.tr(),
             style: SweetAlertV2Style.error);
       }
     }
@@ -165,7 +167,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
               ),
               onPressed: _toggleEdit,
               icon: Icon(Icons.edit_off),
-              label: Text('Cancel'),
+              label: Text(LocaleKeys.cancel.tr()),
             ),
           if (!_isEditable)
             ElevatedButton.icon(
@@ -176,7 +178,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
               ),
               onPressed: _toggleEdit,
               icon: Icon(Icons.edit),
-              label: Text('Edit'),
+              label: Text(LocaleKeys.edit.tr()),
             ),
         ]),
       );
@@ -202,7 +204,8 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                       TextFormField(
                         initialValue: profile.uFname,
                         keyboardType: TextInputType.text,
-                        decoration: decoration(hintText: 'First Name'),
+                        decoration:
+                            decoration(hintText: LocaleKeys.first_name.tr()),
                         onSaved: (firstName) {
                           setState(() {
                             fName = firstName;
@@ -210,7 +213,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                         },
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Please enter first name';
+                            return LocaleKeys.please_enter_first_name.tr();
                           }
                           return null;
                         },
@@ -221,7 +224,8 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                       TextFormField(
                         initialValue: profile.uLname,
                         keyboardType: TextInputType.text,
-                        decoration: decoration(hintText: 'Last Name'),
+                        decoration:
+                            decoration(hintText: LocaleKeys.last_name.tr()),
                         onSaved: (lastName) {
                           setState(() {
                             lName = lastName;
@@ -229,7 +233,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                         },
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Please enter last name.';
+                            return LocaleKeys.please_enter_last_name.tr();
                           }
                           return null;
                         },
@@ -238,7 +242,8 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                   if (!_isEditable)
                     ListTile(
                       leading: Icon(Icons.badge),
-                      title: Text("Designation: ${profile.uDesgNm}"),
+                      title: Text(
+                          "${LocaleKeys.designation.tr()}: ${profile.uDesgNm}"),
                     ),
                   if (!_isEditable)
                     Divider(
@@ -248,7 +253,8 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                   if (!_isEditable)
                     ListTile(
                       leading: Icon(Icons.person),
-                      title: Text("Sevarth Number: ${profile.uSevarthNo}"),
+                      title: Text(
+                          "${LocaleKeys.sevarth_number.tr()}: ${profile.uSevarthNo}"),
                     ),
                   if (!_isEditable)
                     Divider(
@@ -260,7 +266,8 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                       TextFormField(
                         initialValue: profile.uEmail,
                         keyboardType: TextInputType.text,
-                        decoration: decoration(hintText: 'Email Id'),
+                        decoration:
+                            decoration(hintText: LocaleKeys.email_id.tr()),
                         onSaved: (eMail) {
                           setState(() {
                             email = eMail;
@@ -271,7 +278,8 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                   if (!_isEditable)
                     ListTile(
                       leading: Icon(Icons.phone),
-                      title: Text("Mobile No.: ${profile.uMobile}"),
+                      title: Text(
+                          "${LocaleKeys.mobile_no.tr()}: ${profile.uMobile}"),
                     ),
                   if (!_isEditable)
                     Divider(
@@ -283,7 +291,8 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                       TextFormField(
                         initialValue: profile.uMobile,
                         keyboardType: TextInputType.number,
-                        decoration: decoration(hintText: 'Mobile Number'),
+                        decoration:
+                            decoration(hintText: LocaleKeys.mobile_number.tr()),
                         onSaved: (mobileNo) {
                           setState(() {
                             mobile = mobileNo;
@@ -294,7 +303,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                           RegExp regExp = new RegExp(patttern);
 
                           if (!regExp.hasMatch(value) && value != null) {
-                            return 'Please enter valid mobile number.';
+                            return LocaleKeys.please_mobile_number.tr();
                           }
                           return null;
                         },
@@ -303,7 +312,8 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                   if (!_isEditable)
                     ListTile(
                       leading: Icon(Icons.email),
-                      title: Text("Email Id: ${profile.uEmail}"),
+                      title: Text(
+                          "${LocaleKeys.email_id.tr()}: ${profile.uEmail}"),
                     ),
                   if (!_isEditable)
                     Divider(
@@ -313,7 +323,8 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                   if (!_isEditable)
                     ListTile(
                       leading: Icon(Icons.design_services_outlined),
-                      title: Text("Work Office: ${profile.uOfcNm}"),
+                      title: Text(
+                          "${LocaleKeys.work_office.tr()}: ${profile.uOfcNm}"),
                     ),
                   if (!_isEditable)
                     Divider(
@@ -323,7 +334,8 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                   if (!_isEditable)
                     ListTile(
                       leading: Icon(Icons.person),
-                      title: Text("Reporting To: ${profile.uReportUNm}"),
+                      title: Text(
+                          "${LocaleKeys.reporting_to.tr()}: ${profile.uReportUNm}"),
                     ),
                   if (_isEditable)
                     SizedBox(
@@ -341,7 +353,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
       appBar: AppBar(
         brightness: Brightness.dark,
         centerTitle: true,
-        title: Text('User Profile'),
+        title: Text(LocaleKeys.user_profile.tr()),
       ),
       drawer: AppDrawer(),
       body: _isLoading
@@ -378,7 +390,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                             ),
                           ),
                         ),
-                      if (!_pwdchng) _heading('User Profile'),
+                      if (!_pwdchng) _heading(LocaleKeys.user_profile.tr()),
                       if (!_pwdchng) _detailsCard(),
                       if (_pwdchng)
                         ChangePassword(
@@ -396,8 +408,8 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                           onPressed: _togglePwdChange,
                           icon: Icon(Icons.vpn_key),
                           label: _pwdchng
-                              ? Text('Cancel')
-                              : Text('Change Password'),
+                              ? Text(LocaleKeys.close.tr())
+                              : Text(LocaleKeys.change_password.tr()),
                         ),
                       SizedBox(
                         height: 10,
@@ -413,7 +425,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                                     primary: Colors.green, // background
                                     onPrimary: Colors.white,
                                     textStyle: TextStyle(fontSize: 18)),
-                                label: Text('Update'),
+                                label: Text(LocaleKeys.update.tr()),
                                 icon: Icon(Icons.check_circle_outline),
                                 onPressed: _submitUpdateProfileForm,
                               ),
@@ -430,7 +442,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                                 label: Padding(
                                   padding:
                                       const EdgeInsets.symmetric(horizontal: 8),
-                                  child: Text('Cancel'),
+                                  child: Text(LocaleKeys.cancel.tr()),
                                 ),
                                 onPressed: _toggleEdit,
                               ),

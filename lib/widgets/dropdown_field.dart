@@ -1,5 +1,8 @@
-import '../config/palette.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
+
+import '../translations/locale_keys.g.dart';
+import '../config/palette.dart';
 
 class Dropdownfield extends StatefulWidget {
   final List<String> dropdownItems;
@@ -23,7 +26,7 @@ class _DropdownfieldState extends State<Dropdownfield> {
   Widget build(BuildContext context) {
     return DropdownButtonFormField<String>(
       decoration: InputDecoration(
-        labelText: 'Select Concerned Authority',
+        labelText: LocaleKeys.select_concerned.tr(),
         labelStyle: TextStyle(fontSize: 12),
         prefixIcon: Icon(
           Icons.person,

@@ -1,7 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
 
+import '../translations/locale_keys.g.dart';
 import '../models/include_unser.dart';
 
 class SearchBox extends StatefulWidget {
@@ -16,9 +18,9 @@ class _SearchBoxState extends State<SearchBox> {
   String inclUndr =
       "R"; // default Search within complaints raised by searching user
   final List<IncludeUnder> _dropdown = [
-    IncludeUnder(text: "Alloted to me", value: "A"),
-    IncludeUnder(text: "My complaints", value: "R"),
-    IncludeUnder(text: "Under my authority", value: "U"),
+    IncludeUnder(text: LocaleKeys.alloted_to_me.tr(), value: "A"),
+    IncludeUnder(text: LocaleKeys.my_complaints.tr(), value: "R"),
+    IncludeUnder(text: LocaleKeys.under_my_authority.tr(), value: "U"),
   ];
 
   @override
@@ -47,7 +49,7 @@ class _SearchBoxState extends State<SearchBox> {
                         Icons.search,
                         color: Colors.white,
                       ),
-                      hintText: 'Search by complaint number',
+                      hintText: LocaleKeys.search_by_complaint.tr(),
                       hintStyle: TextStyle(color: Colors.white),
                     ),
                   ),
@@ -60,7 +62,7 @@ class _SearchBoxState extends State<SearchBox> {
                     textStyle: TextStyle(fontSize: 18),
                   ),
                   icon: Icon(Icons.cancel_outlined),
-                  label: Text('Clear'),
+                  label: Text(LocaleKeys.clear.tr()),
                   onPressed: () => {_searchText.clear()},
                 ),
               ],
@@ -86,7 +88,7 @@ class _SearchBoxState extends State<SearchBox> {
                       isExpanded: true,
                       value: inclUndr,
                       decoration: InputDecoration(
-                        labelText: "Search Under",
+                        labelText: LocaleKeys.search_under.tr(),
                         labelStyle: TextStyle(color: Colors.white),
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: Colors.white),
@@ -125,7 +127,7 @@ class _SearchBoxState extends State<SearchBox> {
                         textStyle: TextStyle(fontSize: 18),
                       ),
                       icon: Icon(Icons.search),
-                      label: Text('Search'),
+                      label: Text(LocaleKeys.search.tr()),
                       onPressed: () => {
                             if (_searchText.text == "" ||
                                 _searchText.text == null)

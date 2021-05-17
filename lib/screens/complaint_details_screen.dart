@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sweetalertv2/sweetalertv2.dart';
+import 'package:easy_localization/easy_localization.dart';
 
+import '../translations/locale_keys.g.dart';
 import '../models/comments.dart';
 import '../models/complaint.dart';
 import '../providers/complaints.dart';
@@ -20,13 +22,13 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
   String _getStatus(String stat) {
     switch (stat) {
       case "NA":
-        return "Pending";
+        return LocaleKeys.pending.tr();
       case "A":
-        return "Approved";
+        return LocaleKeys.approved.tr();
       case "R":
-        return "Rejected";
+        return LocaleKeys.rejected.tr();
       default:
-        return "Pending";
+        return LocaleKeys.pending.tr();
     }
   }
 
@@ -36,8 +38,8 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
             .getComments(cmpId);
     return comments == null
         ? SweetAlertV2.show(context,
-            title: "Error",
-            subtitle: "Error while loading comments.",
+            title: LocaleKeys.error.tr(),
+            subtitle: LocaleKeys.error_while_loading_com.tr(),
             style: SweetAlertV2Style.error)
         : showGeneralDialog(
             context: context,
@@ -75,11 +77,11 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                                       decoration: BoxDecoration(
                                         color:
                                             _getStatus(comments[index].value) ==
-                                                    'Approved'
+                                                    LocaleKeys.approved.tr()
                                                 ? Colors.green.shade400
                                                 : _getStatus(comments[index]
                                                             .value) ==
-                                                        'Pending'
+                                                        LocaleKeys.pending.tr()
                                                     ? Colors.yellow.shade400
                                                     : Colors.red.shade400,
                                         borderRadius: BorderRadius.all(
@@ -112,7 +114,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                             primary: Colors.red, // background
                             onPrimary: Colors.white,
                             textStyle: TextStyle(fontSize: 16)),
-                        label: Text('Close'),
+                        label: Text(LocaleKeys.close.tr()),
                         icon: Icon(Icons.highlight_remove_outlined),
                         onPressed: () {
                           setState(() {
@@ -138,7 +140,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
               maxLines: 5,
               controller: _rmrkController,
               decoration:
-                  InputDecoration(hintText: "Enter remarks (optional) here..."),
+                  InputDecoration(hintText: LocaleKeys.enter_remarks.tr()),
             ),
             actions: <Widget>[
               ElevatedButton.icon(
@@ -147,7 +149,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                     primary: Colors.red, // background
                     onPrimary: Colors.white,
                     textStyle: TextStyle(fontSize: 18)),
-                label: Text('No'),
+                label: Text(LocaleKeys.no.tr()),
                 icon: Icon(Icons.highlight_remove_outlined),
                 onPressed: () {
                   setState(() {
@@ -162,7 +164,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                     primary: Colors.green, // background
                     onPrimary: Colors.white,
                     textStyle: TextStyle(fontSize: 18)),
-                label: Text("Yes"),
+                label: Text(LocaleKeys.yes.tr()),
                 icon: Icon(Icons.check_circle_outline),
                 onPressed: () {
                   updateStatus(cmpId, stat, _rmrkController.text);
@@ -189,12 +191,12 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
       });
       if (resp['Result'] == "OK") {
         SweetAlertV2.show(context,
-            title: "Updated!",
+            title: "${LocaleKeys.updated.tr()}!",
             subtitle: resp['Msg'],
             style: SweetAlertV2Style.success);
       } else {
         SweetAlertV2.show(context,
-            title: "Error",
+            title: LocaleKeys.error.tr(),
             subtitle: resp['Msg'],
             style: SweetAlertV2Style.error);
       }
@@ -204,8 +206,8 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
       });
       print("Error => $error");
       SweetAlertV2.show(context,
-          title: "Error",
-          subtitle: "Error while updating the user.",
+          title: LocaleKeys.error.tr(),
+          subtitle: LocaleKeys.error_while_updating.tr(),
           style: SweetAlertV2Style.error);
     }
   }
@@ -230,9 +232,9 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
               vertical: 5, // 5 top and bottom
             ),
             decoration: BoxDecoration(
-              color: _getStatus(campData.stat) == 'Approved'
+              color: _getStatus(campData.stat) == LocaleKeys.approved.tr()
                   ? Colors.green.shade400
-                  : _getStatus(campData.stat) == 'Pending'
+                  : _getStatus(campData.stat) == LocaleKeys.pending.tr()
                       ? Colors.yellow.shade400
                       : Colors.red.shade400,
               borderRadius: BorderRadius.all(
@@ -258,7 +260,8 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
               //row for each deatails
               ListTile(
                 leading: Icon(Icons.arrow_forward_ios),
-                title: Text("Complaint ID: ${campData.cmpId}"),
+                title:
+                    Text("${LocaleKeys.complaint_id.tr()}: ${campData.cmpId}"),
               ),
               Divider(
                 height: 0.6,
@@ -266,7 +269,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
               ),
               ListTile(
                 leading: Icon(Icons.arrow_forward_ios),
-                title: Text("Date: ${campData.regon}"),
+                title: Text("${LocaleKeys.date.tr()}: ${campData.regon}"),
               ),
 
               Divider(
@@ -275,7 +278,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
               ),
               ListTile(
                 leading: Icon(Icons.arrow_forward_ios),
-                title: Text("Category: ${campData.cmpCat}"),
+                title: Text("${LocaleKeys.category.tr()}: ${campData.cmpCat}"),
               ),
               Divider(
                 height: 0.6,
@@ -283,7 +286,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
               ),
               ListTile(
                 leading: Icon(Icons.arrow_forward_ios),
-                title: Text("Description:"),
+                title: Text("${LocaleKeys.desc.tr()}:"),
                 subtitle: Text("${campData.desc}"),
               ),
               Divider(
@@ -292,7 +295,8 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
               ),
               ListTile(
                 leading: Icon(Icons.arrow_forward_ios),
-                title: Text("Complaint Assigned To: ${campData.cmpAssignd}"),
+                title: Text(
+                    "${LocaleKeys.complaint_assign_to.tr()}: ${campData.cmpAssignd}"),
               ),
 
               if (campData.cmpRcntRply != null)
@@ -303,10 +307,11 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
               if (campData.cmpRcntRply != null)
                 ListTile(
                   leading: Icon(Icons.arrow_forward_ios),
-                  title: Text("Reply: ${campData.cmpRcntRply}"),
+                  title:
+                      Text("${LocaleKeys.reply.tr()}: ${campData.cmpRcntRply}"),
                   trailing: TextButton(
                     onPressed: () => showComments(context, campData.cmpId),
-                    child: Text("Show All"),
+                    child: Text(LocaleKeys.show_all.tr()),
                   ),
                 ),
               if (campData.cmpRjcnt != null)
@@ -317,7 +322,8 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
               if (campData.cmpRjcnt != null)
                 ListTile(
                   leading: Icon(Icons.arrow_forward_ios),
-                  title: Text("Rejection Count: ${campData.cmpRjcnt}"),
+                  title: Text(
+                      "${LocaleKeys.rejection_count.tr()}: ${campData.cmpRjcnt}"),
                 ),
               if (campData.updton != null)
                 Divider(
@@ -327,7 +333,8 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
               if (campData.updton != null)
                 ListTile(
                   leading: Icon(Icons.arrow_forward_ios),
-                  title: Text("Updated On: ${campData.updton}"),
+                  title:
+                      Text("${LocaleKeys.updated_on.tr()}: ${campData.updton}"),
                 ),
               if (campData.updtby != null)
                 Divider(
@@ -337,7 +344,8 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
               if (campData.updtby != null)
                 ListTile(
                   leading: Icon(Icons.arrow_forward_ios),
-                  title: Text("Updated By: ${campData.updtby}"),
+                  title:
+                      Text("${LocaleKeys.updated_by.tr()}: ${campData.updtby}"),
                 ),
 
               if (campData.rmrk != null)
@@ -349,7 +357,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
               if (campData.rmrk != null)
                 ListTile(
                   leading: Icon(Icons.arrow_forward_ios),
-                  title: Text("Remarks:"),
+                  title: Text("${LocaleKeys.remarks.tr()}:"),
                   subtitle: Text("${campData.rmrk}"),
                 ),
               SizedBox(
@@ -365,7 +373,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
       appBar: AppBar(
         brightness: Brightness.dark,
         centerTitle: true,
-        title: Text('Complaint Details'),
+        title: Text(LocaleKeys.complaint_details.tr()),
       ),
       body: FutureBuilder(
         future: Provider.of<Complaints>(context, listen: false).findById(cmpId),
@@ -386,7 +394,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                             margin: EdgeInsets.all(10),
                             width: MediaQuery.of(context).size.width * 0.80,
                             child: Text(
-                              "Your request is Pending. wait for action from authority.",
+                              LocaleKeys.your_request_is.tr(),
                               style: TextStyle(color: Colors.red[400]),
                             ),
                           ),
@@ -396,7 +404,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                             margin: EdgeInsets.all(10),
                             width: MediaQuery.of(context).size.width * 0.80,
                             child: Text(
-                              "You have already acted on it. Wait for Initiator response.",
+                              LocaleKeys.you_have_already.tr(),
                               style: TextStyle(color: Colors.red[400]),
                             ),
                           ),
@@ -423,7 +431,8 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                             ),
                           ),
                         ),
-                        _heading('Complaint Status:', comp.complaint),
+                        _heading(
+                            '${LocaleKeys.compl_status.tr()}:', comp.complaint),
                         _detailsCard(comp.complaint),
                         SizedBox(
                           height: 10,
@@ -451,11 +460,11 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                                       primary: Colors.green, // background
                                       onPrimary: Colors.white,
                                       textStyle: TextStyle(fontSize: 18)),
-                                  label: Text('Re-Open'),
+                                  label: Text(LocaleKeys.reopen.tr()),
                                   icon: Icon(Icons.open_in_new_outlined),
                                   onPressed: () => _displayDialog(
                                       context,
-                                      "Do you want to re-open the complaint?",
+                                      LocaleKeys.do_you_want_to_reopen.tr(),
                                       "NA",
                                       comp.complaint.cmpId),
                                 ),
@@ -469,10 +478,10 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                                     textStyle: TextStyle(fontSize: 18),
                                   ),
                                   icon: Icon(Icons.close_fullscreen),
-                                  label: Text('Close'),
+                                  label: Text(LocaleKeys.close.tr()),
                                   onPressed: () => _displayDialog(
                                       context,
-                                      "Do you want to close the complaint?",
+                                      LocaleKeys.do_you_want_to_close.tr(),
                                       "C",
                                       comp.complaint.cmpId),
                                 ),
@@ -495,11 +504,12 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                                             primary: Colors.green, // background
                                             onPrimary: Colors.white,
                                             textStyle: TextStyle(fontSize: 18)),
-                                        label: Text('Approve'),
+                                        label: Text(LocaleKeys.apprv.tr()),
                                         icon: Icon(Icons.check_circle_outline),
                                         onPressed: () => _displayDialog(
                                             context,
-                                            "Do you want to approve the complaint?",
+                                            LocaleKeys.do_you_want_to_approve
+                                                .tr(),
                                             "A",
                                             comp.complaint.cmpId),
                                       ),
@@ -513,10 +523,11 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                                           textStyle: TextStyle(fontSize: 18),
                                         ),
                                         icon: Icon(Icons.cancel_outlined),
-                                        label: Text('Reject'),
+                                        label: Text(LocaleKeys.reject.tr()),
                                         onPressed: () => _displayDialog(
                                             context,
-                                            "Do you want to reject the complaint?",
+                                            LocaleKeys.do_you_want_to_rejec
+                                                .tr(),
                                             "R",
                                             comp.complaint.cmpId),
                                       ),
@@ -536,11 +547,13 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                                           textStyle: TextStyle(fontSize: 18),
                                         ),
                                         icon: Icon(Icons.transform_outlined),
-                                        label: Text(
-                                            'Transfer To Higher Authority'),
+                                        label: Text(LocaleKeys
+                                            .transfer_to_higher_authority
+                                            .tr()),
                                         onPressed: () => _displayDialog(
                                             context,
-                                            "Do you want to transfer the complaint?",
+                                            LocaleKeys.do_you_want_to_transfer
+                                                .tr(),
                                             "AH",
                                             comp.complaint.cmpId),
                                       ),

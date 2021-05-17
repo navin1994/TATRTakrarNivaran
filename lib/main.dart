@@ -20,6 +20,7 @@ import './providers/auth.dart';
 import './providers/reporting_officers.dart';
 import './providers/categories.dart';
 import './providers/complaints.dart';
+import './config/env.dart';
 
 void main() async {
   // Needs to be called so that we can await for EasyLocalization.ensureInitialized();
@@ -38,6 +39,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  final String api = Environment.url;
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
