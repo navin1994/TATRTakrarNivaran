@@ -29,6 +29,8 @@ class ComplaintCard extends StatelessWidget {
         return Colors.red.shade400;
       case 'NA':
         return Colors.yellow.shade400;
+      case 'H':
+        return Colors.orange.shade400;
       default:
         return Colors.red.shade400;
     }
@@ -112,9 +114,11 @@ class ComplaintCard extends StatelessWidget {
                           child: Text(
                             status == "A"
                                 ? LocaleKeys.approved.tr()
-                                : status == "NA"
-                                    ? LocaleKeys.pending.tr()
-                                    : LocaleKeys.rejected.tr(),
+                                : status == "H"
+                                    ? LocaleKeys.on_hold
+                                    : status == "NA"
+                                        ? LocaleKeys.pending.tr()
+                                        : LocaleKeys.rejected.tr(),
                             style: TextStyle(color: Colors.white),
                           ),
                         ),

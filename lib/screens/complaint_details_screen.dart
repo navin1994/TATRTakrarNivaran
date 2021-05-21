@@ -27,6 +27,8 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
         return LocaleKeys.approved.tr();
       case "R":
         return LocaleKeys.rejected.tr();
+      case "H":
+        return LocaleKeys.on_hold.tr();
       default:
         return LocaleKeys.pending.tr();
     }
@@ -399,12 +401,23 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                             ),
                           ),
                         if (int.parse(comp.complaint.cmpAssigndTo) == _uid &&
-                            comp.complaint.stat != "NA")
+                            comp.complaint.stat != "NA" &&
+                            comp.complaint.stat != "H")
                           Container(
                             margin: EdgeInsets.all(10),
                             width: MediaQuery.of(context).size.width * 0.80,
                             child: Text(
                               LocaleKeys.you_have_already.tr(),
+                              style: TextStyle(color: Colors.red[400]),
+                            ),
+                          ),
+                        if (int.parse(comp.complaint.cmpAssigndTo) == _uid &&
+                            comp.complaint.stat == "H")
+                          Container(
+                            margin: EdgeInsets.all(10),
+                            width: MediaQuery.of(context).size.width * 0.80,
+                            child: Text(
+                              LocaleKeys.you_have_put_on_hold,
                               style: TextStyle(color: Colors.red[400]),
                             ),
                           ),
@@ -449,7 +462,8 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                         //   label: Text('Download Attachment'),
                         // ),
                         if (int.parse(comp.complaint.cmpInitBy) == _uid &&
-                            comp.complaint.stat != "NA")
+                            comp.complaint.stat != "NA" &&
+                            comp.complaint.stat != "H")
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
@@ -535,7 +549,8 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                                   ],
                                 ),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
                                   children: [
                                     Flexible(
                                       child: ElevatedButton.icon(
@@ -559,6 +574,32 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                                       ),
                                     ),
                                   ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        if (int.parse(comp.complaint.cmpAssigndTo) == _uid &&
+                            comp.complaint.stat == "H")
+                          Container(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Flexible(
+                                  child: ElevatedButton.icon(
+                                    style: ElevatedButton.styleFrom(
+                                      elevation: 12,
+                                      primary: Colors.deepOrange, // background
+                                      onPrimary: Colors.white, // foreground
+                                      textStyle: TextStyle(fontSize: 18),
+                                    ),
+                                    icon: Icon(Icons.pause_circle_outline),
+                                    label: Text(LocaleKeys.hold_the_complaint),
+                                    onPressed: () => _displayDialog(
+                                        context,
+                                        LocaleKeys.do_you_want_to_hold,
+                                        "H",
+                                        comp.complaint.cmpId),
+                                  ),
                                 ),
                               ],
                             ),

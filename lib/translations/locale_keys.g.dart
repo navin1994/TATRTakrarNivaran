@@ -155,5 +155,17 @@ abstract class  LocaleKeys {
   static const apprv = 'apprv';
   static const svd = 'svd';
   static const enter_pwd_cnf_pwd = 'enter_pwd_cnf_pwd';
+  static const on_hold = 'on_hold';
+  static const you_have_put_on_hold = 'you_have_put_on_hold';
+  static const hold_the_complaint = 'hold_the_complaint';
+  static const do_you_want_to_hold = 'do_you_want_to_hold';
+  static const could_not_launch = 'could_not_launch';
+  static const error_while_checking_app_version = 'error_while_checking_app_version';
+  static const error_while_checking_login_id = 'error_while_checking_login_id';
+  static const middle_name = 'middle_name';
+  static const please_enter_middle_name = 'please_enter_middle_name';
+  static const image_file_detected = 'image_file_detected';
+  static const image_file_not_detected = 'image_file_not_detected';
+  static const take_a_picture = 'take_a_picture';
 
 }

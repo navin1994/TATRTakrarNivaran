@@ -92,7 +92,7 @@ class Auth with ChangeNotifier {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String version = packageInfo.version;
     print("version is: $version");
-    var url = Uri.parse("$api/userapp/applogin");
+    var url = Uri.parse("$api/userapp/appversion");
     try {
       final response = await http.post(url,
           headers: {"Content-Type": "application/json"},
@@ -224,6 +224,7 @@ class Auth with ChangeNotifier {
           "mainclntofc": userData.mainclntofc,
           "clntId": userData.clntId,
           "uFname": userData.uFname,
+          "uMname": userData.uMname,
           "uLname": userData.uLname,
           "uDesgId": userData.uDesgId,
           "uDesgNm": userData.uDesgNm,
@@ -243,6 +244,22 @@ class Auth with ChangeNotifier {
       return signUpResp;
     } catch (error) {
       print("Error => $error");
+      throw error;
+    }
+  }
+
+  Future verifyLoginId(String loginId) async {
+    var url = Uri.parse("$api/userapp/datcmplntsrvc");
+    try {
+      final response = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: json.encode({"act": "verfyloginid", "uLogin": loginId}),
+      );
+      print("verifyLoginId response from serve: ${response.body}");
+      return json.decode(response.body);
+    } catch (error) {
+      print("Error while checking login Id => $error");
       throw error;
     }
   }

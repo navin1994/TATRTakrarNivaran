@@ -4,7 +4,8 @@
    <application
         android:label="complaint_management"
         android:icon="@mipmap/ic_launcher"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:requestLegacyExternalStorage="true">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -27,7 +28,7 @@
                  Flutter's first frame. -->
             <meta-data
               android:name="io.flutter.embedding.android.SplashScreenDrawable"
-              android:resource="@drawable/launch_background"
+              android:resource="@drawable/splash_screen"
               />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

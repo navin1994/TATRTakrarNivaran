@@ -15,13 +15,20 @@ class ReportingOfficers with ChangeNotifier {
     return [..._reportingOfficers];
   }
 
-  Future fetchAndSetReportingOfficers(int hdid) async {
+  Future fetchAndSetReportingOfficers(int desigId, int ofcId) async {
+    if (desigId == null || ofcId == null) {
+      return;
+    }
     var url = Uri.parse('$api/userapp/datcmplntsrvc');
     try {
       final response = await http.post(
         url,
         headers: {"Content-Type": "application/json"},
-        body: json.encode({"act": "getreprtngofcr", "desigid": hdid}),
+        body: json.encode({
+          "act": "getreprtngofcr",
+          "desigid": desigId,
+          "ofcid": ofcId,
+        }),
       );
       List<ReportingOfficer> loadedReportingOfficers = [];
       final result = json.decode(response.body);
@@ -38,11 +45,11 @@ class ReportingOfficers with ChangeNotifier {
             )
             .toList();
       } else {
-        return result['Msg'];
+        return result['Result'];
       }
       _reportingOfficers = loadedReportingOfficers;
       notifyListeners();
-      return 0;
+      return;
     } catch (error) {
       print("Error => $error");
       throw error;

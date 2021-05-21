@@ -26,11 +26,14 @@ class AppDrawer extends StatelessWidget {
             ),
             Divider(
               height: 0.6,
-              color: Colors.black87,
+              color: Colors.indigo.shade900,
             ),
             ListTile(
-              leading: Icon(Icons.person),
-              title: Text(LocaleKeys.profile.tr()),
+              leading: Icon(Icons.person, color: Theme.of(context).accentColor),
+              title: Text(
+                LocaleKeys.profile.tr(),
+                style: TextStyle(color: Theme.of(context).accentColor),
+              ),
               onTap: () {
                 Navigator.of(context)
                     .pushReplacementNamed(ProfilePageScreen.routeName);
@@ -41,8 +44,10 @@ class AppDrawer extends StatelessWidget {
               color: Colors.black87,
             ),
             ListTile(
-              leading: Icon(Icons.dashboard),
-              title: Text(LocaleKeys.dashboard.tr()),
+              leading:
+                  Icon(Icons.dashboard, color: Theme.of(context).accentColor),
+              title: Text(LocaleKeys.dashboard.tr(),
+                  style: TextStyle(color: Theme.of(context).accentColor)),
               onTap: () {
                 Navigator.of(context).pushReplacementNamed(Dashboard.routeName);
               },
@@ -52,8 +57,9 @@ class AppDrawer extends StatelessWidget {
               color: Colors.black87,
             ),
             ListTile(
-              leading: Icon(Icons.chat),
-              title: Text(LocaleKeys.manage_complaints.tr()),
+              leading: Icon(Icons.chat, color: Theme.of(context).accentColor),
+              title: Text(LocaleKeys.manage_complaints.tr(),
+                  style: TextStyle(color: Theme.of(context).accentColor)),
               onTap: () {
                 Navigator.of(context)
                     .pushReplacementNamed(ComplaintManagementScreen.routeName);
@@ -100,8 +106,10 @@ class AppDrawer extends StatelessWidget {
               color: Colors.black87,
             ),
             ListTile(
-              leading: Icon(Icons.app_registration),
-              title: Text(LocaleKeys.manage_registrations.tr()),
+              leading: Icon(Icons.app_registration,
+                  color: Theme.of(context).accentColor),
+              title: Text(LocaleKeys.manage_registrations.tr(),
+                  style: TextStyle(color: Theme.of(context).accentColor)),
               onTap: () {
                 Navigator.of(context)
                     .pushReplacementNamed(RegistrationListScreen.routeName);
@@ -112,8 +120,10 @@ class AppDrawer extends StatelessWidget {
               color: Colors.black87,
             ),
             ListTile(
-              leading: Icon(Icons.exit_to_app),
-              title: Text(LocaleKeys.logout.tr()),
+              leading:
+                  Icon(Icons.exit_to_app, color: Theme.of(context).accentColor),
+              title: Text(LocaleKeys.logout.tr(),
+                  style: TextStyle(color: Theme.of(context).accentColor)),
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.of(context)

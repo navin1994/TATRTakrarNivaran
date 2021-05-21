@@ -36,14 +36,19 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   ];
   final TextEditingController _confirmPassword = TextEditingController();
   final TextEditingController _password = TextEditingController();
+  final TextEditingController _loginId = TextEditingController();
   var _init = true;
+  String loginIdMsg;
   var _isLoading = false;
+  var _isLoginLoading = false;
+  var _isRepOfcrLoading = false;
   var _loginData = Login(uLogin: '', uPwd: '');
   var _signupData = Signup(
     mainofcNm: "",
     mainclntofc: "",
     clntId: null,
     uFname: "",
+    uMname: "",
     uLname: "",
     uDesgId: null,
     uDesgNm: "",
@@ -58,6 +63,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
     uPwd: "",
   );
   final _passwordField = FocusNode();
+  final _loginIdField = FocusNode();
   final _loginForm = GlobalKey<FormState>();
   final _signupForm = GlobalKey<FormState>();
   Division selDivOfc;
@@ -76,27 +82,30 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
         barrierColor: Colors.white,
         barrierDismissible: false,
         context: context,
-        builder: (_) => new Dialog(
-          child: Container(
-            height: 200,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Text(res['Msg']),
-                Flexible(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.blueAccent, // background
-                      onPrimary: Colors.white, // foreground
-                      textStyle: TextStyle(fontSize: 18),
+        builder: (_) => WillPopScope(
+          onWillPop: () => Future.value(false),
+          child: Dialog(
+            child: Container(
+              height: 200,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text(res['Msg']),
+                  Flexible(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.blueAccent, // background
+                        onPrimary: Colors.white, // foreground
+                        textStyle: TextStyle(fontSize: 18),
+                      ),
+                      onPressed: () async => await canLaunch(res['rtyp'])
+                          ? await launch(res['rtyp'])
+                          : throw 'Could not launch ${res['rtyp']}',
+                      child: Text(LocaleKeys.update.tr()),
                     ),
-                    onPressed: () async => await canLaunch(res['rtyp'])
-                        ? await launch(res['rtyp'])
-                        : throw 'Could not launch ${res['rtyp']}',
-                    child: Text(LocaleKeys.update.tr()),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -105,13 +114,13 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
       print("Error $error");
       SweetAlertV2.show(context,
           title: LocaleKeys.error.tr(),
-          subtitle: "Error while checking app version.",
+          subtitle: LocaleKeys.error_while_checking_app_version,
           style: SweetAlertV2Style.error);
     }
   }
 
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     if (!_init) {
       return;
     }
@@ -120,20 +129,21 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<Divisions>(context, listen: false)
-          .fetchAndSetDivisons()
-          .then((res) {
-        setState(() {
-          _init = false;
-          _isLoading = false;
-        });
-        if (res != 0) {
-          SweetAlertV2.show(context,
-              title: LocaleKeys.error.tr(),
-              subtitle: res,
-              style: SweetAlertV2Style.error);
-        }
+      final res = await Provider.of<Divisions>(context, listen: false)
+          .fetchAndSetDivisons();
+      setState(() {
+        _init = false;
+        _isLoading = false;
       });
+      if (res == 0) {
+        _fetchDesigAndWrkOfc(
+            Provider.of<Divisions>(context, listen: false).divisions[0]);
+      } else {
+        SweetAlertV2.show(context,
+            title: LocaleKeys.error.tr(),
+            subtitle: res,
+            style: SweetAlertV2Style.error);
+      }
     } catch (error) {
       setState(() {
         _init = false;
@@ -152,8 +162,98 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
     super.didChangeDependencies();
   }
 
+  Future<void> _fetchReportingOfcr() async {
+    try {
+      setState(() {
+        _isRepOfcrLoading = true;
+      });
+      final resp = await Provider.of<ReportingOfficers>(context, listen: false)
+          .fetchAndSetReportingOfficers(selDesig?.hdid, selwrkOfc?.hdid);
+
+      setState(() {
+        _isRepOfcrLoading = false;
+      });
+      if (resp != null && resp['Result'] != "OK") {
+        SweetAlertV2.show(context,
+            title: LocaleKeys.error.tr(),
+            subtitle: resp['Msg'],
+            style: SweetAlertV2Style.error);
+      }
+    } catch (error) {
+      setState(() {
+        _isRepOfcrLoading = false;
+      });
+      SweetAlertV2.show(context,
+          title: LocaleKeys.error.tr(),
+          subtitle: LocaleKeys.error_while_fetching_rep.tr(),
+          style: SweetAlertV2Style.error);
+    }
+    setState(() {
+      _isRepOfcrLoading = false;
+    });
+  }
+
+  Future<void> _fetchDesigAndWrkOfc(Division value) async {
+    if (value == null) {
+      return;
+    }
+    selDivOfc = value;
+    try {
+      Provider.of<DesignationAndWorkOffices>(context, listen: false)
+          .fetchAndSetDesigAndWorkOfcs(int.parse(value.value))
+          .then((resp) {
+        if (resp != 0) {
+          SweetAlertV2.show(context,
+              title: LocaleKeys.error.tr(),
+              subtitle: resp,
+              style: SweetAlertV2Style.error);
+        }
+      });
+    } catch (error) {
+      SweetAlertV2.show(context,
+          title: LocaleKeys.error.tr(),
+          subtitle: LocaleKeys.error_while_fetching_desig.tr(),
+          style: SweetAlertV2Style.error);
+    }
+  }
+
+  Future<void> _loginIdCheck() async {
+    // TextField lost focus
+    try {
+      setState(() {
+        _isLoginLoading = true;
+      });
+      // Execute your API validation here
+      final response = await Provider.of<Auth>(context, listen: false)
+          .verifyLoginId(_loginId.text);
+      setState(() {
+        _isLoginLoading = false;
+      });
+      if (response != null) {
+        setState(() {
+          loginIdMsg = response['Msg'];
+        });
+        return;
+      }
+    } catch (error) {
+      setState(() {
+        _isLoginLoading = false;
+      });
+      print("Error $error");
+      SweetAlertV2.show(context,
+          title: LocaleKeys.error.tr(),
+          subtitle: LocaleKeys.error_while_checking_login_id,
+          style: SweetAlertV2Style.error);
+    }
+    setState(() {
+      _isLoginLoading = false;
+      loginIdMsg = null;
+    });
+  }
+
   @override
   void dispose() {
+    _loginIdField.dispose();
     _passwordField.dispose();
     _confirmPassword.dispose();
     _password.dispose();
@@ -563,39 +663,24 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                 DropdownButtonFormField<Division>(
                   isExpanded: true,
                   value: selDivOfc,
-                  decoration:
-                      decoration(label: LocaleKeys.divisonal_office.tr()),
-                  onChanged: (Division value) {
+                  onChanged: (Division division) async {
                     setState(() {
+                      selDivOfc = division;
                       selwrkOfc = null;
                       selDesig = null;
-                      selDivOfc = value;
                     });
-                    try {
-                      Provider.of<DesignationAndWorkOffices>(context,
-                              listen: false)
-                          .fetchAndSetDesigAndWorkOfcs(int.parse(value.value))
-                          .then((resp) {
-                        if (resp != 0) {
-                          SweetAlertV2.show(context,
-                              title: LocaleKeys.error.tr(),
-                              subtitle: resp,
-                              style: SweetAlertV2Style.error);
-                        }
-                      });
-                    } catch (error) {
-                      SweetAlertV2.show(context,
-                          title: LocaleKeys.error.tr(),
-                          subtitle: LocaleKeys.error_while_fetching_desig.tr(),
-                          style: SweetAlertV2Style.error);
-                    }
+                    _fetchDesigAndWrkOfc(division);
                   },
+                  decoration:
+                      decoration(label: LocaleKeys.divisonal_office.tr()),
+                  // onChanged: (_) {},
                   onSaved: (division) {
                     _signupData = Signup(
                       mainofcNm: division.text,
                       mainclntofc: division.value,
                       clntId: int.parse(division.no),
                       uFname: _signupData.uFname,
+                      uMname: _signupData.uMname,
                       uLname: _signupData.uLname,
                       uDesgId: _signupData.uDesgId,
                       uDesgNm: _signupData.uDesgNm,
@@ -636,6 +721,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       mainclntofc: _signupData.mainclntofc,
                       clntId: _signupData.clntId,
                       uFname: firstName,
+                      uMname: _signupData.uMname,
                       uLname: _signupData.uLname,
                       uDesgId: _signupData.uDesgId,
                       uDesgNm: _signupData.uDesgNm,
@@ -661,6 +747,39 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
               padding.FormFieldWidget(
                 TextFormField(
                   keyboardType: TextInputType.text,
+                  decoration: decoration(label: LocaleKeys.middle_name),
+                  onSaved: (uMname) {
+                    _signupData = Signup(
+                      mainofcNm: _signupData.mainofcNm,
+                      mainclntofc: _signupData.mainclntofc,
+                      clntId: _signupData.clntId,
+                      uFname: _signupData.uFname,
+                      uMname: uMname,
+                      uLname: _signupData.uLname,
+                      uDesgId: _signupData.uDesgId,
+                      uDesgNm: _signupData.uDesgNm,
+                      uSevarthNo: _signupData.uSevarthNo,
+                      uMobile: _signupData.uMobile,
+                      uEmail: _signupData.uEmail,
+                      uOfcId: _signupData.uOfcId,
+                      uOfcNm: _signupData.uOfcNm,
+                      uReportUid: _signupData.uReportUid,
+                      uReportUNm: _signupData.uReportUNm,
+                      uLoginId: _signupData.uLoginId,
+                      uPwd: _signupData.uPwd,
+                    );
+                  },
+                  validator: (value) {
+                    if (value.isEmpty) {
+                      return LocaleKeys.please_enter_middle_name;
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              padding.FormFieldWidget(
+                TextFormField(
+                  keyboardType: TextInputType.text,
                   decoration: decoration(label: LocaleKeys.last_name.tr()),
                   onSaved: (lastName) {
                     _signupData = Signup(
@@ -668,6 +787,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       mainclntofc: _signupData.mainclntofc,
                       clntId: _signupData.clntId,
                       uFname: _signupData.uFname,
+                      uMname: _signupData.uMname,
                       uLname: lastName,
                       uDesgId: _signupData.uDesgId,
                       uDesgNm: _signupData.uDesgNm,
@@ -701,6 +821,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       mainclntofc: _signupData.mainclntofc,
                       clntId: _signupData.clntId,
                       uFname: _signupData.uFname,
+                      uMname: _signupData.uMname,
                       uLname: _signupData.uLname,
                       uDesgId: designation.hdid,
                       uDesgNm: designation.hdnm,
@@ -726,23 +847,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       selRprtOfcr = null;
                       selDesig = designation;
                     });
-                    try {
-                      Provider.of<ReportingOfficers>(context, listen: false)
-                          .fetchAndSetReportingOfficers(designation.hdid)
-                          .then((resp) {
-                        if (resp != 0) {
-                          SweetAlertV2.show(context,
-                              title: LocaleKeys.error.tr(),
-                              subtitle: resp,
-                              style: SweetAlertV2Style.error);
-                        }
-                      });
-                    } catch (error) {
-                      SweetAlertV2.show(context,
-                          title: LocaleKeys.error.tr(),
-                          subtitle: LocaleKeys.error_while_fetching_rep.tr(),
-                          style: SweetAlertV2Style.error);
-                    }
+                    _fetchReportingOfcr();
                   },
                   items: _designations
                       ?.map(
@@ -764,6 +869,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       mainclntofc: _signupData.mainclntofc,
                       clntId: _signupData.clntId,
                       uFname: _signupData.uFname,
+                      uMname: _signupData.uMname,
                       uLname: _signupData.uLname,
                       uDesgId: _signupData.uDesgId,
                       uDesgNm: _signupData.uDesgNm,
@@ -778,12 +884,6 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       uPwd: _signupData.uPwd,
                     );
                   },
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return LocaleKeys.please_enter_sevarth_number.tr();
-                    }
-                    return null;
-                  },
                 ),
               ),
               padding.FormFieldWidget(
@@ -796,6 +896,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       mainclntofc: _signupData.mainclntofc,
                       clntId: _signupData.clntId,
                       uFname: _signupData.uFname,
+                      uMname: _signupData.uMname,
                       uLname: _signupData.uLname,
                       uDesgId: _signupData.uDesgId,
                       uDesgNm: _signupData.uDesgNm,
@@ -833,6 +934,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       mainclntofc: _signupData.mainclntofc,
                       clntId: _signupData.clntId,
                       uFname: _signupData.uFname,
+                      uMname: _signupData.uMname,
                       uLname: _signupData.uLname,
                       uDesgId: _signupData.uDesgId,
                       uDesgNm: _signupData.uDesgNm,
@@ -856,8 +958,10 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                   decoration: decoration(label: LocaleKeys.work_office.tr()),
                   onChanged: (workOffice) {
                     setState(() {
+                      selRprtOfcr = null;
                       selwrkOfc = workOffice;
                     });
+                    _fetchReportingOfcr();
                   },
                   onSaved: (workOffice) {
                     _signupData = Signup(
@@ -865,6 +969,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       mainclntofc: _signupData.mainclntofc,
                       clntId: _signupData.clntId,
                       uFname: _signupData.uFname,
+                      uMname: _signupData.uMname,
                       uLname: _signupData.uLname,
                       uDesgId: _signupData.uDesgId,
                       uDesgNm: _signupData.uDesgNm,
@@ -895,85 +1000,101 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       ?.toList(),
                 ),
               ),
+              _isRepOfcrLoading
+                  ? CircularProgressIndicator()
+                  : padding.FormFieldWidget(
+                      DropdownButtonFormField<ReportingOfficer>(
+                        isExpanded: true,
+                        value: selRprtOfcr,
+                        decoration: decoration(
+                            label: LocaleKeys.reporting_officer.tr()),
+                        onChanged: (ReportingOfficer newValue) {
+                          setState(() {
+                            selRprtOfcr = newValue;
+                          });
+                        },
+                        onSaved: (reportingOfficer) {
+                          _signupData = Signup(
+                            mainofcNm: _signupData.mainofcNm,
+                            mainclntofc: _signupData.mainclntofc,
+                            clntId: _signupData.clntId,
+                            uFname: _signupData.uFname,
+                            uMname: _signupData.uMname,
+                            uLname: _signupData.uLname,
+                            uDesgId: _signupData.uDesgId,
+                            uDesgNm: _signupData.uDesgNm,
+                            uSevarthNo: _signupData.uSevarthNo,
+                            uMobile: _signupData.uMobile,
+                            uEmail: _signupData.uEmail,
+                            uOfcId: _signupData.uOfcId,
+                            uOfcNm: _signupData.uOfcNm,
+                            uReportUid: int.parse(reportingOfficer.value),
+                            uReportUNm: reportingOfficer.text,
+                            uLoginId: _signupData.uLoginId,
+                            uPwd: _signupData.uPwd,
+                          );
+                        },
+                        validator: (value) {
+                          if (value == null) {
+                            return LocaleKeys.please_select_reporting.tr();
+                          }
+                          return null;
+                        },
+                        items: _reportingOfficers
+                            ?.map(
+                              (rptOfcr) => new DropdownMenuItem(
+                                child: new Text('${rptOfcr.text}'),
+                                value: rptOfcr,
+                              ),
+                            )
+                            ?.toList(),
+                      ),
+                    ),
               padding.FormFieldWidget(
-                DropdownButtonFormField<ReportingOfficer>(
-                  isExpanded: true,
-                  value: selRprtOfcr,
-                  decoration:
-                      decoration(label: LocaleKeys.reporting_officer.tr()),
-                  onChanged: (ReportingOfficer newValue) {
-                    setState(() {
-                      selRprtOfcr = newValue;
-                    });
-                  },
-                  onSaved: (reportingOfficer) {
-                    _signupData = Signup(
-                      mainofcNm: _signupData.mainofcNm,
-                      mainclntofc: _signupData.mainclntofc,
-                      clntId: _signupData.clntId,
-                      uFname: _signupData.uFname,
-                      uLname: _signupData.uLname,
-                      uDesgId: _signupData.uDesgId,
-                      uDesgNm: _signupData.uDesgNm,
-                      uSevarthNo: _signupData.uSevarthNo,
-                      uMobile: _signupData.uMobile,
-                      uEmail: _signupData.uEmail,
-                      uOfcId: _signupData.uOfcId,
-                      uOfcNm: _signupData.uOfcNm,
-                      uReportUid: int.parse(reportingOfficer.value),
-                      uReportUNm: reportingOfficer.text,
-                      uLoginId: _signupData.uLoginId,
-                      uPwd: _signupData.uPwd,
-                    );
-                  },
-                  validator: (value) {
-                    if (value == null) {
-                      return LocaleKeys.please_select_reporting.tr();
-                    }
-                    return null;
-                  },
-                  items: _reportingOfficers
-                      ?.map(
-                        (rptOfcr) => new DropdownMenuItem(
-                          child: new Text(rptOfcr.text),
-                          value: rptOfcr,
+                _isLoginLoading
+                    ? CircularProgressIndicator()
+                    : FocusScope(
+                        child: Focus(
+                          onFocusChange: (focus) =>
+                              focus ? () {} : _loginIdCheck(),
+                          child: TextFormField(
+                            controller: _loginId,
+                            focusNode: _loginIdField,
+                            keyboardType: TextInputType.text,
+                            decoration:
+                                decoration(label: LocaleKeys.login_id.tr()),
+                            onSaved: (loginid) {
+                              _signupData = Signup(
+                                mainofcNm: _signupData.mainofcNm,
+                                mainclntofc: _signupData.mainclntofc,
+                                clntId: _signupData.clntId,
+                                uFname: _signupData.uFname,
+                                uMname: _signupData.uMname,
+                                uLname: _signupData.uLname,
+                                uDesgId: _signupData.uDesgId,
+                                uDesgNm: _signupData.uDesgNm,
+                                uSevarthNo: _signupData.uSevarthNo,
+                                uMobile: _signupData.uMobile,
+                                uEmail: _signupData.uEmail,
+                                uOfcId: _signupData.uOfcId,
+                                uOfcNm: _signupData.uOfcNm,
+                                uReportUid: _signupData.uReportUid,
+                                uReportUNm: _signupData.uReportUNm,
+                                uLoginId: loginid,
+                                uPwd: _signupData.uPwd,
+                              );
+                            },
+                            validator: (String value) {
+                              if (value.isEmpty) {
+                                return LocaleKeys.please_enter_login_id.tr();
+                              }
+                              return null;
+                            },
+                          ),
                         ),
-                      )
-                      ?.toList(),
-                ),
+                      ),
               ),
-              padding.FormFieldWidget(
-                TextFormField(
-                  keyboardType: TextInputType.text,
-                  decoration: decoration(label: LocaleKeys.login_id.tr()),
-                  onSaved: (loginid) {
-                    _signupData = Signup(
-                      mainofcNm: _signupData.mainofcNm,
-                      mainclntofc: _signupData.mainclntofc,
-                      clntId: _signupData.clntId,
-                      uFname: _signupData.uFname,
-                      uLname: _signupData.uLname,
-                      uDesgId: _signupData.uDesgId,
-                      uDesgNm: _signupData.uDesgNm,
-                      uSevarthNo: _signupData.uSevarthNo,
-                      uMobile: _signupData.uMobile,
-                      uEmail: _signupData.uEmail,
-                      uOfcId: _signupData.uOfcId,
-                      uOfcNm: _signupData.uOfcNm,
-                      uReportUid: _signupData.uReportUid,
-                      uReportUNm: _signupData.uReportUNm,
-                      uLoginId: loginid,
-                      uPwd: _signupData.uPwd,
-                    );
-                  },
-                  validator: (String value) {
-                    if (value.isEmpty) {
-                      return LocaleKeys.please_enter_login_id.tr();
-                    }
-                    return null;
-                  },
-                ),
-              ),
+              if (loginIdMsg != null && !_isLoginLoading) Text(loginIdMsg),
               padding.FormFieldWidget(
                 TextFormField(
                   controller: _password,
@@ -986,6 +1107,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       mainclntofc: _signupData.mainclntofc,
                       clntId: _signupData.clntId,
                       uFname: _signupData.uFname,
+                      uMname: _signupData.uMname,
                       uLname: _signupData.uLname,
                       uDesgId: _signupData.uDesgId,
                       uDesgNm: _signupData.uDesgNm,

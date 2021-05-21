@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:complaint_management/providers/complaints.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sweetalertv2/sweetalertv2.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../translations/locale_keys.g.dart';
 import '../config/palette.dart';
@@ -19,6 +22,8 @@ class RaiseComplainScreen extends StatefulWidget {
 }
 
 class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
+  String _imagePath;
+  final picker = ImagePicker();
   Category _selCategory;
   List<PlatformFile> files;
   final _complaintForm = GlobalKey<FormState>();
@@ -26,6 +31,21 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
   var _isLoading = false;
   var _init = true;
   var _complaint = Complaint(cmpcatid: null, desc: "");
+
+  Future getImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.camera);
+
+    setState(() {
+      if (pickedFile != null) {
+        files = null;
+        _imagePath = pickedFile.path;
+        _msg = LocaleKeys.image_file_detected;
+      } else {
+        _imagePath = null;
+        _msg = LocaleKeys.image_file_not_detected;
+      }
+    });
+  }
 
   Future _submitComplaint() async {
     final isValid = _complaintForm.currentState.validate();
@@ -39,7 +59,8 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
 
     try {
       final res = await Provider.of<Complaints>(context, listen: false)
-          .saveComplaint(_complaint, files != null ? files.first : files);
+          .saveComplaint(
+              _complaint, files != null ? files.first.path : _imagePath);
       setState(() {
         _isLoading = false;
       });
@@ -144,6 +165,7 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
     print(file.extension);
     print(file.path);
     setState(() {
+      _imagePath = null;
       files = result.files;
       _msg = files.length == 1
           ? LocaleKeys.single_file_selected.tr()
@@ -186,85 +208,103 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
 
     return Container(
       margin: EdgeInsets.only(top: 20),
-      child: Form(
-        key: _complaintForm,
-        child: Padding(
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: Column(
-            children: [
-              padding.FormFieldWidget(
-                DropdownButtonFormField<Category>(
-                  value: _selCategory,
-                  isExpanded: true,
-                  decoration:
-                      decoration(hintText: LocaleKeys.complaint_category.tr()),
-                  onSaved: (category) {
-                    _complaint = Complaint(cmpcatid: category.hdid, desc: "");
-                  },
-                  validator: (value) {
-                    if (value == null) {
-                      return LocaleKeys.please_complaint_category.tr();
-                    }
-                    return null;
-                  },
-                  onChanged: (category) {
-                    print('selected _complaintCategory $category');
-                    setState(() {
-                      _selCategory = category;
-                    });
-                  },
-                  items: _categories
-                      ?.map(
-                        (cat) => new DropdownMenuItem(
-                          child: new Text(cat.hdnm),
-                          value: cat,
-                        ),
-                      )
-                      ?.toList(),
+      child: SingleChildScrollView(
+        child: Form(
+          key: _complaintForm,
+          child: Padding(
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Column(
+              children: [
+                padding.FormFieldWidget(
+                  DropdownButtonFormField<Category>(
+                    value: _selCategory,
+                    isExpanded: true,
+                    decoration: decoration(
+                        hintText: LocaleKeys.complaint_category.tr()),
+                    onSaved: (category) {
+                      _complaint = Complaint(cmpcatid: category.hdid, desc: "");
+                    },
+                    validator: (value) {
+                      if (value == null) {
+                        return LocaleKeys.please_complaint_category.tr();
+                      }
+                      return null;
+                    },
+                    onChanged: (category) {
+                      print('selected _complaintCategory $category');
+                      setState(() {
+                        _selCategory = category;
+                      });
+                    },
+                    items: _categories
+                        ?.map(
+                          (cat) => new DropdownMenuItem(
+                            child: new Text(cat.hdnm),
+                            value: cat,
+                          ),
+                        )
+                        ?.toList(),
+                  ),
                 ),
-              ),
-              padding.FormFieldWidget(
-                TextFormField(
-                  maxLines: 5,
-                  keyboardType: TextInputType.text,
-                  decoration: decoration(hintText: LocaleKeys.desc.tr()),
-                  onSaved: (description) {
-                    _complaint = Complaint(
-                        cmpcatid: _complaint.cmpcatid, desc: description);
-                  },
-                  validator: (value) {
-                    if (value.isEmpty) {
-                      return LocaleKeys.please_enter_description.tr();
-                    }
-                    return null;
-                  },
+                padding.FormFieldWidget(
+                  TextFormField(
+                    maxLines: 5,
+                    keyboardType: TextInputType.text,
+                    decoration: decoration(hintText: LocaleKeys.desc.tr()),
+                    onSaved: (description) {
+                      _complaint = Complaint(
+                          cmpcatid: _complaint.cmpcatid, desc: description);
+                    },
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return LocaleKeys.please_enter_description.tr();
+                      }
+                      return null;
+                    },
+                  ),
                 ),
-              ),
-              padding.FormFieldWidget(
+                padding.FormFieldWidget(
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: files == null
+                          ? Colors.grey
+                          : Colors.purple, // background
+                      onPrimary: Colors.white, // foreground
+                    ),
+                    child: Text(LocaleKeys.upload_files.tr()),
+                    onPressed: _loadFiles,
+                  ),
+                ),
+                padding.FormFieldWidget(
+                  ElevatedButton.icon(
+                    icon: Icon(Icons.camera),
+                    style: ElevatedButton.styleFrom(
+                      primary: _imagePath == null
+                          ? Colors.grey
+                          : Colors.purple, // background
+                      onPrimary: Colors.white, // foreground
+                    ),
+                    label: Text(LocaleKeys.take_a_picture),
+                    onPressed: getImage,
+                  ),
+                ),
+                if (_msg != null) Center(child: Text(_msg)),
+                padding.FormFieldWidget(SizedBox(height: 20)),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: files == null
-                        ? Colors.grey
-                        : Colors.purple, // background
-                    onPrimary: Colors.white, // foreground
-                  ),
-                  child: Text(LocaleKeys.upload_files.tr()),
-                  onPressed: _loadFiles,
+                      primary: Colors.green[600], // background
+                      onPrimary: Colors.white,
+                      textStyle: TextStyle(fontSize: 18) // foreground
+                      ),
+                  child: Text(LocaleKeys.submit.tr()),
+                  onPressed: _submitComplaint,
                 ),
-              ),
-              if (_msg != null) Center(child: Text(_msg)),
-              padding.FormFieldWidget(SizedBox(height: 20)),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    primary: Colors.green[600], // background
-                    onPrimary: Colors.white,
-                    textStyle: TextStyle(fontSize: 18) // foreground
-                    ),
-                child: Text(LocaleKeys.submit.tr()),
-                onPressed: _submitComplaint,
-              ),
-            ],
+                SizedBox(
+                  height: 20,
+                ),
+              ],
+            ),
           ),
         ),
       ),

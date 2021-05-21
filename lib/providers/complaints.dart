@@ -218,6 +218,7 @@ class Complaints with ChangeNotifier {
   }
 
   Future fetchAndSetcomplaints(String crit) async {
+    print("crit $crit");
     var url = Uri.parse("$api/userapp/cmplntmangesrvc");
     var complaintData;
     List<Complaint> loadedComplaints = [];
@@ -279,7 +280,7 @@ class Complaints with ChangeNotifier {
     return complaintData;
   }
 
-  Future saveComplaint(Complaint complaint, PlatformFile uploadfile) async {
+  Future saveComplaint(Complaint complaint, String uploadfilePath) async {
     print("uid $uid");
     print("clntId $clntId");
     print("name $name");
@@ -295,7 +296,8 @@ class Complaints with ChangeNotifier {
           "act": "savecmplnt",
           "cmpcatid": complaint.cmpcatid,
           "desc": complaint.desc,
-          "cmpisAttch": uploadfile != null ? "Y" : "N", //complaint.cmpisAttch,
+          "cmpisAttch":
+              uploadfilePath != null ? "Y" : "N", //complaint.cmpisAttch,
           "clntId": clntId,
           "uid": uid,
           "name": name
@@ -312,7 +314,7 @@ class Complaints with ChangeNotifier {
         var request = http.MultipartRequest('POST', url2);
         request.files.add(await http.MultipartFile.fromPath(
           'fleupldsp',
-          uploadfile.path,
+          uploadfilePath,
         ));
         request.fields['act'] = 'cmplntfl';
         request.fields['id'] = compSaveResp['rscnt'].toString();

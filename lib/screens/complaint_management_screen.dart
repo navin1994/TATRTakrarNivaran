@@ -27,6 +27,7 @@ class _ComplaintManagementScreenState extends State<ComplaintManagementScreen> {
   final List _filters = [
     LocaleKeys.my_complaints.tr(),
     LocaleKeys.pending.tr(),
+    LocaleKeys.on_hold,
     LocaleKeys.approved.tr(),
     LocaleKeys.rejected.tr(),
     LocaleKeys.all.tr()
@@ -42,9 +43,12 @@ class _ComplaintManagementScreenState extends State<ComplaintManagementScreen> {
         _fetchAndSetComplaints("NA", false);
         break;
       case 2:
-        _fetchAndSetComplaints("A", false);
+        _fetchAndSetComplaints("H", false);
         break;
       case 3:
+        _fetchAndSetComplaints("A", false);
+        break;
+      case 4:
         _fetchAndSetComplaints("R", false);
         break;
       default:

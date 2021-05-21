@@ -5,6 +5,7 @@ class Signup {
   final String mainclntofc;
   final int clntId;
   final String uFname;
+  final String uMname;
   final String uLname;
   final int uDesgId;
   final String uDesgNm;
@@ -24,6 +25,7 @@ class Signup {
     @required this.mainclntofc,
     @required this.clntId,
     @required this.uFname,
+    @required this.uMname,
     @required this.uLname,
     @required this.uDesgId,
     @required this.uDesgNm,

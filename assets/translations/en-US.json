@@ -152,5 +152,17 @@
   "desc": "Description",
   "apprv": "Approve",
   "svd": "Saved",
-  "enter_pwd_cnf_pwd": "Please enter password and confirm password."
+  "enter_pwd_cnf_pwd": "Please enter password and confirm password.",
+  "on_hold": "On Hold",
+  "you_have_put_on_hold": "You have put this complaint on hold.",
+  "hold_the_complaint": "Hold The Complaint",
+  "do_you_want_to_hold": "Do you want to hold the complaint?",
+  "could_not_launch": "Could not launch",
+  "error_while_checking_app_version": "Error while checking app version.",
+  "error_while_checking_login_id": "Error while checking loginId.",
+  "middle_name": "Middle Name",
+  "please_enter_middle_name": "Please enter middle name",
+  "image_file_detected": "Image file detected.",
+  "image_file_not_detected": "Image file not detected.",
+  "take_a_picture": "Take A Picture"
 }

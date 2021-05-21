@@ -168,7 +168,19 @@ class CodegenLoader extends AssetLoader{
   "desc": "Description",
   "apprv": "Approve",
   "svd": "Saved",
-  "enter_pwd_cnf_pwd": "Please enter password and confirm password."
+  "enter_pwd_cnf_pwd": "Please enter password and confirm password.",
+  "on_hold": "On Hold",
+  "you_have_put_on_hold": "You have put this complaint on hold.",
+  "hold_the_complaint": "Hold The Complaint",
+  "do_you_want_to_hold": "Do you want to hold the complaint?",
+  "could_not_launch": "Could not launch",
+  "error_while_checking_app_version": "Error while checking app version.",
+  "error_while_checking_login_id": "Error while checking loginId.",
+  "middle_name": "Middle Name",
+  "please_enter_middle_name": "Please enter middle name",
+  "image_file_detected": "Image file detected.",
+  "image_file_not_detected": "Image file not detected.",
+  "take_a_picture": "Take A Picture"
 };
 static const Map<String,dynamic> mr_IN = {
   "login": "लॉगिन",
@@ -324,7 +336,19 @@ static const Map<String,dynamic> mr_IN = {
   "desc": "वर्णन",
   "apprv": "मंजूर",
   "svd": "जतन केले",
-  "enter_pwd_cnf_pwd": "कृपया संकेतशब्द प्रविष्ट करा आणि संकेतशब्दाची पुष्टी करा."
+  "enter_pwd_cnf_pwd": "कृपया संकेतशब्द प्रविष्ट करा आणि संकेतशब्दाची पुष्टी करा.",
+  "on_hold": "ऑन होल्ड",
+  "you_have_put_on_hold": "आपण ही तक्रार थांबविली आहे.",
+  "hold_the_complaint": "तक्रार थांबवा",
+  "do_you_want_to_hold": "आपण तक्रार थांबवू इच्छिता?",
+  "could_not_launch": "लाँच करू शकलो नाही",
+  "error_while_checking_app_version": "अ‍ॅप आवृत्ती तपासताना त्रुटी.",
+  "error_while_checking_login_id": "लॉगइनआयडी तपासताना त्रुटी.",
+  "middle_name": "मधले नाव",
+  "please_enter_middle_name": "कृपया मधले नाव प्रविष्ट करा",
+  "image_file_detected": "प्रतिमा फाईल आढळली.",
+  "image_file_not_detected": "प्रतिमा फाईल आढळली नाही.",
+  "take_a_picture": "एक चित्र घ्या"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en_US": en_US, "mr_IN": mr_IN};
 }
