@@ -417,7 +417,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                             margin: EdgeInsets.all(10),
                             width: MediaQuery.of(context).size.width * 0.80,
                             child: Text(
-                              LocaleKeys.you_have_put_on_hold,
+                              LocaleKeys.you_have_put_on_hold.tr(),
                               style: TextStyle(color: Colors.red[400]),
                             ),
                           ),
@@ -503,7 +503,8 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                             ],
                           ),
                         if (int.parse(comp.complaint.cmpAssigndTo) == _uid &&
-                            comp.complaint.stat == "NA")
+                                comp.complaint.stat == "NA" ||
+                            comp.complaint.stat == "H")
                           Container(
                             child: Column(
                               children: [
@@ -523,6 +524,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                                         onPressed: () => _displayDialog(
                                             context,
                                             LocaleKeys.do_you_want_to_approve
+                                                .tr()
                                                 .tr(),
                                             "A",
                                             comp.complaint.cmpId),
@@ -593,10 +595,11 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                                       textStyle: TextStyle(fontSize: 18),
                                     ),
                                     icon: Icon(Icons.pause_circle_outline),
-                                    label: Text(LocaleKeys.hold_the_complaint),
+                                    label: Text(
+                                        LocaleKeys.hold_the_complaint.tr()),
                                     onPressed: () => _displayDialog(
                                         context,
-                                        LocaleKeys.do_you_want_to_hold,
+                                        LocaleKeys.do_you_want_to_hold.tr(),
                                         "H",
                                         comp.complaint.cmpId),
                                   ),

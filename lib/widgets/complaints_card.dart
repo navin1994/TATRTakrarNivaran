@@ -115,7 +115,7 @@ class ComplaintCard extends StatelessWidget {
                             status == "A"
                                 ? LocaleKeys.approved.tr()
                                 : status == "H"
-                                    ? LocaleKeys.on_hold
+                                    ? LocaleKeys.on_hold.tr()
                                     : status == "NA"
                                         ? LocaleKeys.pending.tr()
                                         : LocaleKeys.rejected.tr(),

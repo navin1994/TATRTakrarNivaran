@@ -39,10 +39,10 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
       if (pickedFile != null) {
         files = null;
         _imagePath = pickedFile.path;
-        _msg = LocaleKeys.image_file_detected;
+        _msg = LocaleKeys.image_file_detected.tr();
       } else {
         _imagePath = null;
-        _msg = LocaleKeys.image_file_not_detected;
+        _msg = LocaleKeys.image_file_not_detected.tr();
       }
     });
   }
@@ -285,7 +285,7 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
                           : Colors.purple, // background
                       onPrimary: Colors.white, // foreground
                     ),
-                    label: Text(LocaleKeys.take_a_picture),
+                    label: Text(LocaleKeys.take_a_picture.tr()),
                     onPressed: getImage,
                   ),
                 ),

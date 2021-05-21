@@ -114,7 +114,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
       print("Error $error");
       SweetAlertV2.show(context,
           title: LocaleKeys.error.tr(),
-          subtitle: LocaleKeys.error_while_checking_app_version,
+          subtitle: LocaleKeys.error_while_checking_app_version.tr(),
           style: SweetAlertV2Style.error);
     }
   }
@@ -242,7 +242,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
       print("Error $error");
       SweetAlertV2.show(context,
           title: LocaleKeys.error.tr(),
-          subtitle: LocaleKeys.error_while_checking_login_id,
+          subtitle: LocaleKeys.error_while_checking_login_id.tr(),
           style: SweetAlertV2Style.error);
     }
     setState(() {
@@ -747,7 +747,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
               padding.FormFieldWidget(
                 TextFormField(
                   keyboardType: TextInputType.text,
-                  decoration: decoration(label: LocaleKeys.middle_name),
+                  decoration: decoration(label: LocaleKeys.middle_name.tr()),
                   onSaved: (uMname) {
                     _signupData = Signup(
                       mainofcNm: _signupData.mainofcNm,
@@ -771,7 +771,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                   },
                   validator: (value) {
                     if (value.isEmpty) {
-                      return LocaleKeys.please_enter_middle_name;
+                      return LocaleKeys.please_enter_middle_name.tr();
                     }
                     return null;
                   },
