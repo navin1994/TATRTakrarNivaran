@@ -164,5 +164,7 @@
   "please_enter_middle_name": "Please enter middle name",
   "image_file_detected": "Image file detected.",
   "image_file_not_detected": "Image file not detected.",
-  "take_a_picture": "Take A Picture"
+  "take_a_picture": "Take A Picture",
+  "english": "English",
+  "marathi": "Marathi"
 }

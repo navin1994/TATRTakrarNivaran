@@ -180,7 +180,9 @@ class CodegenLoader extends AssetLoader{
   "please_enter_middle_name": "Please enter middle name",
   "image_file_detected": "Image file detected.",
   "image_file_not_detected": "Image file not detected.",
-  "take_a_picture": "Take A Picture"
+  "take_a_picture": "Take A Picture",
+  "english": "English",
+  "marathi": "Marathi"
 };
 static const Map<String,dynamic> mr_IN = {
   "login": "लॉगिन",
@@ -348,7 +350,9 @@ static const Map<String,dynamic> mr_IN = {
   "please_enter_middle_name": "कृपया मधले नाव प्रविष्ट करा",
   "image_file_detected": "प्रतिमा फाईल आढळली.",
   "image_file_not_detected": "प्रतिमा फाईल आढळली नाही.",
-  "take_a_picture": "एक चित्र घ्या"
+  "take_a_picture": "एक चित्र घ्या",
+  "english": "इंग्रजी",
+  "marathi": "मराठी"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en_US": en_US, "mr_IN": mr_IN};
 }

@@ -29,10 +29,10 @@ class LoginSignupScreen extends StatefulWidget {
 
 class _LoginSignupScreenState extends State<LoginSignupScreen> {
   Language selLanguage =
-      Language(language: "English", value: Locale('en', 'US'));
+      Language(language: LocaleKeys.english.tr(), value: Locale('en', 'US'));
   List<Language> _languages = [
-    Language(language: "English", value: Locale('en', 'US')),
-    Language(language: "Marathi", value: Locale('mr', 'IN')),
+    Language(language: LocaleKeys.english.tr(), value: Locale('en', 'US')),
+    Language(language: LocaleKeys.marathi.tr(), value: Locale('mr', 'IN')),
   ];
   final TextEditingController _confirmPassword = TextEditingController();
   final TextEditingController _password = TextEditingController();

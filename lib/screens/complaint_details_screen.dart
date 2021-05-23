@@ -503,8 +503,8 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                             ],
                           ),
                         if (int.parse(comp.complaint.cmpAssigndTo) == _uid &&
-                                comp.complaint.stat == "NA" ||
-                            comp.complaint.stat == "H")
+                            (comp.complaint.stat == "NA" ||
+                                comp.complaint.stat == "H"))
                           Container(
                             child: Column(
                               children: [

@@ -167,5 +167,7 @@ abstract class  LocaleKeys {
   static const image_file_detected = 'image_file_detected';
   static const image_file_not_detected = 'image_file_not_detected';
   static const take_a_picture = 'take_a_picture';
+  static const english = 'english';
+  static const marathi = 'marathi';
 
 }
