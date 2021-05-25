@@ -8,15 +8,16 @@ import '../models/include_unser.dart';
 
 class SearchBox extends StatefulWidget {
   final Function searchFeature;
-  SearchBox(this.searchFeature);
+  final Function dropdownChangeFilter;
+  final String srchUnder;
+  SearchBox(this.searchFeature, this.srchUnder, this.dropdownChangeFilter);
   @override
   _SearchBoxState createState() => _SearchBoxState();
 }
 
 class _SearchBoxState extends State<SearchBox> {
   TextEditingController _searchText = new TextEditingController();
-  String inclUndr =
-      "R"; // default Search within complaints raised by searching user
+
   final List<IncludeUnder> _dropdown = [
     IncludeUnder(text: LocaleKeys.alloted_to_me.tr(), value: "A"),
     IncludeUnder(text: LocaleKeys.my_complaints.tr(), value: "R"),
@@ -45,25 +46,30 @@ class _SearchBoxState extends State<SearchBox> {
                     decoration: InputDecoration(
                       enabledBorder: InputBorder.none,
                       focusedBorder: InputBorder.none,
-                      icon: Icon(
-                        Icons.search,
-                        color: Colors.white,
-                      ),
+                      // icon: Icon(
+                      //   Icons.search,
+                      //   color: Colors.white,
+                      // ),
                       hintText: LocaleKeys.search_by_complaint.tr(),
                       hintStyle: TextStyle(color: Colors.white),
                     ),
                   ),
                 ),
-                ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    elevation: 12,
-                    primary: Colors.red, // background
-                    onPrimary: Colors.white, // foreground
-                    textStyle: TextStyle(fontSize: 18),
-                  ),
-                  icon: Icon(Icons.cancel_outlined),
-                  label: Text(LocaleKeys.clear.tr()),
-                  onPressed: () => {_searchText.clear()},
+                IconButton(
+                  icon: Icon(Icons.search),
+                  iconSize: 30,
+                  color: Colors.white,
+                  onPressed: () => {
+                    if (_searchText.text == "" || _searchText.text == null)
+                      {
+                        widget.searchFeature(null, widget.srchUnder),
+                      }
+                    else
+                      {
+                        widget.searchFeature(
+                            _searchText.text, widget.srchUnder),
+                      }
+                  },
                 ),
               ],
             ),
@@ -73,12 +79,13 @@ class _SearchBoxState extends State<SearchBox> {
           ),
           Container(
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Expanded(
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.75,
                   child: new Theme(
                     data: Theme.of(context).copyWith(
-                      canvasColor: Colors.blue.shade200,
+                      canvasColor: Colors.amber[900],
                     ),
                     child: DropdownButtonFormField<String>(
                       style: TextStyle(
@@ -86,7 +93,7 @@ class _SearchBoxState extends State<SearchBox> {
                         fontSize: 16,
                       ),
                       isExpanded: true,
-                      value: inclUndr,
+                      value: widget.srchUnder,
                       decoration: InputDecoration(
                         labelText: LocaleKeys.search_under.tr(),
                         labelStyle: TextStyle(color: Colors.white),
@@ -103,9 +110,7 @@ class _SearchBoxState extends State<SearchBox> {
                       ),
                       onChanged: (value) {
                         print(value);
-                        setState(() {
-                          inclUndr = value;
-                        });
+                        widget.dropdownChangeFilter(value);
                       },
                       items: _dropdown
                           ?.map(
@@ -119,27 +124,14 @@ class _SearchBoxState extends State<SearchBox> {
                   ),
                 ),
                 Flexible(
-                  child: ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        elevation: 12,
-                        primary: Colors.amber, // background
-                        onPrimary: Colors.white, // foreground
-                        textStyle: TextStyle(fontSize: 18),
-                      ),
-                      icon: Icon(Icons.search),
-                      label: Text(LocaleKeys.search.tr()),
-                      onPressed: () => {
-                            if (_searchText.text == "" ||
-                                _searchText.text == null)
-                              {
-                                widget.searchFeature(null, inclUndr),
-                              }
-                            else
-                              {
-                                widget.searchFeature(
-                                    int.parse(_searchText.text), inclUndr),
-                              }
-                          }),
+                  child: IconButton(
+                      color: Colors.red,
+                      iconSize: 30,
+                      icon: Icon(Icons.cancel_outlined),
+                      onPressed: () {
+                        _searchText.clear();
+                        widget.dropdownChangeFilter(widget.srchUnder);
+                      }),
                 ),
               ],
             ),

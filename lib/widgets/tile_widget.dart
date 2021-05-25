@@ -30,7 +30,7 @@ class Tilewidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            width: 120,
+            width: MediaQuery.of(context).size.width * 0.38,
             child: Row(
               children: [
                 CircleAvatar(
@@ -43,18 +43,28 @@ class Tilewidget extends StatelessWidget {
             ),
           ),
           Container(
-            width: 1,
-            color: Colors.grey,
+            width: MediaQuery.of(context).size.width * 0.35,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: 1,
+                  color: Colors.grey,
+                ),
+                Text('$count', style: TextStyle(color: Colors.white)),
+                Container(
+                  width: 1,
+                  color: Colors.grey,
+                ),
+              ],
+            ),
           ),
-          Text('$count', style: TextStyle(color: Colors.white)),
           Container(
-            width: 1,
-            color: Colors.grey,
-          ),
-          Container(
+            width: MediaQuery.of(context).size.width * 0.17,
             child: Text(
               '${perc.toStringAsFixed(0) == 'NaN' ? 0 : perc.toStringAsFixed(0)} %',
               style: TextStyle(color: this.textcolor),
+              textAlign: TextAlign.end,
             ),
           ),
         ],

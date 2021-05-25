@@ -43,7 +43,39 @@ class Complaints with ChangeNotifier {
     notifyListeners();
   }
 
-  Future serachComplaint(String crit, int srcCmpno, String inclUndr) async {
+  Future downloadAttachment(int cmplId) async {
+    var url = Uri.parse("$api/userapp/fleDownldsrvc");
+
+    try {
+      final resp = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: utf8.encode(
+          json.encode(
+            {
+              "act": "cmplnt",
+              "doctyp": "cmplnt",
+              "id": cmplId,
+              "clntId": clntId,
+              "uid": uid,
+              "name": name,
+            },
+          ),
+        ),
+      );
+      if (resp.contentLength == 0) {
+        return;
+      }
+      final data = resp.headers['content-disposition'];
+      final fname = data.substring(data.indexOf('=') + 1, data.indexOf('"'));
+      return {"fileBytes": resp.bodyBytes, "fileName": fname.toString()};
+    } catch (error) {
+      print("Error while downloading attachment : $error");
+      // throw error;
+    }
+  }
+
+  Future serachComplaint(String crit, String srcCmpno, String inclUndr) async {
     print("crit : $crit");
     print("srcCmpno : $srcCmpno");
     print("inclUndr : $inclUndr");

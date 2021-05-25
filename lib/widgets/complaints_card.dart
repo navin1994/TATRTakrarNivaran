@@ -21,7 +21,7 @@ class ComplaintCard extends StatelessWidget {
     this.press,
   });
 
-  Color _statusColor(status) {
+  Color get _statusColor {
     switch (status) {
       case 'A':
         return Colors.green.shade400;
@@ -33,6 +33,21 @@ class ComplaintCard extends StatelessWidget {
         return Colors.orange.shade400;
       default:
         return Colors.red.shade400;
+    }
+  }
+
+  String get _status {
+    switch (status) {
+      case 'A':
+        return LocaleKeys.approved.tr();
+      case 'R':
+        return LocaleKeys.rejected.tr();
+      case 'NA':
+        return LocaleKeys.pending.tr();
+      case 'H':
+        return LocaleKeys.on_hold.tr();
+      case 'C':
+        return LocaleKeys.closed.tr();
     }
   }
 
@@ -56,7 +71,7 @@ class ComplaintCard extends StatelessWidget {
               height: 120,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(22),
-                color: _statusColor(status),
+                color: _statusColor,
                 boxShadow: [
                   BoxShadow(
                       offset: Offset(0, 15),
@@ -105,20 +120,14 @@ class ComplaintCard extends StatelessWidget {
                             // vertical: 5, // 5 top and bottom
                           ),
                           decoration: BoxDecoration(
-                            color: _statusColor(status),
+                            color: _statusColor,
                             borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(22),
                               topRight: Radius.circular(22),
                             ),
                           ),
                           child: Text(
-                            status == "A"
-                                ? LocaleKeys.approved.tr()
-                                : status == "H"
-                                    ? LocaleKeys.on_hold.tr()
-                                    : status == "NA"
-                                        ? LocaleKeys.pending.tr()
-                                        : LocaleKeys.rejected.tr(),
+                            _status,
                             style: TextStyle(color: Colors.white),
                           ),
                         ),

@@ -33,43 +33,55 @@ class _ComplaintManagementScreenState extends State<ComplaintManagementScreen> {
     LocaleKeys.all.tr()
   ];
   var _selectedIndex = 1;
+  var _srchUnder = "A";
   void _filterData(index) {
     _selectedIndex = index;
     switch (_selectedIndex) {
       case 0:
-        _fetchAndSetComplaints("Y", false);
+        _fetchAndSetComplaints("Y", true, inclUndr: _srchUnder);
         break;
       case 1:
-        _fetchAndSetComplaints("NA", false);
+        _fetchAndSetComplaints("NA", true, inclUndr: _srchUnder);
         break;
       case 2:
-        _fetchAndSetComplaints("H", false);
+        _fetchAndSetComplaints("H", true, inclUndr: _srchUnder);
         break;
       case 3:
-        _fetchAndSetComplaints("A", false);
+        _fetchAndSetComplaints("A", true, inclUndr: _srchUnder);
         break;
       case 4:
-        _fetchAndSetComplaints("R", false);
+        _fetchAndSetComplaints("R", true, inclUndr: _srchUnder);
         break;
       default:
-        _fetchAndSetComplaints("AR", false);
+        _fetchAndSetComplaints("AR", true, inclUndr: _srchUnder);
     }
   }
 
-  void _searchFeature(int srcCmpno, inclUndr) {
+  void _searchFeature(String srcCmpno, inclUndr) {
     if (srcCmpno != null && inclUndr != null) {
+      setState(() {
+        _selectedIndex = 5;
+        _crit = "AR";
+      });
       _fetchAndSetComplaints(_crit, true,
           srcCmpno: srcCmpno, inclUndr: inclUndr);
     } else {
-      SweetAlertV2.show(context,
-          title: LocaleKeys.error.tr(),
-          subtitle: LocaleKeys.please_enter_compl.tr(),
-          style: SweetAlertV2Style.error);
+      SweetAlertV2.show(
+        context,
+        title: LocaleKeys.error.tr(),
+        subtitle: LocaleKeys.please_enter_compl.tr(),
+        style: SweetAlertV2Style.error,
+      );
     }
   }
 
+  void _dropdownChangeFilter(String includUnder) {
+    _srchUnder = includUnder;
+    _filterData(_selectedIndex);
+  }
+
   Future<void> _fetchAndSetComplaints(String filterValue, bool isSearch,
-      {int srcCmpno, String inclUndr}) async {
+      {String srcCmpno, String inclUndr}) async {
     try {
       var response;
       if (!isSearch) {
@@ -115,7 +127,7 @@ class _ComplaintManagementScreenState extends State<ComplaintManagementScreen> {
     if (!_init) {
       return;
     }
-    _fetchAndSetComplaints("NA", false);
+    _fetchAndSetComplaints("NA", true, inclUndr: _srchUnder);
     setState(() {
       _init = false;
     });
@@ -163,7 +175,7 @@ class _ComplaintManagementScreenState extends State<ComplaintManagementScreen> {
             // ),
             child: Column(
               children: <Widget>[
-                SearchBox(_searchFeature),
+                SearchBox(_searchFeature, _srchUnder, _dropdownChangeFilter),
                 FilterList(_filters, _filterData, _selectedIndex),
                 SizedBox(height: 10),
                 Expanded(

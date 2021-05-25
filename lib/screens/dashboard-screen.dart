@@ -7,7 +7,7 @@ import '../translations/locale_keys.g.dart';
 import '../providers/complaints.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/tile_widget.dart';
-import '../widgets/pending_complaint_card.dart';
+// import '../widgets/pending_complaint_card.dart';
 import '../screens/complaint_management_screen.dart';
 
 class Dashboard extends StatelessWidget {

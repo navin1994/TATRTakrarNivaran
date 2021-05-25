@@ -182,7 +182,8 @@ class CodegenLoader extends AssetLoader{
   "image_file_not_detected": "Image file not detected.",
   "take_a_picture": "Take A Picture",
   "english": "English",
-  "marathi": "Marathi"
+  "marathi": "Marathi",
+  "closed": "Closed"
 };
 static const Map<String,dynamic> mr_IN = {
   "login": "लॉगिन",
@@ -352,7 +353,8 @@ static const Map<String,dynamic> mr_IN = {
   "image_file_not_detected": "प्रतिमा फाईल आढळली नाही.",
   "take_a_picture": "एक चित्र घ्या",
   "english": "इंग्रजी",
-  "marathi": "मराठी"
+  "marathi": "मराठी",
+  "closed": "बंद"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en_US": en_US, "mr_IN": mr_IN};
 }

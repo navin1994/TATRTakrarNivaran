@@ -169,5 +169,6 @@ abstract class  LocaleKeys {
   static const take_a_picture = 'take_a_picture';
   static const english = 'english';
   static const marathi = 'marathi';
+  static const closed = 'closed';
 
 }

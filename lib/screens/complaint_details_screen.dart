@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sweetalertv2/sweetalertv2.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../translations/locale_keys.g.dart';
 import '../models/comments.dart';
@@ -29,8 +32,8 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
         return LocaleKeys.rejected.tr();
       case "H":
         return LocaleKeys.on_hold.tr();
-      default:
-        return LocaleKeys.pending.tr();
+      case "C":
+        return LocaleKeys.closed.tr();
     }
   }
 
@@ -421,7 +424,6 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                               style: TextStyle(color: Colors.red[400]),
                             ),
                           ),
-
                         Container(
                           margin: EdgeInsets.all(10),
                           width: MediaQuery.of(context).size.width * 0.80,
@@ -450,17 +452,19 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                         SizedBox(
                           height: 10,
                         ),
-                        // TextButton.icon(
-                        //   onPressed: () {},
-                        //   style: TextButton.styleFrom(
-                        //     elevation: 10,
-                        //     backgroundColor: Colors.purple,
-                        //     primary: Colors.white,
-                        //     textStyle: TextStyle(fontSize: 14),
+                        // if (comp.complaint.cmpisAttch == "Y")
+                        //   TextButton.icon(
+                        //     onPressed: () =>
+                        //         _donwloadAttchment(comp.complaint.cmpId),
+                        //     style: TextButton.styleFrom(
+                        //       elevation: 10,
+                        //       backgroundColor: Colors.purple,
+                        //       primary: Colors.white,
+                        //       textStyle: TextStyle(fontSize: 14),
+                        //     ),
+                        //     icon: Icon(Icons.attachment_outlined),
+                        //     label: Text('Download Attachment'),
                         //   ),
-                        //   icon: Icon(Icons.attachment_outlined),
-                        //   label: Text('Download Attachment'),
-                        // ),
                         if (int.parse(comp.complaint.cmpInitBy) == _uid &&
                             comp.complaint.stat != "NA" &&
                             comp.complaint.stat != "H")
