@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:sweetalertv2/sweetalertv2.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:open_file/open_file.dart';
 
 import '../translations/locale_keys.g.dart';
 import '../models/comments.dart';
@@ -42,6 +43,11 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
       final resp = await Provider.of<Complaints>(context, listen: false)
           .downloadAttachment(cmplId);
       print("Download ${resp['fileName']}");
+      Directory tempDir = await getTemporaryDirectory();
+      String tempPath = tempDir.path;
+      File file = new File('$tempPath/${resp['fileName']}');
+      await file.writeAsBytes(resp['fileBytes']);
+      OpenFile.open("$tempPath/${resp['fileName']}");
     } catch (error) {
       print("Error ==> $error");
     }
