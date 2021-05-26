@@ -48,6 +48,8 @@ class ComplaintCard extends StatelessWidget {
         return LocaleKeys.on_hold.tr();
       case 'C':
         return LocaleKeys.closed.tr();
+      default:
+        return LocaleKeys.rejected.tr();
     }
   }
 
