@@ -37,6 +37,16 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
     }
   }
 
+  Future<void> _donwloadAttchment(int cmplId) async {
+    try {
+      final resp = await Provider.of<Complaints>(context, listen: false)
+          .downloadAttachment(cmplId);
+      print("Download ${resp['fileName']}");
+    } catch (error) {
+      print("Error ==> $error");
+    }
+  }
+
   Future<void> showComments(BuildContext context, int cmpId) async {
     final List<Comment> comments =
         await Provider.of<Complaints>(context, listen: false)
@@ -452,19 +462,19 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                         SizedBox(
                           height: 10,
                         ),
-                        // if (comp.complaint.cmpisAttch == "Y")
-                        //   TextButton.icon(
-                        //     onPressed: () =>
-                        //         _donwloadAttchment(comp.complaint.cmpId),
-                        //     style: TextButton.styleFrom(
-                        //       elevation: 10,
-                        //       backgroundColor: Colors.purple,
-                        //       primary: Colors.white,
-                        //       textStyle: TextStyle(fontSize: 14),
-                        //     ),
-                        //     icon: Icon(Icons.attachment_outlined),
-                        //     label: Text('Download Attachment'),
-                        //   ),
+                        if (comp.complaint.cmpisAttch == "Y")
+                          TextButton.icon(
+                            onPressed: () =>
+                                _donwloadAttchment(comp.complaint.cmpId),
+                            style: TextButton.styleFrom(
+                              elevation: 10,
+                              backgroundColor: Colors.purple,
+                              primary: Colors.white,
+                              textStyle: TextStyle(fontSize: 14),
+                            ),
+                            icon: Icon(Icons.attachment_outlined),
+                            label: Text('Download Attachment'),
+                          ),
                         if (int.parse(comp.complaint.cmpInitBy) == _uid &&
                             comp.complaint.stat != "NA" &&
                             comp.complaint.stat != "H")
