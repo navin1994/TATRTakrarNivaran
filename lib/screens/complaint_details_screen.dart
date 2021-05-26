@@ -35,11 +35,16 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
         return LocaleKeys.on_hold.tr();
       case "C":
         return LocaleKeys.closed.tr();
+      default:
+        return LocaleKeys.rejected.tr();
     }
   }
 
   Future<void> _donwloadAttchment(int cmplId) async {
     try {
+      setState(() {
+        _isLoading = true;
+      });
       final resp = await Provider.of<Complaints>(context, listen: false)
           .downloadAttachment(cmplId);
       print("Download ${resp['fileName']}");
@@ -47,6 +52,9 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
       String tempPath = tempDir.path;
       File file = new File('$tempPath/${resp['fileName']}');
       await file.writeAsBytes(resp['fileBytes']);
+      setState(() {
+        _isLoading = false;
+      });
       OpenFile.open("$tempPath/${resp['fileName']}");
     } catch (error) {
       print("Error ==> $error");
@@ -469,18 +477,25 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                           height: 10,
                         ),
                         if (comp.complaint.cmpisAttch == "Y")
-                          TextButton.icon(
-                            onPressed: () =>
-                                _donwloadAttchment(comp.complaint.cmpId),
-                            style: TextButton.styleFrom(
-                              elevation: 10,
-                              backgroundColor: Colors.purple,
-                              primary: Colors.white,
-                              textStyle: TextStyle(fontSize: 14),
-                            ),
-                            icon: Icon(Icons.attachment_outlined),
-                            label: Text('Download Attachment'),
-                          ),
+                          _isLoading
+                              ? Column(
+                                  children: [
+                                    CircularProgressIndicator(),
+                                    Text("Downloading File..."),
+                                  ],
+                                )
+                              : TextButton.icon(
+                                  onPressed: () =>
+                                      _donwloadAttchment(comp.complaint.cmpId),
+                                  style: TextButton.styleFrom(
+                                    elevation: 10,
+                                    backgroundColor: Colors.purple,
+                                    primary: Colors.white,
+                                    textStyle: TextStyle(fontSize: 14),
+                                  ),
+                                  icon: Icon(Icons.attachment_outlined),
+                                  label: Text('Download Attachment'),
+                                ),
                         if (int.parse(comp.complaint.cmpInitBy) == _uid &&
                             comp.complaint.stat != "NA" &&
                             comp.complaint.stat != "H")

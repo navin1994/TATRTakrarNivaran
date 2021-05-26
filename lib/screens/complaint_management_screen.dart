@@ -84,7 +84,7 @@ class _ComplaintManagementScreenState extends State<ComplaintManagementScreen> {
       {String srcCmpno, String inclUndr}) async {
     try {
       var response;
-      if (!isSearch) {
+      if (filterValue == "Y") {
         setState(() {
           _crit = filterValue;
           _isLoading = true;
