@@ -34,6 +34,7 @@ class _ComplaintManagementScreenState extends State<ComplaintManagementScreen> {
   ];
   var _selectedIndex = 1;
   var _srchUnder = "A";
+
   void _filterData(index) {
     _selectedIndex = index;
     switch (_selectedIndex) {
@@ -127,7 +128,8 @@ class _ComplaintManagementScreenState extends State<ComplaintManagementScreen> {
     if (!_init) {
       return;
     }
-    _fetchAndSetComplaints("NA", true, inclUndr: _srchUnder);
+    final filter = ModalRoute.of(context).settings.arguments as int;
+    _filterData(filter != null ? filter : _selectedIndex);
     setState(() {
       _init = false;
     });

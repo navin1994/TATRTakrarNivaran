@@ -21,8 +21,10 @@ class Divisions with ChangeNotifier {
       final response = await http.post(
         url,
         headers: {"Content-Type": "application/json"},
-        body: json
-            .encode({"act": "clntmainofchd", "clntId": "YKV9BWUK"}), // 4G0T337M
+        body: json.encode({
+          "act": "clntmainofchd",
+          "clntId": "4G0T337M"
+        }), // 4G0T337M   prod => YKV9BWUK
       );
       List<Division> loadedDivisions = [];
       final divisionData = json.decode(response.body);

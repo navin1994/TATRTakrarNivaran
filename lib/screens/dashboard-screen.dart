@@ -81,43 +81,75 @@ class Dashboard extends StatelessWidget {
                           ],
                         ),
                         SizedBox(height: 15),
-                        Tilewidget(
-                          color: Colors.yellow,
-                          symbol: cmpl.complaintSummary[0].text,
-                          icon: Icon(Icons.calculate_outlined, size: 32),
-                          perc: 100.0,
-                          textcolor: Colors.purpleAccent,
-                          count: int.parse(cmpl.complaintSummary[0].value),
+                        InkWell(
+                          onTap: () {
+                            Navigator.of(context).pushReplacementNamed(
+                                ComplaintManagementScreen.routeName,
+                                arguments: 5);
+                          },
+                          child: Tilewidget(
+                            color: Colors.yellow,
+                            symbol: cmpl.complaintSummary[0].text,
+                            icon: Icon(Icons.calculate_outlined, size: 32),
+                            perc: 100.0,
+                            textcolor: Colors.purpleAccent,
+                            count: int.parse(cmpl.complaintSummary[0].value),
+                          ),
                         ),
-                        Tilewidget(
-                          color: Colors.greenAccent,
-                          symbol: cmpl.complaintSummary[1].text,
-                          icon: Icon(Icons.check_circle_outline, size: 32),
-                          perc: ((double.parse(cmpl.complaintSummary[1].value) *
-                                  100) /
-                              double.parse(cmpl.complaintSummary[0].value)),
-                          textcolor: Colors.greenAccent,
-                          count: int.parse(cmpl.complaintSummary[1].value),
+                        InkWell(
+                          onTap: () {
+                            Navigator.of(context).pushReplacementNamed(
+                                ComplaintManagementScreen.routeName,
+                                arguments: 3);
+                          },
+                          child: Tilewidget(
+                            color: Colors.greenAccent,
+                            symbol: cmpl.complaintSummary[1].text,
+                            icon: Icon(Icons.check_circle_outline, size: 32),
+                            perc: ((double.parse(
+                                        cmpl.complaintSummary[1].value) *
+                                    100) /
+                                double.parse(cmpl.complaintSummary[0].value)),
+                            textcolor: Colors.greenAccent,
+                            count: int.parse(cmpl.complaintSummary[1].value),
+                          ),
                         ),
-                        Tilewidget(
-                          color: Colors.orange,
-                          symbol: cmpl.complaintSummary[3].text,
-                          icon: Icon(Icons.pending_actions, size: 32),
-                          perc: ((double.parse(cmpl.complaintSummary[3].value) *
-                                  100) /
-                              double.parse(cmpl.complaintSummary[0].value)),
-                          textcolor: Colors.amberAccent,
-                          count: int.parse(cmpl.complaintSummary[3].value),
+                        InkWell(
+                          onTap: () {
+                            Navigator.of(context).pushReplacementNamed(
+                                ComplaintManagementScreen.routeName,
+                                arguments: 1);
+                          },
+                          child: Tilewidget(
+                            color: Colors.orange,
+                            symbol: cmpl.complaintSummary[3].text,
+                            icon: Icon(Icons.pending_actions, size: 32),
+                            perc: ((double.parse(
+                                        cmpl.complaintSummary[3].value) *
+                                    100) /
+                                double.parse(cmpl.complaintSummary[0].value)),
+                            textcolor: Colors.amberAccent,
+                            count: int.parse(cmpl.complaintSummary[3].value),
+                          ),
                         ),
-                        Tilewidget(
-                          color: Colors.red,
-                          symbol: cmpl.complaintSummary[2].text,
-                          icon: Icon(Icons.highlight_remove_outlined, size: 32),
-                          perc: ((double.parse(cmpl.complaintSummary[2].value) *
-                                  100) /
-                              double.parse(cmpl.complaintSummary[0].value)),
-                          textcolor: Colors.redAccent,
-                          count: int.parse(cmpl.complaintSummary[2].value),
+                        InkWell(
+                          onTap: () {
+                            Navigator.of(context).pushReplacementNamed(
+                                ComplaintManagementScreen.routeName,
+                                arguments: 4);
+                          },
+                          child: Tilewidget(
+                            color: Colors.red,
+                            symbol: cmpl.complaintSummary[2].text,
+                            icon:
+                                Icon(Icons.highlight_remove_outlined, size: 32),
+                            perc: ((double.parse(
+                                        cmpl.complaintSummary[2].value) *
+                                    100) /
+                                double.parse(cmpl.complaintSummary[0].value)),
+                            textcolor: Colors.redAccent,
+                            count: int.parse(cmpl.complaintSummary[2].value),
+                          ),
                         )
                       ],
                     ),

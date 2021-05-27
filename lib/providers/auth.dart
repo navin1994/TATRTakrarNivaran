@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:async';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info/package_info.dart';
@@ -12,12 +13,14 @@ import '../models/signup.dart';
 import '../config/env.dart';
 
 class Auth with ChangeNotifier {
+  FirebaseMessaging _fcmMessaging = FirebaseMessaging.instance;
   Map<String, dynamic> _userData;
   final String api = Environment.url;
   int _uid;
   int _clntId;
   String _uFname;
   String _uLname;
+  String _fcmToken;
   Profile _userProfile = Profile(
       uid: null,
       mainclntofc: "",
@@ -86,6 +89,30 @@ class Auth with ChangeNotifier {
 
   Profile get userProfile {
     return _userProfile;
+  }
+
+  Future updateOrRegisterFCMToken(int clntId, int uid, String name) async {
+    // var url = Uri.parse("$api/userapp/updtfcm");
+    final token = await _fcmMessaging.getToken(); // get FCM token here
+    print("FCM Token : $token");
+    try {
+      //   final response = await http.post(url,
+      //       headers: {"Content-Type": "application/json"},
+      //       body: json.encode({
+      //         "clntId": clntId,
+      //         "uid": uid,
+      //         "name": name,
+      //         "tkn": token,
+      //       }));
+      //   final result = json.decode(response.body);
+      //   if (result['Result'] == "NOK") {
+      //     return;
+      //   }
+      return token;
+    } catch (error) {
+      print("Error while sending token $error");
+      throw error;
+    }
   }
 
   Future checkAppVersion() async {
@@ -276,17 +303,24 @@ class Auth with ChangeNotifier {
       print("Rsponse Login Attempt ===> $loginResp");
       if (loginResp['Result'] == "OK") {
         final record = loginResp['Record'] as Map<String, dynamic>;
-        _clntId = record['clntid'];
-        _uid = record['uid'];
-        _uFname = record['uFname'];
-        _uLname = record['uLname'];
-        notifyListeners();
-        final prefs = await SharedPreferences.getInstance();
-        prefs.setInt("clntId", _clntId);
-        prefs.setInt("uid", _uid);
-        prefs.setString("uFname", _uFname);
-        prefs.setString("uLname", _uLname);
-        return 0;
+        final respToken = await updateOrRegisterFCMToken(record['clntid'],
+            record['uid'], "${record['uFname']} ${record['uLname']}");
+        if (respToken != null) {
+          _clntId = record['clntid'];
+          _uid = record['uid'];
+          _uFname = record['uFname'];
+          _uLname = record['uLname'];
+          _fcmToken = respToken.toString();
+          notifyListeners();
+          final prefs = await SharedPreferences.getInstance();
+          prefs.setInt("clntId", _clntId);
+          prefs.setInt("uid", _uid);
+          prefs.setString("uFname", _uFname);
+          prefs.setString("uLname", _uLname);
+          prefs.setString("fcmToken", _fcmToken);
+          return 0;
+        }
+        return "Invalid Token";
       } else {
         return loginResp['Msg'];
       }
@@ -305,6 +339,8 @@ class Auth with ChangeNotifier {
     _clntId = prefs.getInt('clntId');
     _uFname = prefs.getString('uFname');
     _uLname = prefs.getString('uLname');
+    _fcmToken = prefs.getString('fcmToken');
+    print("FCM Token $_fcmToken");
     notifyListeners();
     return true;
   }
@@ -314,6 +350,7 @@ class Auth with ChangeNotifier {
     _uid = null;
     _uFname = null;
     _uLname = null;
+    _fcmToken = null;
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
     // prefs.remove('userData');

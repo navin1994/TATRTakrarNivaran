@@ -1,4 +1,4 @@
-package com.sparsh.app.complaint_management
+package com.sparsh.app
 
 import io.flutter.embedding.android.FlutterActivity
 
