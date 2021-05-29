@@ -33,7 +33,7 @@ class _ComplaintManagementScreenState extends State<ComplaintManagementScreen> {
     LocaleKeys.all.tr()
   ];
   var _selectedIndex = 1;
-  var _srchUnder = "A";
+  var _srchUnder = "U";
 
   void _filterData(index) {
     _selectedIndex = index;
