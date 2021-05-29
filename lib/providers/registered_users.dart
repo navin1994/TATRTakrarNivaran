@@ -64,6 +64,7 @@ class RegisteredUsers with ChangeNotifier {
                   mainclntofc: user['mainclntofc'],
                   clntid: user['clntid'],
                   uFname: user['uFname'],
+                  uMname: user['uMname'],
                   uLname: user['uLname'],
                   uDesgId: user['uDesgId'],
                   uDesgNm: user['uDesgNm'],

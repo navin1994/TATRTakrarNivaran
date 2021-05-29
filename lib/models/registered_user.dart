@@ -3,6 +3,7 @@ class RegisteredUser {
   final String mainclntofc;
   final int clntid;
   final String uFname;
+  final String uMname;
   final String uLname;
   final int uDesgId;
   final String uDesgNm;
@@ -26,6 +27,7 @@ class RegisteredUser {
     this.mainclntofc,
     this.clntid,
     this.uFname,
+    this.uMname,
     this.uLname,
     this.uDesgId,
     this.uDesgNm,

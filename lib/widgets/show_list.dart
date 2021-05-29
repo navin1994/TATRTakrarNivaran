@@ -50,7 +50,7 @@ class ShowList extends StatelessWidget {
                     itemBuilder: (context, index) => RegistrationCard(
                       itemIndex: index,
                       name:
-                          "${users.registeredUsers[index].uFname} ${users.registeredUsers[index].uLname}",
+                          "${users.registeredUsers[index].uFname} ${users.registeredUsers[index].uMname} ${users.registeredUsers[index].uLname}",
                       sevarthNumber: users.registeredUsers[index].uSevarthNo,
                       division: users.registeredUsers[index].uOfcNm,
                       mobileNumber: users.registeredUsers[index].uMobile,

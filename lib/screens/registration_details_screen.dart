@@ -141,7 +141,7 @@ class RagistrationDetailsScreen extends StatelessWidget {
               ),
               ListTile(
                 leading: Icon(Icons.location_on),
-                title: Text("${LocaleKeys.division.tr()}: ${userData.uOfcNm}"),
+                title: Text("Work Office: ${userData.uOfcNm}"),
               ),
               Divider(
                 height: 0.6,
@@ -186,7 +186,7 @@ class RagistrationDetailsScreen extends StatelessWidget {
                             width: MediaQuery.of(context).size.width * 0.80,
                             child: Center(
                               child: Text(
-                                '${regUsers.regUser.uFname} ${regUsers.regUser.uLname}',
+                                '${regUsers.regUser.uFname} ${regUsers.regUser.uMname} ${regUsers.regUser.uLname}',
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 24,
