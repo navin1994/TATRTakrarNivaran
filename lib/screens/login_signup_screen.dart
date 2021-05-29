@@ -91,7 +91,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Text(res['Msg']),
+                  Text("${res['Msg']}"),
                   Flexible(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -99,8 +99,8 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                         onPrimary: Colors.white, // foreground
                         textStyle: TextStyle(fontSize: 18),
                       ),
-                      onPressed: () async => await canLaunch(res['rtyp'])
-                          ? await launch(res['rtyp'])
+                      onPressed: () async => await canLaunch("${res['rtyp']}")
+                          ? await launch("${res['rtyp']}")
                           : throw 'Could not launch ${res['rtyp']}',
                       child: Text(LocaleKeys.update.tr()),
                     ),
