@@ -26,6 +26,7 @@ class Auth with ChangeNotifier {
       mainclntofc: "",
       clntid: null,
       uFname: "",
+      uMname: "",
       uLname: "",
       uDesgId: null,
       uDesgNm: "",
@@ -157,8 +158,8 @@ class Auth with ChangeNotifier {
     }
   }
 
-  Future updateProfile(
-      String uFname, String uLname, String uMobile, String uEmail) async {
+  Future updateProfile(String uFname, String uMname, String uLname,
+      String uMobile, String uEmail) async {
     var url = Uri.parse("$api/userapp/datcmplntsrvc");
     var rObject;
     try {
@@ -171,6 +172,7 @@ class Auth with ChangeNotifier {
           "uid": _uid,
           "name": "$_uFname $_uLname",
           "uFname": uFname,
+          "uMname": uMname,
           "uLname": uLname,
           "uMobile": uMobile,
           "uEmail": uEmail
@@ -212,6 +214,7 @@ class Auth with ChangeNotifier {
           mainclntofc: tempProf['mainclntofc'],
           clntid: tempProf['clntid'],
           uFname: tempProf['uFname'],
+          uMname: tempProf['uMname'],
           uLname: tempProf['uLname'],
           uDesgId: tempProf['uDesgId'],
           uDesgNm: tempProf['uDesgNm'],
@@ -350,11 +353,15 @@ class Auth with ChangeNotifier {
     _uid = null;
     _uFname = null;
     _uLname = null;
-    _fcmToken = null;
-    _fcmMessaging.deleteToken();
+    // _fcmToken = null;
+    // _fcmMessaging.deleteToken();
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
-    // prefs.remove('userData');
-    prefs.clear();
+    prefs.remove('uid');
+    prefs.remove('clntId');
+    prefs.remove('uFname');
+    prefs.remove('uLname');
+
+    // prefs.clear();
   }
 }

@@ -23,7 +23,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
   var _isInit = true;
   bool _isEditable = false;
   final _profileForm = GlobalKey<FormState>();
-  String fName, lName, email, mobile;
+  String fName, uMname, lName, email, mobile;
 
   void _toggleEdit() {
     setState(() {
@@ -85,7 +85,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
         _isLoading = true;
       });
       final respo = await Provider.of<Auth>(context, listen: false)
-          .updateProfile(fName, lName, mobile, email);
+          .updateProfile(fName, uMname, lName, mobile, email);
       setState(() {
         _isLoading = false;
       });
@@ -214,6 +214,25 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                         validator: (value) {
                           if (value.isEmpty) {
                             return LocaleKeys.please_enter_first_name.tr();
+                          }
+                          return null;
+                        },
+                      ),
+                    ),
+                  if (_isEditable)
+                    padding.FormFieldWidget(
+                      TextFormField(
+                        initialValue: profile.uMname,
+                        keyboardType: TextInputType.text,
+                        decoration: decoration(hintText: "Middle Name"),
+                        onSaved: (middleName) {
+                          setState(() {
+                            uMname = middleName;
+                          });
+                        },
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return "Please enter middle name.";
                           }
                           return null;
                         },
@@ -382,7 +401,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                           width: MediaQuery.of(context).size.width * 0.80,
                           child: Center(
                             child: Text(
-                              '${profile.uFname} ${profile.uLname}',
+                              '${profile.uFname} ${profile.uMname} ${profile.uLname}',
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 24,
