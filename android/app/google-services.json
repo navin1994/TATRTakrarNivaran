@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "1044864992324",
-    "project_id": "testsparshapp",
-    "storage_bucket": "testsparshapp.appspot.com"
+    "project_number": "713602164788",
+    "project_id": "sparshtesting-44a91",
+    "storage_bucket": "sparshtesting-44a91.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1044864992324:android:e348c8815a2ed348a3a811",
+        "mobilesdk_app_id": "1:713602164788:android:43d69dbe98e89a5ee5c261",
         "android_client_info": {
           "package_name": "com.sparsh.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1044864992324-nvts353be6j0987o1g076efukklh2dj0.apps.googleusercontent.com",
+          "client_id": "713602164788-mkbfr4s5noqop3m1iqolfba4bcj7d5cp.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBk4ikB443V_Bwju8OmwEKlIxcPpLKqOZ4"
+          "current_key": "AIzaSyAE6-EVAJsjeOKa18mD-Rb4kz4YFcGL3fo"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1044864992324-nvts353be6j0987o1g076efukklh2dj0.apps.googleusercontent.com",
+              "client_id": "713602164788-mkbfr4s5noqop3m1iqolfba4bcj7d5cp.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

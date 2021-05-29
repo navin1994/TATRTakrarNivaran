@@ -93,22 +93,22 @@ class Auth with ChangeNotifier {
   }
 
   Future updateOrRegisterFCMToken(int clntId, int uid, String name) async {
-    // var url = Uri.parse("$api/userapp/updtfcm");
+    var url = Uri.parse("$api/userapp/updtfcm");
     final token = await _fcmMessaging.getToken(); // get FCM token here
     print("FCM Token : $token");
     try {
-      //   final response = await http.post(url,
-      //       headers: {"Content-Type": "application/json"},
-      //       body: json.encode({
-      //         "clntId": clntId,
-      //         "uid": uid,
-      //         "name": name,
-      //         "tkn": token,
-      //       }));
-      //   final result = json.decode(response.body);
-      //   if (result['Result'] == "NOK") {
-      //     return;
-      //   }
+      final response = await http.post(url,
+          headers: {"Content-Type": "application/json"},
+          body: json.encode({
+            "clntId": clntId,
+            "uid": uid,
+            "name": name,
+            "tkn": token,
+          }));
+      final result = json.decode(response.body);
+      if (result['Result'] == "NOK") {
+        return;
+      }
       return token;
     } catch (error) {
       print("Error while sending token $error");
