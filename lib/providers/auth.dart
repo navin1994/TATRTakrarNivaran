@@ -351,6 +351,7 @@ class Auth with ChangeNotifier {
     _uFname = null;
     _uLname = null;
     _fcmToken = null;
+    _fcmMessaging.deleteToken();
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
     // prefs.remove('userData');
