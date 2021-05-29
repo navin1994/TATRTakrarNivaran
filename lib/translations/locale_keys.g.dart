@@ -170,5 +170,7 @@ abstract class  LocaleKeys {
   static const english = 'english';
   static const marathi = 'marathi';
   static const closed = 'closed';
+  static const donwloading_file = 'donwloading_file';
+  static const donwload_attachment = 'donwload_attachment';
 
 }

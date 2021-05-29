@@ -167,5 +167,7 @@
   "take_a_picture": "Take A Picture",
   "english": "English",
   "marathi": "Marathi",
-  "closed": "Closed"
+  "closed": "Closed",
+  "donwloading_file": "Downloading File...",
+  "donwload_attachment": "Download Attachment"
 }

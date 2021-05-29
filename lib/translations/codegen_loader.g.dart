@@ -183,7 +183,9 @@ class CodegenLoader extends AssetLoader{
   "take_a_picture": "Take A Picture",
   "english": "English",
   "marathi": "Marathi",
-  "closed": "Closed"
+  "closed": "Closed",
+  "donwloading_file": "Downloading File...",
+  "donwload_attachment": "Download Attachment"
 };
 static const Map<String,dynamic> mr_IN = {
   "login": "लॉगिन",
@@ -199,14 +201,14 @@ static const Map<String,dynamic> mr_IN = {
   "change_password": "पासवर्ड बदला ",
   "clear": "हटवा",
   "close": "बंद",
-  "complaint_id": "तक्रार क्रमांक ",
-  "complaint_assign_to": "या अधिकार्‍यास तक्रार नोंद केली ",
+  "complaint_id": "तक्रार अनुक्रमांक ",
+  "complaint_assign_to": "तक्रार निवारण अधिकारी ",
   "complaint_category": "तक्रार वर्ग ",
   "complaint_category_form": "तक्रार वर्ग फॉर्म",
   "complaint_details": "तक्रार तपशील ",
   "comlaint_form": "तक्रार फॉर्म",
   "complt_mngmnt": "तक्रार व्यवस्थापन",
-  "compl_status": "तक्रार स्थिती",
+  "compl_status": "तक्रार सद्यस्थिती",
   "cmpl_data": "तक्रारींचा डेटा",
   "cmpl_not_avlbl": "तक्रारी उपलब्ध नाहीत",
   "cnf_pwd": "पासवर्डची पुष्टी करा",
@@ -327,7 +329,7 @@ static const Map<String,dynamic> mr_IN = {
   "user_level": "यूजर स्तर",
   "user_profile": "यूजर प्रोफाइल",
   "user_type": "यूजर प्रकार ",
-  "user_type_form": "यूजर प्रकार या पासून ",
+  "user_type_form": "यूजर प्रकार फॉर्म",
   "users": "यूजर ",
   "users_not_available": "यूजर उपलब्ध नाहीत",
   "view_all_": "सर्व पहा",
@@ -354,7 +356,9 @@ static const Map<String,dynamic> mr_IN = {
   "take_a_picture": "एक चित्र घ्या",
   "english": "इंग्रजी",
   "marathi": "मराठी",
-  "closed": "बंद"
+  "closed": "बंद",
+  "donwloading_file": "फाईल डाउनलोड करीत आहे",
+  "donwload_attachment": "संलग्नक डाउनलोड करा"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en_US": en_US, "mr_IN": mr_IN};
 }

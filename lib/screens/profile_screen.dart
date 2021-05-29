@@ -224,7 +224,8 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                       TextFormField(
                         initialValue: profile.uMname,
                         keyboardType: TextInputType.text,
-                        decoration: decoration(hintText: "Middle Name"),
+                        decoration:
+                            decoration(hintText: LocaleKeys.middle_name.tr()),
                         onSaved: (middleName) {
                           setState(() {
                             uMname = middleName;
@@ -232,7 +233,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                         },
                         validator: (value) {
                           if (value.isEmpty) {
-                            return "Please enter middle name.";
+                            return LocaleKeys.please_enter_middle_name.tr();
                           }
                           return null;
                         },

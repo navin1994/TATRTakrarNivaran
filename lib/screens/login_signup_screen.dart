@@ -1,4 +1,3 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -101,7 +100,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       ),
                       onPressed: () async => await canLaunch("${res['rtyp']}")
                           ? await launch("${res['rtyp']}")
-                          : throw 'Could not launch ${res['rtyp']}',
+                          : throw '${LocaleKeys.could_not_launch.tr()} ${res['rtyp']}',
                       child: Text(LocaleKeys.update.tr()),
                     ),
                   ),

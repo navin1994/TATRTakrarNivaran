@@ -481,7 +481,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                               ? Column(
                                   children: [
                                     CircularProgressIndicator(),
-                                    Text("Downloading File..."),
+                                    Text("${LocaleKeys.donwloading_file.tr()}"),
                                   ],
                                 )
                               : TextButton.icon(
@@ -494,7 +494,8 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                                     textStyle: TextStyle(fontSize: 14),
                                   ),
                                   icon: Icon(Icons.attachment_outlined),
-                                  label: Text('Download Attachment'),
+                                  label: Text(
+                                      '${LocaleKeys.donwload_attachment.tr()}'),
                                 ),
                         if (int.parse(comp.complaint.cmpInitBy) == _uid &&
                             comp.complaint.stat != "NA" &&

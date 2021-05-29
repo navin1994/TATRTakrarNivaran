@@ -141,7 +141,8 @@ class RagistrationDetailsScreen extends StatelessWidget {
               ),
               ListTile(
                 leading: Icon(Icons.location_on),
-                title: Text("Work Office: ${userData.uOfcNm}"),
+                title:
+                    Text("${LocaleKeys.work_office.tr()}: ${userData.uOfcNm}"),
               ),
               Divider(
                 height: 0.6,
