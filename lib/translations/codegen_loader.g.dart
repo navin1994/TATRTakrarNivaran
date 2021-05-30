@@ -185,7 +185,8 @@ class CodegenLoader extends AssetLoader{
   "marathi": "Marathi",
   "closed": "Closed",
   "donwloading_file": "Downloading File...",
-  "donwload_attachment": "Download Attachment"
+  "donwload_attachment": "Download Attachment",
+  "error_dashboard_summary": "Error while fetching the Dashboard Summary. Please check your internet connection."
 };
 static const Map<String,dynamic> mr_IN = {
   "login": "लॉगिन",
@@ -358,7 +359,8 @@ static const Map<String,dynamic> mr_IN = {
   "marathi": "मराठी",
   "closed": "बंद",
   "donwloading_file": "फाईल डाउनलोड करीत आहे",
-  "donwload_attachment": "संलग्नक डाउनलोड करा"
+  "donwload_attachment": "संलग्नक डाउनलोड करा",
+  "error_dashboard_summary": "डॅशबोर्ड सारांश प्राप्त करताना त्रुटी. कृपया आपले इंटरनेट कनेक्शन तपासा."
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en_US": en_US, "mr_IN": mr_IN};
 }

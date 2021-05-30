@@ -169,5 +169,6 @@
   "marathi": "Marathi",
   "closed": "Closed",
   "donwloading_file": "Downloading File...",
-  "donwload_attachment": "Download Attachment"
+  "donwload_attachment": "Download Attachment",
+  "error_dashboard_summary": "Error while fetching the Dashboard Summary. Please check your internet connection."
 }

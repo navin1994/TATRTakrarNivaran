@@ -172,5 +172,6 @@ abstract class  LocaleKeys {
   static const closed = 'closed';
   static const donwloading_file = 'donwloading_file';
   static const donwload_attachment = 'donwload_attachment';
+  static const error_dashboard_summary = 'error_dashboard_summary';
 
 }
