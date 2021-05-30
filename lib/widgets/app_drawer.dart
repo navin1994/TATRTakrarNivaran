@@ -8,9 +8,7 @@ import '../screens/login_signup_screen.dart';
 import '../screens/dashboard-screen.dart';
 import '../screens/registration_List_screen.dart';
 import '../screens/profile_screen.dart';
-import '../screens/raise_complain_screen.dart';
 import '../screens/complaint_management_screen.dart';
-import '../screens/data_management_screen.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -18,21 +16,28 @@ class AppDrawer extends StatelessWidget {
     String _userName = Provider.of<Auth>(context, listen: false).name;
     return Drawer(
       child: Container(
+        color: Colors.lightGreen[200],
         child: ListView(
           children: [
             AppBar(
+              brightness: Brightness.dark,
+              centerTitle: true,
+              backgroundColor: Colors.green[900],
               title: Text('${LocaleKeys.hello.tr()} $_userName'),
               automaticallyImplyLeading: false,
             ),
             Divider(
               height: 0.6,
-              color: Colors.indigo.shade900,
+              color: Colors.deepOrange,
             ),
             ListTile(
-              leading: Icon(Icons.person, color: Theme.of(context).accentColor),
+              leading: Icon(Icons.person, color: Colors.green[900]),
+              tileColor: Colors.lightGreen[400],
+              selectedTileColor: Colors.deepOrange,
               title: Text(
                 LocaleKeys.profile.tr(),
-                style: TextStyle(color: Theme.of(context).accentColor),
+                style: TextStyle(
+                    color: Colors.teal[900], fontWeight: FontWeight.bold),
               ),
               onTap: () {
                 Navigator.of(context)
@@ -41,25 +46,28 @@ class AppDrawer extends StatelessWidget {
             ),
             Divider(
               height: 0.6,
-              color: Colors.black87,
+              color: Colors.deepOrange,
             ),
             ListTile(
-              leading:
-                  Icon(Icons.dashboard, color: Theme.of(context).accentColor),
+              leading: Icon(Icons.dashboard, color: Colors.green[900]),
+              tileColor: Colors.lightGreen[300],
               title: Text(LocaleKeys.dashboard.tr(),
-                  style: TextStyle(color: Theme.of(context).accentColor)),
+                  style: TextStyle(
+                      color: Colors.teal[900], fontWeight: FontWeight.bold)),
               onTap: () {
                 Navigator.of(context).pushReplacementNamed(Dashboard.routeName);
               },
             ),
             Divider(
               height: 0.6,
-              color: Colors.black87,
+              color: Colors.deepOrange,
             ),
             ListTile(
-              leading: Icon(Icons.chat, color: Theme.of(context).accentColor),
+              leading: Icon(Icons.chat, color: Colors.green[900]),
+              tileColor: Colors.lightGreen[400],
               title: Text(LocaleKeys.manage_complaints.tr(),
-                  style: TextStyle(color: Theme.of(context).accentColor)),
+                  style: TextStyle(
+                      color: Colors.teal[900], fontWeight: FontWeight.bold)),
               onTap: () {
                 Navigator.of(context)
                     .pushReplacementNamed(ComplaintManagementScreen.routeName);
@@ -102,28 +110,30 @@ class AppDrawer extends StatelessWidget {
             //   },
             // ),
             Divider(
-              height: 0.6,
-              color: Colors.black87,
+              height: 0.8,
+              color: Colors.deepOrange,
             ),
             ListTile(
-              leading: Icon(Icons.app_registration,
-                  color: Theme.of(context).accentColor),
+              leading: Icon(Icons.app_registration, color: Colors.green[900]),
+              tileColor: Colors.lightGreen[300],
               title: Text(LocaleKeys.manage_registrations.tr(),
-                  style: TextStyle(color: Theme.of(context).accentColor)),
+                  style: TextStyle(
+                      color: Colors.green[900], fontWeight: FontWeight.bold)),
               onTap: () {
                 Navigator.of(context)
                     .pushReplacementNamed(RegistrationListScreen.routeName);
               },
             ),
             Divider(
-              height: 0.6,
-              color: Colors.black87,
+              height: 0.8,
+              color: Colors.deepOrange,
             ),
             ListTile(
-              leading:
-                  Icon(Icons.exit_to_app, color: Theme.of(context).accentColor),
+              leading: Icon(Icons.exit_to_app, color: Colors.deepOrange),
+              tileColor: Colors.lightGreen[400],
               title: Text(LocaleKeys.logout.tr(),
-                  style: TextStyle(color: Theme.of(context).accentColor)),
+                  style: TextStyle(
+                      color: Colors.green[900], fontWeight: FontWeight.bold)),
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.of(context)
@@ -132,8 +142,8 @@ class AppDrawer extends StatelessWidget {
               },
             ),
             Divider(
-              height: 0.6,
-              color: Colors.black87,
+              height: 1,
+              color: Colors.deepOrange,
             ),
           ],
         ),

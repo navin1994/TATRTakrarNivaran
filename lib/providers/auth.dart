@@ -106,6 +106,7 @@ class Auth with ChangeNotifier {
             "tkn": token,
           }));
       final result = json.decode(response.body);
+      print("FCM Token registration result => $result");
       if (result['Result'] == "NOK") {
         return;
       }
