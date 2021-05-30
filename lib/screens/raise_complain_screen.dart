@@ -336,8 +336,7 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
                         bottomRight: Radius.circular(20),
                       ),
                       image: DecorationImage(
-                          image: AssetImage(
-                              "assets/images/background-waterfall.jpg"),
+                          image: AssetImage("assets/images/bg3.jpg"),
                           fit: BoxFit.fill),
                     ),
                   ),

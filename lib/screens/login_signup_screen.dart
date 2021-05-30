@@ -395,8 +395,9 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                     height: MediaQuery.of(context).size.height,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                          image:
-                              AssetImage("assets/images/background-forest.jpg"),
+                          colorFilter: ColorFilter.mode(
+                              Colors.black.withOpacity(0.8), BlendMode.darken),
+                          image: AssetImage("assets/images/bg3.jpg"),
                           fit: BoxFit.fill),
                     ),
                     child: Container(
@@ -417,8 +418,8 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                 children: [
                                   TextSpan(
                                     text: isSignupScreen
-                                        ? "ताडोबा अंधारी व्याघ्र प्रकल्पाची नोंदणी,"
-                                        : "ताडोबा अंधारी व्याघ्रप्रकल्प लॉगिन,",
+                                        ? "TATR तक्रार निवारण नोंदणी,"
+                                        : "TATR तक्रार निवारण लॉगिन,",
                                     style: TextStyle(
                                       fontSize: 25,
                                       fontWeight: FontWeight.bold,
@@ -453,7 +454,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                       width: 100,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                            image: AssetImage("assets/images/logo.jpg"),
+                            image: AssetImage("assets/images/logo.png"),
                             fit: BoxFit.fill),
                       ),
                     ),
