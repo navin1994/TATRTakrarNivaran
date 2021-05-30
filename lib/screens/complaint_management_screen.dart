@@ -140,10 +140,10 @@ class _ComplaintManagementScreenState extends State<ComplaintManagementScreen> {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Color(0xFF581845),
       appBar: AppBar(
         brightness: Brightness.dark,
-        backgroundColor: Colors.black,
+        backgroundColor: Color(0xFF581845),
         elevation: 0,
         centerTitle: true,
         title: Text(

@@ -16,7 +16,7 @@ class AppDrawer extends StatelessWidget {
     String _userName = Provider.of<Auth>(context, listen: false).name;
     return Drawer(
       child: Container(
-        color: Colors.lightGreen[200],
+        color: Colors.lightGreen[50],
         child: ListView(
           children: [
             AppBar(
@@ -31,7 +31,7 @@ class AppDrawer extends StatelessWidget {
               color: Colors.deepOrange,
             ),
             ListTile(
-              leading: Icon(Icons.person, color: Colors.green[900]),
+              leading: Icon(Icons.person, color: Colors.pinkAccent[700]),
               tileColor: Colors.lightGreen[400],
               selectedTileColor: Colors.deepOrange,
               title: Text(
@@ -49,7 +49,7 @@ class AppDrawer extends StatelessWidget {
               color: Colors.deepOrange,
             ),
             ListTile(
-              leading: Icon(Icons.dashboard, color: Colors.green[900]),
+              leading: Icon(Icons.dashboard, color: Colors.amber[900]),
               tileColor: Colors.lightGreen[300],
               title: Text(LocaleKeys.dashboard.tr(),
                   style: TextStyle(
@@ -114,7 +114,7 @@ class AppDrawer extends StatelessWidget {
               color: Colors.deepOrange,
             ),
             ListTile(
-              leading: Icon(Icons.app_registration, color: Colors.green[900]),
+              leading: Icon(Icons.app_registration, color: Colors.lime[900]),
               tileColor: Colors.lightGreen[300],
               title: Text(LocaleKeys.manage_registrations.tr(),
                   style: TextStyle(

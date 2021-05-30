@@ -20,17 +20,23 @@ class Tilewidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       margin: EdgeInsets.symmetric(vertical: 6),
       height: 75,
       decoration: BoxDecoration(
           color: Color.fromRGBO(34, 37, 42, 1),
+          border: Border.all(
+            color: Colors.white30,
+            width: 1,
+          ),
           borderRadius: BorderRadius.circular(18)),
+          
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            width: MediaQuery.of(context).size.width * 0.38,
+            width: MediaQuery.of(context).size.width * 0.36,
             child: Row(
               children: [
                 CircleAvatar(
@@ -43,7 +49,7 @@ class Tilewidget extends StatelessWidget {
             ),
           ),
           Container(
-            width: MediaQuery.of(context).size.width * 0.35,
+            width: MediaQuery.of(context).size.width * 0.30,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -60,7 +66,7 @@ class Tilewidget extends StatelessWidget {
             ),
           ),
           Container(
-            width: MediaQuery.of(context).size.width * 0.17,
+            width: MediaQuery.of(context).size.width * 0.20,
             child: Text(
               '${perc.toStringAsFixed(0) == 'NaN' ? 0 : perc.toStringAsFixed(0)} %',
               style: TextStyle(color: this.textcolor),

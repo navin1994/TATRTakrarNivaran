@@ -83,10 +83,10 @@ class _RegistrationListScreenState extends State<RegistrationListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF035AA6),
+      backgroundColor: Color(0xFF581845),
       appBar: AppBar(
         brightness: Brightness.dark,
-        backgroundColor: Color(0xFF035AA6),
+        backgroundColor: Color(0xFF581845),
         elevation: 0,
         centerTitle: true,
         title: Text(LocaleKeys.registration_list.tr()),

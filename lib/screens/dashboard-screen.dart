@@ -39,12 +39,12 @@ class Dashboard extends StatelessWidget {
       appBar: AppBar(
         brightness: Brightness.dark,
         centerTitle: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.teal[900],
         title: Text(
           LocaleKeys.dashboard.tr(),
         ),
       ),
-      backgroundColor: Color.fromRGBO(26, 29, 33, 1),
+      // backgroundColor: Color.fromRGBO(26, 29, 33, 1),
       drawer: AppDrawer(),
       body: FutureBuilder(
         future: _getSummary(),
@@ -56,11 +56,19 @@ class Dashboard extends StatelessWidget {
             : Consumer<Complaints>(
                 builder: (ctx, cmpl, _) => SafeArea(
                   child: Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                          colorFilter: ColorFilter.mode(
+                              Colors.black.withOpacity(0.5), BlendMode.darken),
+                          image: AssetImage("assets/images/bg3.jpg"),
+                          fit: BoxFit.fill
+                      ),
+                    ),
                     width: double.infinity,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
+                        Container(                          
                           height: MediaQuery.of(context).size.height * .80,
                           padding: EdgeInsets.all(10),
                           child: cmpl.complaintSummary.isEmpty
@@ -78,7 +86,7 @@ class Dashboard extends StatelessWidget {
                                     // PendingComplaintCard(),
                                     Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
+                                          MainAxisAlignment.spaceAround,                                      
                                       children: [
                                         Text(LocaleKeys.cmpl_data.tr(),
                                             style: TextStyle(
@@ -196,12 +204,12 @@ class Dashboard extends StatelessWidget {
                                 ),
                         ),
                         SizedBox(
-                          width: double.infinity,
+                          // width: double.infinity,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               textStyle: const TextStyle(fontSize: 20),
-                              primary: Colors.blue, // background
-                              onPrimary: Colors.white, // foreground
+                              primary: Colors.deepOrange[900], // background
+                              onPrimary: Colors.white, // foreground                              
                             ),
                             onPressed: () => Navigator.of(context)
                                 .pushNamed(RaiseComplainScreen.routeName),
