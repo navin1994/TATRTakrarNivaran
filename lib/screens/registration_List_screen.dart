@@ -89,9 +89,7 @@ class _RegistrationListScreenState extends State<RegistrationListScreen> {
         backgroundColor: Color(0xFF035AA6),
         elevation: 0,
         centerTitle: true,
-        title: Text(
-          LocaleKeys.registration_list.tr(),
-        ),
+        title: Text(LocaleKeys.registration_list.tr()),
       ),
       drawer: AppDrawer(),
       body: SafeArea(

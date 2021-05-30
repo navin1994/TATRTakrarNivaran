@@ -156,7 +156,8 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text(
             heading,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
           ),
           if (_isEditable)
             ElevatedButton.icon(
@@ -185,183 +186,188 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
     }
 
     Widget _detailsCard() {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Form(
-          key: _profileForm,
-          child: Card(
-            elevation: 12,
-            child: Container(
-              padding: EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  if (_isEditable)
-                    SizedBox(
-                      height: 10,
-                    ),
-                  if (_isEditable)
-                    padding.FormFieldWidget(
-                      TextFormField(
-                        initialValue: profile.uFname,
-                        keyboardType: TextInputType.text,
-                        decoration:
-                            decoration(hintText: LocaleKeys.first_name.tr()),
-                        onSaved: (firstName) {
-                          setState(() {
-                            fName = firstName;
-                          });
-                        },
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return LocaleKeys.please_enter_first_name.tr();
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                  if (_isEditable)
-                    padding.FormFieldWidget(
-                      TextFormField(
-                        initialValue: profile.uMname,
-                        keyboardType: TextInputType.text,
-                        decoration:
-                            decoration(hintText: LocaleKeys.middle_name.tr()),
-                        onSaved: (middleName) {
-                          setState(() {
-                            uMname = middleName;
-                          });
-                        },
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return LocaleKeys.please_enter_middle_name.tr();
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                  if (_isEditable)
-                    padding.FormFieldWidget(
-                      TextFormField(
-                        initialValue: profile.uLname,
-                        keyboardType: TextInputType.text,
-                        decoration:
-                            decoration(hintText: LocaleKeys.last_name.tr()),
-                        onSaved: (lastName) {
-                          setState(() {
-                            lName = lastName;
-                          });
-                        },
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return LocaleKeys.please_enter_last_name.tr();
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                  if (!_isEditable)
-                    ListTile(
-                      leading: Icon(Icons.badge),
-                      title: Text(
-                          "${LocaleKeys.designation.tr()}: ${profile.uDesgNm}"),
-                    ),
-                  if (!_isEditable)
-                    Divider(
-                      height: 0.6,
-                      color: Colors.black87,
-                    ),
-                  if (!_isEditable)
-                    ListTile(
-                      leading: Icon(Icons.person),
-                      title: Text(
-                          "${LocaleKeys.sevarth_number.tr()}: ${profile.uSevarthNo}"),
-                    ),
-                  if (!_isEditable)
-                    Divider(
-                      height: 0.6,
-                      color: Colors.black87,
-                    ),
-                  if (_isEditable)
-                    padding.FormFieldWidget(
-                      TextFormField(
-                        initialValue: profile.uEmail,
-                        keyboardType: TextInputType.text,
-                        decoration:
-                            decoration(hintText: LocaleKeys.email_id.tr()),
-                        onSaved: (eMail) {
-                          setState(() {
-                            email = eMail;
-                          });
-                        },
-                      ),
-                    ),
-                  if (!_isEditable)
-                    ListTile(
-                      leading: Icon(Icons.phone),
-                      title: Text(
-                          "${LocaleKeys.mobile_no.tr()}: ${profile.uMobile}"),
-                    ),
-                  if (!_isEditable)
-                    Divider(
-                      height: 0.6,
-                      color: Colors.black87,
-                    ),
-                  if (_isEditable)
-                    padding.FormFieldWidget(
-                      TextFormField(
-                        initialValue: profile.uMobile,
-                        keyboardType: TextInputType.number,
-                        decoration:
-                            decoration(hintText: LocaleKeys.mobile_number.tr()),
-                        onSaved: (mobileNo) {
-                          setState(() {
-                            mobile = mobileNo;
-                          });
-                        },
-                        validator: (value) {
-                          String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
-                          RegExp regExp = new RegExp(patttern);
+      return Container(
+        height: MediaQuery.of(context).size.height * 0.70,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Form(
+              key: _profileForm,
+              child: Card(
+                elevation: 12,
+                child: Container(
+                  padding: EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      if (_isEditable)
+                        SizedBox(
+                          height: 10,
+                        ),
+                      if (_isEditable)
+                        padding.FormFieldWidget(
+                          TextFormField(
+                            initialValue: profile.uFname,
+                            keyboardType: TextInputType.text,
+                            decoration: decoration(
+                                hintText: LocaleKeys.first_name.tr()),
+                            onSaved: (firstName) {
+                              setState(() {
+                                fName = firstName;
+                              });
+                            },
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return LocaleKeys.please_enter_first_name.tr();
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      if (_isEditable)
+                        padding.FormFieldWidget(
+                          TextFormField(
+                            initialValue: profile.uMname,
+                            keyboardType: TextInputType.text,
+                            decoration: decoration(
+                                hintText: LocaleKeys.middle_name.tr()),
+                            onSaved: (middleName) {
+                              setState(() {
+                                uMname = middleName;
+                              });
+                            },
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return LocaleKeys.please_enter_middle_name.tr();
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      if (_isEditable)
+                        padding.FormFieldWidget(
+                          TextFormField(
+                            initialValue: profile.uLname,
+                            keyboardType: TextInputType.text,
+                            decoration:
+                                decoration(hintText: LocaleKeys.last_name.tr()),
+                            onSaved: (lastName) {
+                              setState(() {
+                                lName = lastName;
+                              });
+                            },
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return LocaleKeys.please_enter_last_name.tr();
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      if (!_isEditable)
+                        ListTile(
+                          leading: Icon(Icons.badge),
+                          title: Text(
+                              "${LocaleKeys.designation.tr()}: ${profile.uDesgNm}"),
+                        ),
+                      if (!_isEditable)
+                        Divider(
+                          height: 0.6,
+                          color: Colors.black87,
+                        ),
+                      if (!_isEditable)
+                        ListTile(
+                          leading: Icon(Icons.person),
+                          title: Text(
+                              "${LocaleKeys.sevarth_number.tr()}: ${profile.uSevarthNo}"),
+                        ),
+                      if (!_isEditable)
+                        Divider(
+                          height: 0.6,
+                          color: Colors.black87,
+                        ),
+                      if (_isEditable)
+                        padding.FormFieldWidget(
+                          TextFormField(
+                            initialValue: profile.uEmail,
+                            keyboardType: TextInputType.text,
+                            decoration:
+                                decoration(hintText: LocaleKeys.email_id.tr()),
+                            onSaved: (eMail) {
+                              setState(() {
+                                email = eMail;
+                              });
+                            },
+                          ),
+                        ),
+                      if (!_isEditable)
+                        ListTile(
+                          leading: Icon(Icons.phone),
+                          title: Text(
+                              "${LocaleKeys.mobile_no.tr()}: ${profile.uMobile}"),
+                        ),
+                      if (!_isEditable)
+                        Divider(
+                          height: 0.6,
+                          color: Colors.black87,
+                        ),
+                      if (_isEditable)
+                        padding.FormFieldWidget(
+                          TextFormField(
+                            initialValue: profile.uMobile,
+                            keyboardType: TextInputType.number,
+                            decoration: decoration(
+                                hintText: LocaleKeys.mobile_number.tr()),
+                            onSaved: (mobileNo) {
+                              setState(() {
+                                mobile = mobileNo;
+                              });
+                            },
+                            validator: (value) {
+                              String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+                              RegExp regExp = new RegExp(patttern);
 
-                          if (!regExp.hasMatch(value) && value != null) {
-                            return LocaleKeys.please_mobile_number.tr();
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                  if (!_isEditable)
-                    ListTile(
-                      leading: Icon(Icons.email),
-                      title: Text(
-                          "${LocaleKeys.email_id.tr()}: ${profile.uEmail}"),
-                    ),
-                  if (!_isEditable)
-                    Divider(
-                      height: 0.6,
-                      color: Colors.black87,
-                    ),
-                  if (!_isEditable)
-                    ListTile(
-                      leading: Icon(Icons.design_services_outlined),
-                      title: Text(
-                          "${LocaleKeys.work_office.tr()}: ${profile.uOfcNm}"),
-                    ),
-                  if (!_isEditable)
-                    Divider(
-                      height: 0.6,
-                      color: Colors.black87,
-                    ),
-                  if (!_isEditable)
-                    ListTile(
-                      leading: Icon(Icons.person),
-                      title: Text(
-                          "${LocaleKeys.reporting_to.tr()}: ${profile.uReportUNm}"),
-                    ),
-                  if (_isEditable)
-                    SizedBox(
-                      height: 10,
-                    ),
-                ],
+                              if (!regExp.hasMatch(value) && value != null) {
+                                return LocaleKeys.please_mobile_number.tr();
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      if (!_isEditable)
+                        ListTile(
+                          leading: Icon(Icons.email),
+                          title: Text(
+                              "${LocaleKeys.email_id.tr()}: ${profile.uEmail}"),
+                        ),
+                      if (!_isEditable)
+                        Divider(
+                          height: 0.6,
+                          color: Colors.black87,
+                        ),
+                      if (!_isEditable)
+                        ListTile(
+                          leading: Icon(Icons.design_services_outlined),
+                          title: Text(
+                              "${LocaleKeys.work_office.tr()}: ${profile.uOfcNm}"),
+                        ),
+                      if (!_isEditable)
+                        Divider(
+                          height: 0.6,
+                          color: Colors.black87,
+                        ),
+                      if (!_isEditable)
+                        ListTile(
+                          leading: Icon(Icons.person),
+                          title: Text(
+                              "${LocaleKeys.reporting_to.tr()}: ${profile.uReportUNm}"),
+                        ),
+                      if (_isEditable)
+                        SizedBox(
+                          height: 10,
+                        ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
@@ -370,8 +376,11 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
     }
 
     return Scaffold(
+      backgroundColor: Color(0xFF035AA6),
       appBar: AppBar(
         brightness: Brightness.dark,
+        backgroundColor: Color(0xFF035AA6),
+        elevation: 0,
         centerTitle: true,
         title: Text(LocaleKeys.user_profile.tr()),
       ),
@@ -381,99 +390,133 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
               child: CircularProgressIndicator(),
             )
           : SafeArea(
+              bottom: false,
               child: Container(
-              // decoration: BoxDecoration(
-              //   gradient: LinearGradient(
-              //     begin: Alignment.topRight,
-              //     end: Alignment.bottomLeft,
-              //     colors: [
-              //       Colors.blue,
-              //       Colors.red,
-              //     ],
-              //   ),
-              // ),
-              child: Center(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      if (!_isEditable)
-                        Container(
-                          margin: EdgeInsets.all(10),
-                          width: MediaQuery.of(context).size.width * 0.80,
-                          child: Center(
-                            child: Text(
-                              '${profile.uFname} ${profile.uMname} ${profile.uLname}',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w800),
-                            ),
+                child: Column(
+                  children: [
+                    if (!_isEditable)
+                      Container(
+                        // margin: EdgeInsets.all(10),
+                        width: MediaQuery.of(context).size.width * 0.80,
+                        child: Center(
+                          child: Text(
+                            '${profile.uFname} ${profile.uMname} ${profile.uLname}',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w800),
                           ),
                         ),
-                      if (!_pwdchng) _heading(LocaleKeys.user_profile.tr()),
-                      if (!_pwdchng) _detailsCard(),
-                      if (_pwdchng)
-                        ChangePassword(
-                            profile.uLoginId, decoration, _togglePwdChange),
-                      SizedBox(
-                        height: 10,
                       ),
-                      if (!_isEditable && !_pwdchng)
-                        ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                            elevation: 12,
-                            primary: Colors.pink.shade300, // background
-                            onPrimary: Colors.white, // foreground
+                    if (!_pwdchng) _heading(LocaleKeys.user_profile.tr()),
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          // Our background
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            margin: EdgeInsets.only(top: 60),
+                            decoration: BoxDecoration(
+                              color: Color(0xFFF1EFF1),
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(40),
+                                topRight: Radius.circular(40),
+                              ),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  bottom:
+                                      MediaQuery.of(context).viewInsets.bottom),
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height -
+                                        270,
+                                  ),
+                                  if (!_isEditable && !_pwdchng)
+                                    ElevatedButton.icon(
+                                      style: ElevatedButton.styleFrom(
+                                        elevation: 12,
+                                        primary:
+                                            Colors.pink.shade300, // background
+                                        onPrimary: Colors.white, // foreground
+                                      ),
+                                      onPressed: _togglePwdChange,
+                                      icon: Icon(Icons.vpn_key),
+                                      label: _pwdchng
+                                          ? Text(LocaleKeys.close.tr())
+                                          : Text(
+                                              LocaleKeys.change_password.tr()),
+                                    ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  if (_isEditable)
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Flexible(
+                                          child: ElevatedButton.icon(
+                                            style: ElevatedButton.styleFrom(
+                                                elevation: 12,
+                                                primary:
+                                                    Colors.green, // background
+                                                onPrimary: Colors.white,
+                                                textStyle:
+                                                    TextStyle(fontSize: 18)),
+                                            label: Text(LocaleKeys.update.tr()),
+                                            icon: Icon(
+                                                Icons.check_circle_outline),
+                                            onPressed: _submitUpdateProfileForm,
+                                          ),
+                                        ),
+                                        Flexible(
+                                          child: ElevatedButton.icon(
+                                            style: ElevatedButton.styleFrom(
+                                              elevation: 12,
+                                              primary: Colors.red, // background
+                                              onPrimary:
+                                                  Colors.white, // foreground
+                                              textStyle:
+                                                  TextStyle(fontSize: 18),
+                                            ),
+                                            icon: Icon(Icons.cancel_outlined),
+                                            label: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 8),
+                                              child:
+                                                  Text(LocaleKeys.cancel.tr()),
+                                            ),
+                                            onPressed: _toggleEdit,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                ],
+                              ),
+                            ),
                           ),
-                          onPressed: _togglePwdChange,
-                          icon: Icon(Icons.vpn_key),
-                          label: _pwdchng
-                              ? Text(LocaleKeys.close.tr())
-                              : Text(LocaleKeys.change_password.tr()),
-                        ),
-                      SizedBox(
-                        height: 10,
+                          if (!_pwdchng) _detailsCard(),
+                          if (_pwdchng)
+                            Container(
+                              margin: EdgeInsets.only(
+                                  top:
+                                      MediaQuery.of(context).size.height * .20),
+                              child: ChangePassword(profile.uLoginId,
+                                  decoration, _togglePwdChange),
+                            ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                        ],
                       ),
-                      if (_isEditable)
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Flexible(
-                              child: ElevatedButton.icon(
-                                style: ElevatedButton.styleFrom(
-                                    elevation: 12,
-                                    primary: Colors.green, // background
-                                    onPrimary: Colors.white,
-                                    textStyle: TextStyle(fontSize: 18)),
-                                label: Text(LocaleKeys.update.tr()),
-                                icon: Icon(Icons.check_circle_outline),
-                                onPressed: _submitUpdateProfileForm,
-                              ),
-                            ),
-                            Flexible(
-                              child: ElevatedButton.icon(
-                                style: ElevatedButton.styleFrom(
-                                  elevation: 12,
-                                  primary: Colors.red, // background
-                                  onPrimary: Colors.white, // foreground
-                                  textStyle: TextStyle(fontSize: 18),
-                                ),
-                                icon: Icon(Icons.cancel_outlined),
-                                label: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 8),
-                                  child: Text(LocaleKeys.cancel.tr()),
-                                ),
-                                onPressed: _toggleEdit,
-                              ),
-                            ),
-                          ],
-                        ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-            )),
+            ),
     );
   }
 }

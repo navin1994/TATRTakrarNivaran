@@ -89,69 +89,81 @@ class _ChangePasswordState extends State<ChangePassword> {
     return _isLoading
         ? Center(child: CircularProgressIndicator())
         : Container(
+            height: MediaQuery.of(context).size.height * .45,
             padding: EdgeInsets.symmetric(
               horizontal: 20,
             ),
-            child: Column(
-              children: [
-                Container(
-                  height: 200,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextFormField(
-                        initialValue: widget.loginId,
-                        readOnly: true,
-                        decoration: widget.decoration(
-                            icon: Icons.person,
-                            hintText: LocaleKeys.login_id.tr()),
-                      ),
-                      TextFormField(
-                        obscureText: true,
-                        controller: _pwdController,
-                        decoration: widget.decoration(
-                            icon: Icons.lock,
-                            hintText: LocaleKeys.new_password.tr()),
-                      ),
-                      TextFormField(
-                        obscureText: true,
-                        controller: _cnfPwdController,
-                        decoration: widget.decoration(
-                            icon: Icons.lock,
-                            hintText: LocaleKeys.cnf_pwd.tr()),
-                      ),
-                      SizedBox(
-                        height: 30,
-                      )
-                    ],
+            child: Card(
+              child: Container(
+                padding: EdgeInsets.all(10),
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 200,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextFormField(
+                                initialValue: widget.loginId,
+                                readOnly: true,
+                                decoration: widget.decoration(
+                                    icon: Icons.person,
+                                    hintText: LocaleKeys.login_id.tr()),
+                              ),
+                              TextFormField(
+                                obscureText: true,
+                                controller: _pwdController,
+                                decoration: widget.decoration(
+                                    icon: Icons.lock,
+                                    hintText: LocaleKeys.new_password.tr()),
+                              ),
+                              TextFormField(
+                                obscureText: true,
+                                controller: _cnfPwdController,
+                                decoration: widget.decoration(
+                                    icon: Icons.lock,
+                                    hintText: LocaleKeys.cnf_pwd.tr()),
+                              ),
+                              SizedBox(
+                                height: 30,
+                              )
+                            ],
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                  elevation: 12,
+                                  primary: Colors.red, // background
+                                  onPrimary: Colors.white,
+                                  textStyle: TextStyle(fontSize: 18)),
+                              label: Text(LocaleKeys.cancel.tr()),
+                              icon: Icon(Icons.highlight_remove_outlined),
+                              onPressed: widget.togglePwdChange,
+                            ),
+                            ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                  elevation: 12,
+                                  primary: Colors.green, // background
+                                  onPrimary: Colors.white,
+                                  textStyle: TextStyle(fontSize: 18)),
+                              label: Text(LocaleKeys.submit.tr()),
+                              icon: Icon(Icons.check_circle_outline),
+                              onPressed: _changePassword,
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                          elevation: 12,
-                          primary: Colors.red, // background
-                          onPrimary: Colors.white,
-                          textStyle: TextStyle(fontSize: 18)),
-                      label: Text(LocaleKeys.cancel.tr()),
-                      icon: Icon(Icons.highlight_remove_outlined),
-                      onPressed: widget.togglePwdChange,
-                    ),
-                    ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                          elevation: 12,
-                          primary: Colors.green, // background
-                          onPrimary: Colors.white,
-                          textStyle: TextStyle(fontSize: 18)),
-                      label: Text(LocaleKeys.submit.tr()),
-                      icon: Icon(Icons.check_circle_outline),
-                      onPressed: _changePassword,
-                    ),
-                  ],
-                )
-              ],
+              ),
             ),
           );
   }
