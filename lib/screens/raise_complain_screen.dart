@@ -312,76 +312,141 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFF035AA6),
       appBar: AppBar(
-        backgroundColor: Colors.black.withOpacity(0.8),
-        title: Text(LocaleKeys.new_complaint.tr()),
-        centerTitle: true,
         brightness: Brightness.dark,
+        backgroundColor: Color(0xFF035AA6),
+        elevation: 0,
+        centerTitle: true,
+        title: Text(LocaleKeys.new_complaint.tr()),
       ),
-      backgroundColor: Colors.black.withOpacity(0.8),
       body: _isLoading
           ? Center(
               child: CircularProgressIndicator(),
             )
-          : Stack(
-              children: [
-                Positioned(
-                  top: 0,
-                  right: 0,
-                  left: 0,
-                  child: Container(
-                    height: MediaQuery.of(context).size.height,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20),
-                      ),
-                      image: DecorationImage(
-                          colorFilter: ColorFilter.mode(
-                              Colors.black.withOpacity(0.8), BlendMode.darken),
-                          image: AssetImage("assets/images/bg3.jpg"),
-                          fit: BoxFit.fill),
-                    ),
-                  ),
-                ),
-                AnimatedPositioned(
-                  duration: Duration(milliseconds: 800),
-                  curve: Curves.bounceInOut,
-                  top: MediaQuery.of(context).size.height * .2,
-                  child: AnimatedContainer(
-                    duration: Duration(milliseconds: 800),
-                    curve: Curves.bounceInOut,
-                    padding: EdgeInsets.all(20),
-                    width: MediaQuery.of(context).size.width - 40,
-                    margin: EdgeInsets.symmetric(horizontal: 20),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black.withOpacity(0.3),
-                              blurRadius: 15,
-                              spreadRadius: 5),
-                        ]),
-                    child: SingleChildScrollView(
+          : true
+              ? SafeArea(
+                  bottom: false,
+                  child: Center(
+                    child: Container(
                       child: Column(
                         children: [
-                          Text(
-                            LocaleKeys.comlaint_form.tr(),
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Palette.activeColor),
+                          Expanded(
+                            child: Stack(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      top: MediaQuery.of(context).size.height *
+                                          .30),
+                                  decoration: BoxDecoration(
+                                    color: Color(0xFFF1EFF1),
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(40),
+                                      topRight: Radius.circular(40),
+                                    ),
+                                  ),
+                                ),
+                                Center(
+                                  child: Container(
+                                    padding: EdgeInsets.all(20),
+                                    width:
+                                        MediaQuery.of(context).size.width - 40,
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 20),
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(15),
+                                        boxShadow: [
+                                          BoxShadow(
+                                              color:
+                                                  Colors.black.withOpacity(0.3),
+                                              blurRadius: 15,
+                                              spreadRadius: 5),
+                                        ]),
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            LocaleKeys.comlaint_form.tr(),
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                                color: Palette.activeColor),
+                                          ),
+                                          complaintFormSection(),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                          complaintFormSection(),
                         ],
                       ),
                     ),
-                  ),
+                  ))
+              : Stack(
+                  children: [
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      left: 0,
+                      child: Container(
+                        height: MediaQuery.of(context).size.height,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(20),
+                            bottomRight: Radius.circular(20),
+                          ),
+                          image: DecorationImage(
+                              colorFilter: ColorFilter.mode(
+                                  Colors.black.withOpacity(0.8),
+                                  BlendMode.darken),
+                              image: AssetImage("assets/images/bg3.jpg"),
+                              fit: BoxFit.fill),
+                        ),
+                      ),
+                    ),
+                    AnimatedPositioned(
+                      duration: Duration(milliseconds: 800),
+                      curve: Curves.bounceInOut,
+                      top: MediaQuery.of(context).size.height * .2,
+                      child: AnimatedContainer(
+                        duration: Duration(milliseconds: 800),
+                        curve: Curves.bounceInOut,
+                        padding: EdgeInsets.all(20),
+                        width: MediaQuery.of(context).size.width - 40,
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15),
+                            boxShadow: [
+                              BoxShadow(
+                                  color: Colors.black.withOpacity(0.3),
+                                  blurRadius: 15,
+                                  spreadRadius: 5),
+                            ]),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Text(
+                                LocaleKeys.comlaint_form.tr(),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Palette.activeColor),
+                              ),
+                              complaintFormSection(),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
     );
   }
 }
