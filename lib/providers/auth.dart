@@ -241,6 +241,7 @@ class Auth with ChangeNotifier {
       throw error;
     }
     _userProfile = loadProfile;
+    notifyListeners();
     return object;
   }
 

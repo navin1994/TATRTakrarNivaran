@@ -147,8 +147,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Profile profile =
-        Provider.of<Auth>(context, listen: false).userProfile;
+    final Profile profile = Provider.of<Auth>(context).userProfile;
     Widget _heading(String heading) {
       return Container(
         width: MediaQuery.of(context).size.width * 0.80, //80% of width,
