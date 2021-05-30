@@ -313,11 +313,12 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.black.withOpacity(0.8),
         title: Text(LocaleKeys.new_complaint.tr()),
         centerTitle: true,
         brightness: Brightness.dark,
       ),
-      backgroundColor: Palette.backgroundColor,
+      backgroundColor: Colors.black.withOpacity(0.8),
       body: _isLoading
           ? Center(
               child: CircularProgressIndicator(),
@@ -336,6 +337,8 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
                         bottomRight: Radius.circular(20),
                       ),
                       image: DecorationImage(
+                          colorFilter: ColorFilter.mode(
+                              Colors.black.withOpacity(0.8), BlendMode.darken),
                           image: AssetImage("assets/images/bg3.jpg"),
                           fit: BoxFit.fill),
                     ),
