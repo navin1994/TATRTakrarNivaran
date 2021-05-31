@@ -223,65 +223,55 @@ class RagistrationDetailsScreen extends StatelessWidget {
                                     ),
                                   ),
                                   child: Padding(
-                                    padding: EdgeInsets.only(
-                                        bottom: MediaQuery.of(context)
-                                            .viewInsets
-                                            .bottom),
-                                    child: Column(
-                                      children: [
-                                        SizedBox(
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height -
-                                              270,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Flexible(
-                                              child: ElevatedButton.icon(
-                                                style: ElevatedButton.styleFrom(
-                                                    primary: Colors
-                                                        .green, // background
-                                                    onPrimary: Colors.white,
-                                                    textStyle: TextStyle(
-                                                        fontSize: 18)),
-                                                label:
-                                                    Text(LocaleKeys.apprv.tr()),
-                                                icon: Icon(
-                                                    Icons.check_circle_outline),
-                                                onPressed: () => updateStatus(
-                                                    "A", regUsers.regUser.uid),
-                                              ),
-                                            ),
-                                            Flexible(
-                                              child: ElevatedButton.icon(
-                                                style: ElevatedButton.styleFrom(
-                                                  primary:
-                                                      Colors.red, // background
-                                                  onPrimary: Colors
-                                                      .white, // foreground
+                                    padding: const EdgeInsets.only(bottom: 10),
+                                    child: Align(
+                                      alignment: FractionalOffset.bottomCenter,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Flexible(
+                                            child: ElevatedButton.icon(
+                                              style: ElevatedButton.styleFrom(
+                                                  primary: Colors
+                                                      .green, // background
+                                                  onPrimary: Colors.white,
                                                   textStyle:
-                                                      TextStyle(fontSize: 18),
-                                                ),
-                                                icon:
-                                                    Icon(Icons.cancel_outlined),
-                                                label: Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(horizontal: 8),
-                                                  child: Text(
-                                                      LocaleKeys.reject.tr()),
-                                                ),
-                                                onPressed: () {
-                                                  updateStatus("R",
-                                                      regUsers.regUser.uid);
-                                                },
-                                              ),
+                                                      TextStyle(fontSize: 18)),
+                                              label:
+                                                  Text(LocaleKeys.apprv.tr()),
+                                              icon: Icon(
+                                                  Icons.check_circle_outline),
+                                              onPressed: () => updateStatus(
+                                                  "A", regUsers.regUser.uid),
                                             ),
-                                          ],
-                                        ),
-                                      ],
+                                          ),
+                                          Flexible(
+                                            child: ElevatedButton.icon(
+                                              style: ElevatedButton.styleFrom(
+                                                primary:
+                                                    Colors.red, // background
+                                                onPrimary:
+                                                    Colors.white, // foreground
+                                                textStyle:
+                                                    TextStyle(fontSize: 18),
+                                              ),
+                                              icon: Icon(Icons.cancel_outlined),
+                                              label: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 8),
+                                                child: Text(
+                                                    LocaleKeys.reject.tr()),
+                                              ),
+                                              onPressed: () {
+                                                updateStatus(
+                                                    "R", regUsers.regUser.uid);
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
