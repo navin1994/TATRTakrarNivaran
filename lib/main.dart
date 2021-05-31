@@ -38,7 +38,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
+  //await Firebase.initializeApp();
   print('A bg message just showed up :  ${message.messageId}');
 }
 
@@ -143,7 +143,7 @@ class MyApp extends StatelessWidget {
           supportedLocales: context.supportedLocales,
           localizationsDelegates: context.localizationDelegates,
           locale: context.locale,
-          title: 'Sanwad',
+          title: 'TATR तक्रार निवारण',
           theme: ThemeData(
             primarySwatch: Colors.blue,
             // brightness: Brightness.dark,

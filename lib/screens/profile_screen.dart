@@ -147,7 +147,8 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Profile profile = Provider.of<Auth>(context).userProfile;
+    final Profile profile =
+        Provider.of<Auth>(context, listen: false).userProfile;
     Widget _heading(String heading) {
       return Container(
         width: MediaQuery.of(context).size.width * 0.80, //80% of width,
@@ -185,15 +186,17 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
     }
 
     Widget _detailsCard() {
-      return Container(
-        height: MediaQuery.of(context).size.height * 0.70,
+      return Container(        
+        height: MediaQuery.of(context).size.height * 0.80,        
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 4.0),
             child: Form(
               key: _profileForm,
               child: Card(
-                elevation: 12,
+                margin: const EdgeInsets.only(top: 15.0),
+                color: Colors.transparent,
+                elevation: 0,
                 child: Container(
                   padding: EdgeInsets.all(20),
                   child: Column(
@@ -375,10 +378,10 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
     }
 
     return Scaffold(
-      backgroundColor: Color(0xFF035AA6),
+      backgroundColor: Color(0xFF581845),
       appBar: AppBar(
         brightness: Brightness.dark,
-        backgroundColor: Color(0xFF035AA6),
+        backgroundColor: Color(0xFF581845),
         elevation: 0,
         centerTitle: true,
         title: Text(LocaleKeys.user_profile.tr()),
@@ -396,7 +399,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                     if (!_isEditable)
                       Container(
                         // margin: EdgeInsets.all(10),
-                        width: MediaQuery.of(context).size.width * 0.80,
+                        width: MediaQuery.of(context).size.width * 0.70,
                         child: Center(
                           child: Text(
                             '${profile.uFname} ${profile.uMname} ${profile.uLname}',
@@ -414,7 +417,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                           // Our background
                           Container(
                             width: MediaQuery.of(context).size.width,
-                            margin: EdgeInsets.only(top: 60),
+                            margin: EdgeInsets.only(top: 30),
                             decoration: BoxDecoration(
                               color: Color(0xFFF1EFF1),
                               borderRadius: BorderRadius.only(

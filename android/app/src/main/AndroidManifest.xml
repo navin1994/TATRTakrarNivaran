@@ -2,8 +2,8 @@
     package="com.sparsh.app">
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
-        android:label="complaint_management"
-        android:icon="@mipmap/ic_launcher"
+        android:label="TATR तक्रार निवारण"
+        android:icon="@mipmap/applogo"
         android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true">
         <activity
@@ -28,11 +28,16 @@
                  Flutter's first frame. -->
             <meta-data
               android:name="io.flutter.embedding.android.SplashScreenDrawable"
-              android:resource="@drawable/splash_screen"
+              android:resource="@drawable/launch_background"
               />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="FLUTTER_NOTIFICATION_CLICK" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

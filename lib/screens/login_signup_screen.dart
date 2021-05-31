@@ -396,14 +396,15 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                     decoration: BoxDecoration(
                       image: DecorationImage(
                           colorFilter: ColorFilter.mode(
-                              Colors.black.withOpacity(0.8), BlendMode.darken),
+                              Colors.black.withOpacity(0.5), BlendMode.darken),
                           image: AssetImage("assets/images/bg3.jpg"),
-                          fit: BoxFit.fill),
+                          fit: BoxFit.fill
+                      ),
                     ),
                     child: Container(
                       padding: EdgeInsets.only(
                           top: !isSignupScreen ? 125 : 30, left: 20),
-                      color: Color(0xFF3b5999).withOpacity(.50),
+                      //color: Color(0xFF3b5999).withOpacity(.50),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

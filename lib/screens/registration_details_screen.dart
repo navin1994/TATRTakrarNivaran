@@ -78,7 +78,7 @@ class RagistrationDetailsScreen extends StatelessWidget {
             ),
             child: Text(
               _getStatus(userData.stat),
-              style: TextStyle(color: Colors.black),
+              style: TextStyle(color: Colors.white),
             ),
           ),
         ]),
@@ -172,10 +172,10 @@ class RagistrationDetailsScreen extends StatelessWidget {
     }
 
     return Scaffold(
-      backgroundColor: Color(0xFF035AA6),
+      backgroundColor: Color(0xFF581845),
       appBar: AppBar(
         brightness: Brightness.dark,
-        backgroundColor: Color(0xFF035AA6),
+        backgroundColor: Color(0xFF581845),
         elevation: 0,
         centerTitle: true,
         title: Text(LocaleKeys.registration_details.tr()),

@@ -403,6 +403,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
         brightness: Brightness.dark,
         centerTitle: true,
         title: Text(LocaleKeys.complaint_details.tr()),
+        backgroundColor: Color(0xFF581845),
       ),
       body: FutureBuilder(
         future: Provider.of<Complaints>(context, listen: false).findById(cmpId),
