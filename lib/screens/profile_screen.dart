@@ -186,8 +186,8 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
     }
 
     Widget _detailsCard() {
-      return Container(        
-        height: MediaQuery.of(context).size.height * 0.80,        
+      return Container(
+        height: MediaQuery.of(context).size.height * 0.80,
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -367,6 +367,58 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                         SizedBox(
                           height: 10,
                         ),
+                      if (_isEditable)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Flexible(
+                              child: ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                    elevation: 12,
+                                    primary: Colors.green, // background
+                                    onPrimary: Colors.white,
+                                    textStyle: TextStyle(fontSize: 18)),
+                                label: Text(LocaleKeys.update.tr()),
+                                icon: Icon(Icons.check_circle_outline),
+                                onPressed: _submitUpdateProfileForm,
+                              ),
+                            ),
+                            Flexible(
+                              child: ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                  elevation: 12,
+                                  primary: Colors.red, // background
+                                  onPrimary: Colors.white, // foreground
+                                  textStyle: TextStyle(fontSize: 18),
+                                ),
+                                icon: Icon(Icons.cancel_outlined),
+                                label: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  child: Text(LocaleKeys.cancel.tr()),
+                                ),
+                                onPressed: _toggleEdit,
+                              ),
+                            ),
+                          ],
+                        ),
+                      if (!_isEditable)
+                        SizedBox(
+                          height: 20,
+                        ),
+                      if (!_isEditable && !_pwdchng)
+                        ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            elevation: 12,
+                            primary: Colors.pink.shade300, // background
+                            onPrimary: Colors.white, // foreground
+                          ),
+                          onPressed: _togglePwdChange,
+                          icon: Icon(Icons.vpn_key),
+                          label: _pwdchng
+                              ? Text(LocaleKeys.close.tr())
+                              : Text(LocaleKeys.change_password.tr()),
+                        ),
                     ],
                   ),
                 ),
@@ -399,7 +451,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                     if (!_isEditable)
                       Container(
                         // margin: EdgeInsets.all(10),
-                        width: MediaQuery.of(context).size.width * 0.70,
+                        width: MediaQuery.of(context).size.width * 0.80,
                         child: Center(
                           child: Text(
                             '${profile.uFname} ${profile.uMname} ${profile.uLname}',
@@ -416,6 +468,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                         children: [
                           // Our background
                           Container(
+                            height: MediaQuery.of(context).size.height,
                             width: MediaQuery.of(context).size.width,
                             margin: EdgeInsets.only(top: 30),
                             decoration: BoxDecoration(
@@ -423,80 +476,6 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                               borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(40),
                                 topRight: Radius.circular(40),
-                              ),
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                  bottom:
-                                      MediaQuery.of(context).viewInsets.bottom),
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: MediaQuery.of(context).size.height -
-                                        270,
-                                  ),
-                                  if (!_isEditable && !_pwdchng)
-                                    ElevatedButton.icon(
-                                      style: ElevatedButton.styleFrom(
-                                        elevation: 12,
-                                        primary:
-                                            Colors.pink.shade300, // background
-                                        onPrimary: Colors.white, // foreground
-                                      ),
-                                      onPressed: _togglePwdChange,
-                                      icon: Icon(Icons.vpn_key),
-                                      label: _pwdchng
-                                          ? Text(LocaleKeys.close.tr())
-                                          : Text(
-                                              LocaleKeys.change_password.tr()),
-                                    ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  if (_isEditable)
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        Flexible(
-                                          child: ElevatedButton.icon(
-                                            style: ElevatedButton.styleFrom(
-                                                elevation: 12,
-                                                primary:
-                                                    Colors.green, // background
-                                                onPrimary: Colors.white,
-                                                textStyle:
-                                                    TextStyle(fontSize: 18)),
-                                            label: Text(LocaleKeys.update.tr()),
-                                            icon: Icon(
-                                                Icons.check_circle_outline),
-                                            onPressed: _submitUpdateProfileForm,
-                                          ),
-                                        ),
-                                        Flexible(
-                                          child: ElevatedButton.icon(
-                                            style: ElevatedButton.styleFrom(
-                                              elevation: 12,
-                                              primary: Colors.red, // background
-                                              onPrimary:
-                                                  Colors.white, // foreground
-                                              textStyle:
-                                                  TextStyle(fontSize: 18),
-                                            ),
-                                            icon: Icon(Icons.cancel_outlined),
-                                            label: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8),
-                                              child:
-                                                  Text(LocaleKeys.cancel.tr()),
-                                            ),
-                                            onPressed: _toggleEdit,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                ],
                               ),
                             ),
                           ),

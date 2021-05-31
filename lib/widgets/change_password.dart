@@ -94,6 +94,8 @@ class _ChangePasswordState extends State<ChangePassword> {
               horizontal: 20,
             ),
             child: Card(
+              color: Colors.transparent,
+              elevation: 0,
               child: Container(
                 padding: EdgeInsets.all(10),
                 child: Padding(
