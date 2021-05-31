@@ -173,5 +173,7 @@ abstract class  LocaleKeys {
   static const donwloading_file = 'donwloading_file';
   static const donwload_attachment = 'donwload_attachment';
   static const error_dashboard_summary = 'error_dashboard_summary';
+  static const raise_complaint = 'raise_complaint';
+  static const track_it = 'track_it';
 
 }

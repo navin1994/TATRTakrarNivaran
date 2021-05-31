@@ -170,5 +170,7 @@
   "closed": "Closed",
   "donwloading_file": "Downloading File...",
   "donwload_attachment": "Download Attachment",
-  "error_dashboard_summary": "Error while fetching the Dashboard Summary. Please check your internet connection."
+  "error_dashboard_summary": "Error while fetching the Dashboard Summary. Please check your internet connection.",
+  "raise_complaint": "Raise Complaint",
+  "track_it": "Track It"
 }

@@ -210,7 +210,7 @@ class Dashboard extends StatelessWidget {
                                 ),
                                 onPressed: () => Navigator.of(context)
                                     .pushNamed(RaiseComplainScreen.routeName),
-                                child: Text("Raise Complaint"),
+                                child: Text(LocaleKeys.raise_complaint.tr()),
                               ),
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
@@ -223,7 +223,7 @@ class Dashboard extends StatelessWidget {
                                         ComplaintManagementScreen.routeName,
                                         arguments: FilterComplaintArgs(
                                             indx: 5, srcUnder: "R")),
-                                child: Text("Track It"),
+                                child: Text(LocaleKeys.track_it.tr()),
                               ),
                             ],
                           ),
