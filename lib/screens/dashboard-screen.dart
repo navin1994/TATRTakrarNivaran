@@ -200,7 +200,7 @@ class Dashboard extends StatelessWidget {
                         SizedBox(
                           // width: double.infinity,
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
