@@ -200,11 +200,11 @@ class Dashboard extends StatelessWidget {
                         SizedBox(
                           // width: double.infinity,
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  textStyle: const TextStyle(fontSize: 20),
+                                  textStyle: const TextStyle(fontSize: 14),
                                   primary: Colors.deepOrange[900], // background
                                   onPrimary: Colors.white, // foreground
                                 ),
@@ -212,9 +212,10 @@ class Dashboard extends StatelessWidget {
                                     .pushNamed(RaiseComplainScreen.routeName),
                                 child: Text(LocaleKeys.raise_complaint.tr()),
                               ),
+                              SizedBox(width: 10),
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  textStyle: const TextStyle(fontSize: 20),
+                                  textStyle: const TextStyle(fontSize: 14),
                                   primary: Colors.green[900], // background
                                   onPrimary: Colors.white, // foreground
                                 ),
