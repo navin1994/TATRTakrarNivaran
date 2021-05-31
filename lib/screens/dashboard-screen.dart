@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:sweetalertv2/sweetalertv2.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+import '../models/filter_cmpl_args.dart';
 import '../translations/locale_keys.g.dart';
 import '../providers/complaints.dart';
 import '../widgets/app_drawer.dart';
@@ -61,14 +62,13 @@ class Dashboard extends StatelessWidget {
                           colorFilter: ColorFilter.mode(
                               Colors.black.withOpacity(0.5), BlendMode.darken),
                           image: AssetImage("assets/images/bg3.jpg"),
-                          fit: BoxFit.fill
-                      ),
+                          fit: BoxFit.fill),
                     ),
                     width: double.infinity,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(                          
+                        Container(
                           height: MediaQuery.of(context).size.height * .80,
                           padding: EdgeInsets.all(10),
                           child: cmpl.complaintSummary.isEmpty
@@ -86,7 +86,7 @@ class Dashboard extends StatelessWidget {
                                     // PendingComplaintCard(),
                                     Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,                                      
+                                          MainAxisAlignment.spaceAround,
                                       children: [
                                         Text(LocaleKeys.cmpl_data.tr(),
                                             style: TextStyle(
@@ -98,24 +98,21 @@ class Dashboard extends StatelessWidget {
                                               style: TextStyle(
                                                   fontSize: 15,
                                                   color: Colors.white)),
-                                          onTap: () {
-                                            Navigator.of(context)
-                                                .pushReplacementNamed(
-                                                    ComplaintManagementScreen
-                                                        .routeName);
-                                          },
+                                          onTap: () => Navigator.of(context)
+                                              .pushReplacementNamed(
+                                                  ComplaintManagementScreen
+                                                      .routeName),
                                         ),
                                       ],
                                     ),
                                     SizedBox(height: 15),
                                     InkWell(
-                                      onTap: () {
-                                        Navigator.of(context)
-                                            .pushReplacementNamed(
-                                                ComplaintManagementScreen
-                                                    .routeName,
-                                                arguments: 5);
-                                      },
+                                      onTap: () => Navigator.of(context)
+                                          .pushReplacementNamed(
+                                              ComplaintManagementScreen
+                                                  .routeName,
+                                              arguments: FilterComplaintArgs(
+                                                  indx: 5, srcUnder: "U")),
                                       child: Tilewidget(
                                         color: Colors.yellow,
                                         symbol: cmpl.complaintSummary[0].text,
@@ -128,13 +125,12 @@ class Dashboard extends StatelessWidget {
                                       ),
                                     ),
                                     InkWell(
-                                      onTap: () {
-                                        Navigator.of(context)
-                                            .pushReplacementNamed(
-                                                ComplaintManagementScreen
-                                                    .routeName,
-                                                arguments: 3);
-                                      },
+                                      onTap: () => Navigator.of(context)
+                                          .pushReplacementNamed(
+                                              ComplaintManagementScreen
+                                                  .routeName,
+                                              arguments: FilterComplaintArgs(
+                                                  indx: 3, srcUnder: "U")),
                                       child: Tilewidget(
                                         color: Colors.greenAccent,
                                         symbol: cmpl.complaintSummary[1].text,
@@ -152,13 +148,12 @@ class Dashboard extends StatelessWidget {
                                       ),
                                     ),
                                     InkWell(
-                                      onTap: () {
-                                        Navigator.of(context)
-                                            .pushReplacementNamed(
-                                                ComplaintManagementScreen
-                                                    .routeName,
-                                                arguments: 1);
-                                      },
+                                      onTap: () => Navigator.of(context)
+                                          .pushReplacementNamed(
+                                              ComplaintManagementScreen
+                                                  .routeName,
+                                              arguments: FilterComplaintArgs(
+                                                  indx: 1, srcUnder: "U")),
                                       child: Tilewidget(
                                         color: Colors.orange,
                                         symbol: cmpl.complaintSummary[3].text,
@@ -176,13 +171,12 @@ class Dashboard extends StatelessWidget {
                                       ),
                                     ),
                                     InkWell(
-                                      onTap: () {
-                                        Navigator.of(context)
-                                            .pushReplacementNamed(
-                                                ComplaintManagementScreen
-                                                    .routeName,
-                                                arguments: 4);
-                                      },
+                                      onTap: () => Navigator.of(context)
+                                          .pushReplacementNamed(
+                                              ComplaintManagementScreen
+                                                  .routeName,
+                                              arguments: FilterComplaintArgs(
+                                                  indx: 4, srcUnder: "U")),
                                       child: Tilewidget(
                                         color: Colors.red,
                                         symbol: cmpl.complaintSummary[2].text,
@@ -205,15 +199,33 @@ class Dashboard extends StatelessWidget {
                         ),
                         SizedBox(
                           // width: double.infinity,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              textStyle: const TextStyle(fontSize: 20),
-                              primary: Colors.deepOrange[900], // background
-                              onPrimary: Colors.white, // foreground                              
-                            ),
-                            onPressed: () => Navigator.of(context)
-                                .pushNamed(RaiseComplainScreen.routeName),
-                            child: Text("Raise Complaint"),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  textStyle: const TextStyle(fontSize: 20),
+                                  primary: Colors.deepOrange[900], // background
+                                  onPrimary: Colors.white, // foreground
+                                ),
+                                onPressed: () => Navigator.of(context)
+                                    .pushNamed(RaiseComplainScreen.routeName),
+                                child: Text("Raise Complaint"),
+                              ),
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  textStyle: const TextStyle(fontSize: 20),
+                                  primary: Colors.green[900], // background
+                                  onPrimary: Colors.white, // foreground
+                                ),
+                                onPressed: () => Navigator.of(context)
+                                    .pushReplacementNamed(
+                                        ComplaintManagementScreen.routeName,
+                                        arguments: FilterComplaintArgs(
+                                            indx: 5, srcUnder: "R")),
+                                child: Text("Track It"),
+                              ),
+                            ],
                           ),
                         ),
                       ],

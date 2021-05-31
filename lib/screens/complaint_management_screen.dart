@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:sweetalertv2/sweetalertv2.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+import '../models/filter_cmpl_args.dart';
 import '../translations/locale_keys.g.dart';
 import '../widgets/show_list.dart';
 import '../widgets/filter_list.dart';
@@ -128,8 +129,17 @@ class _ComplaintManagementScreenState extends State<ComplaintManagementScreen> {
     if (!_init) {
       return;
     }
-    final filter = ModalRoute.of(context).settings.arguments as int;
-    _filterData(filter != null ? filter : _selectedIndex);
+    final trackIt =
+        ModalRoute.of(context).settings.arguments as FilterComplaintArgs;
+    if (trackIt != null) {
+      setState(() {
+        _srchUnder = trackIt.srcUnder;
+        _init = false;
+      });
+      _filterData(trackIt.indx);
+      return;
+    }
+    _filterData(_selectedIndex);
     setState(() {
       _init = false;
     });
@@ -149,17 +159,17 @@ class _ComplaintManagementScreenState extends State<ComplaintManagementScreen> {
         title: Text(
           LocaleKeys.complt_mngmnt.tr(),
         ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add_comment_outlined),
-            padding: EdgeInsets.all(10),
-            iconSize: 34,
-            color: Colors.white,
-            onPressed: () {
-              Navigator.of(context).pushNamed(RaiseComplainScreen.routeName);
-            },
-          )
-        ],
+        // actions: [
+        //   IconButton(
+        //     icon: Icon(Icons.add_comment_outlined),
+        //     padding: EdgeInsets.all(10),
+        //     iconSize: 34,
+        //     color: Colors.white,
+        //     onPressed: () {
+        //       Navigator.of(context).pushNamed(RaiseComplainScreen.routeName);
+        //     },
+        //   )
+        // ],
       ),
       drawer: AppDrawer(),
       body: new GestureDetector(
@@ -199,6 +209,22 @@ class _ComplaintManagementScreenState extends State<ComplaintManagementScreen> {
                               child: CircularProgressIndicator(),
                             )
                           : ShowList(_listType),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 5, bottom: 5),
+                        child: Align(
+                          alignment: FractionalOffset.bottomRight,
+                          child: FloatingActionButton(
+                            backgroundColor: Colors.deepOrange[900],
+                            elevation: 40,
+                            child: Icon(
+                              Icons.add,
+                              size: 35,
+                            ),
+                            onPressed: () => Navigator.of(context)
+                                .pushNamed(RaiseComplainScreen.routeName),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),

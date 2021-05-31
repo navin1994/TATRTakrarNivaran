@@ -126,9 +126,9 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
     }
     try {
       checkAppUpdate();
-      setState(() {
-        _isLoading = true;
-      });
+      // setState(() {
+      //   _isLoading = true;
+      // });
       final res = await Provider.of<Divisions>(context, listen: false)
           .fetchAndSetDivisons();
       setState(() {
@@ -398,8 +398,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                           colorFilter: ColorFilter.mode(
                               Colors.black.withOpacity(0.5), BlendMode.darken),
                           image: AssetImage("assets/images/bg3.jpg"),
-                          fit: BoxFit.fill
-                      ),
+                          fit: BoxFit.fill),
                     ),
                     child: Container(
                       padding: EdgeInsets.only(
