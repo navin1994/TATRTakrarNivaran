@@ -25,17 +25,19 @@ class _ComplaintManagementScreenState extends State<ComplaintManagementScreen> {
   var _init = true;
   String _crit = "NA";
   final String _listType = "complaints";
+  // Please match sequence with _filterData method
   final List _filters = [
     LocaleKeys.my_complaints.tr(),
     LocaleKeys.pending.tr(),
     LocaleKeys.on_hold.tr(),
+    LocaleKeys.transfered.tr(),
     LocaleKeys.approved.tr(),
     LocaleKeys.rejected.tr(),
     LocaleKeys.all.tr()
   ];
   var _selectedIndex = 1;
   var _srchUnder = "U";
-
+  // Please match sequence with _filters variable
   void _filterData(index) {
     _selectedIndex = index;
     switch (_selectedIndex) {
@@ -49,9 +51,12 @@ class _ComplaintManagementScreenState extends State<ComplaintManagementScreen> {
         _fetchAndSetComplaints("H", true, inclUndr: _srchUnder);
         break;
       case 3:
-        _fetchAndSetComplaints("A", true, inclUndr: _srchUnder);
+        _fetchAndSetComplaints("AH", true, inclUndr: _srchUnder);
         break;
       case 4:
+        _fetchAndSetComplaints("A", true, inclUndr: _srchUnder);
+        break;
+      case 5:
         _fetchAndSetComplaints("R", true, inclUndr: _srchUnder);
         break;
       default:

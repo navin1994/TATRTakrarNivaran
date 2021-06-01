@@ -1,4 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+
+import '../translations/locale_keys.g.dart';
 
 class Tilewidget extends StatelessWidget {
   final Color color;
@@ -17,10 +20,26 @@ class Tilewidget extends StatelessWidget {
       @required this.count})
       : super(key: key);
 
+  Widget get _getLabel {
+    switch (symbol) {
+      case "TOTAL":
+        return Text("${LocaleKeys.total.tr()}",
+            style: TextStyle(color: Colors.white));
+      case "Solved":
+        return Text("${LocaleKeys.solved.tr()}",
+            style: TextStyle(color: Colors.white));
+      case "Pending":
+        return Text("${LocaleKeys.pending.tr()}",
+            style: TextStyle(color: Colors.white));
+      default:
+        return Text("${LocaleKeys.rejected.tr()}",
+            style: TextStyle(color: Colors.white));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      
       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       margin: EdgeInsets.symmetric(vertical: 6),
       height: 75,
@@ -31,7 +50,6 @@ class Tilewidget extends StatelessWidget {
             width: 1,
           ),
           borderRadius: BorderRadius.circular(18)),
-          
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -44,7 +62,8 @@ class Tilewidget extends StatelessWidget {
                   backgroundColor: this.color,
                   child: this.icon,
                 ),
-                Text('$symbol', style: TextStyle(color: Colors.white)),
+                _getLabel,
+                // Text('$symbol', style: TextStyle(color: Colors.white)),
               ],
             ),
           ),

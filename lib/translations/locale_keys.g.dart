@@ -175,5 +175,11 @@ abstract class  LocaleKeys {
   static const error_dashboard_summary = 'error_dashboard_summary';
   static const raise_complaint = 'raise_complaint';
   static const track_it = 'track_it';
+  static const total = 'total';
+  static const solved = 'solved';
+  static const error_while_downloading_updated_app = 'error_while_downloading_updated_app';
+  static const downloading_updated_app = 'downloading_updated_app';
+  static const history = 'history';
+  static const transfered = 'transfered';
 
 }

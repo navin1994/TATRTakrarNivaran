@@ -96,7 +96,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
     } catch (error) {
       SweetAlertV2.show(context,
           title: LocaleKeys.error.tr(),
-          subtitle: "Error while downloading updated app.",
+          subtitle: LocaleKeys.error_while_downloading_updated_app.tr(),
           style: SweetAlertV2Style.error);
     }
   }
@@ -114,36 +114,6 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
       setState(() {
         _isUpdating = true;
       });
-      // showDialog(
-      //   barrierColor: Colors.white,
-      //   barrierDismissible: false,
-      //   context: context,
-      //   builder: (_) => WillPopScope(
-      //     onWillPop: () => Future.value(false),
-      //     child: Dialog(
-      //       child: Container(
-      //         height: 200,
-      //         child: Column(
-      //           mainAxisAlignment: MainAxisAlignment.spaceAround,
-      //           children: [
-      //             Text("${res['Msg']}"),
-      //             Flexible(
-      //               child: ElevatedButton(
-      //                 style: ElevatedButton.styleFrom(
-      //                   primary: Colors.blueAccent, // background
-      //                   onPrimary: Colors.white, // foreground
-      //                   textStyle: TextStyle(fontSize: 18),
-      //                 ),
-      //                 onPressed: () => downloadUpdate(res['rtyp']),
-      //                 child: Text(LocaleKeys.update.tr()),
-      //               ),
-      //             ),
-      //           ],
-      //         ),
-      //       ),
-      //     ),
-      //   ),
-      // );
     } catch (error) {
       print("Error $error");
       SweetAlertV2.show(context,
@@ -455,7 +425,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
                               children: [
                                 CircularProgressIndicator(),
                                 Text(
-                                  "Downloading updated version plesae wait...",
+                                  "${LocaleKeys.downloading_updated_app.tr()}",
                                   textAlign: TextAlign.center,
                                 ),
                               ],

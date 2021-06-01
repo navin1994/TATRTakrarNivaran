@@ -35,8 +35,29 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
         return LocaleKeys.on_hold.tr();
       case "C":
         return LocaleKeys.closed.tr();
+      case "AH":
+        return LocaleKeys.transfered.tr();
       default:
-        return LocaleKeys.rejected.tr();
+        return LocaleKeys.pending.tr();
+    }
+  }
+
+  Color _getColor(String stat) {
+    switch (stat) {
+      case "NA":
+        return Colors.yellow.shade400;
+      case "A":
+        return Colors.green.shade400;
+      case "R":
+        return Colors.red.shade400;
+      case "H":
+        return Colors.orange.shade400;
+      case "C":
+        return Colors.blue.shade400;
+      case "AH":
+        return Colors.purple.shade400;
+      default:
+        return Colors.yellow.shade400;
     }
   }
 
@@ -104,22 +125,14 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                                         vertical: 5, // 5 top and bottom
                                       ),
                                       decoration: BoxDecoration(
-                                        color:
-                                            _getStatus(comments[index].value) ==
-                                                    LocaleKeys.approved.tr()
-                                                ? Colors.green.shade400
-                                                : _getStatus(comments[index]
-                                                            .value) ==
-                                                        LocaleKeys.pending.tr()
-                                                    ? Colors.yellow.shade400
-                                                    : Colors.red.shade400,
+                                        color: _getColor(comments[index].value),
                                         borderRadius: BorderRadius.all(
                                           Radius.circular(22),
                                         ),
                                       ),
                                       child: Text(
                                         _getStatus(comments[index].value),
-                                        style: TextStyle(color: Colors.black),
+                                        style: TextStyle(color: Colors.white),
                                       ),
                                     ),
                                   ],
@@ -336,11 +349,29 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
               if (campData.cmpRcntRply != null)
                 ListTile(
                   leading: Icon(Icons.arrow_forward_ios),
-                  title:
-                      Text("${LocaleKeys.reply.tr()}: ${campData.cmpRcntRply}"),
-                  trailing: TextButton(
+                  title: Text("${LocaleKeys.reply.tr()}:"),
+                  subtitle: Text("${campData.cmpRcntRply}"),
+                  // trailing: TextButton(
+                  //   onPressed: () => showComments(context, campData.cmpId),
+                  //   child: Text(LocaleKeys.history.tr()),
+                  // ),
+                  // trailing: ElevatedButton(
+                  //   child: Text(
+                  //     LocaleKeys.history.tr(),
+                  //     style: TextStyle(color: Colors.white),
+                  //   ),
+                  //   onPressed: () => showComments(context, campData.cmpId),
+                  // )
+                ),
+              if (campData.cmpRcntRply != null)
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: TextButton(
+                    child: Text(
+                      "${LocaleKeys.history.tr()}...",
+                      style: TextStyle(color: Colors.blue),
+                    ),
                     onPressed: () => showComments(context, campData.cmpId),
-                    child: Text(LocaleKeys.show_all.tr()),
                   ),
                 ),
               if (campData.cmpRjcnt != null)

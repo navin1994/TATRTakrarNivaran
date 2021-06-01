@@ -134,7 +134,7 @@ class Dashboard extends StatelessWidget {
                                               ComplaintManagementScreen
                                                   .routeName,
                                               arguments: FilterComplaintArgs(
-                                                  indx: 5, srcUnder: "U")),
+                                                  indx: 6, srcUnder: "U")),
                                       child: Tilewidget(
                                         color: Colors.yellow,
                                         symbol: cmpl.complaintSummary[0].text,
@@ -152,7 +152,7 @@ class Dashboard extends StatelessWidget {
                                               ComplaintManagementScreen
                                                   .routeName,
                                               arguments: FilterComplaintArgs(
-                                                  indx: 3, srcUnder: "U")),
+                                                  indx: 4, srcUnder: "U")),
                                       child: Tilewidget(
                                         color: Colors.greenAccent,
                                         symbol: cmpl.complaintSummary[1].text,
@@ -198,7 +198,7 @@ class Dashboard extends StatelessWidget {
                                               ComplaintManagementScreen
                                                   .routeName,
                                               arguments: FilterComplaintArgs(
-                                                  indx: 4, srcUnder: "U")),
+                                                  indx: 5, srcUnder: "U")),
                                       child: Tilewidget(
                                         color: Colors.red,
                                         symbol: cmpl.complaintSummary[2].text,
@@ -245,7 +245,7 @@ class Dashboard extends StatelessWidget {
                                     .pushReplacementNamed(
                                         ComplaintManagementScreen.routeName,
                                         arguments: FilterComplaintArgs(
-                                            indx: 5, srcUnder: "R")),
+                                            indx: 6, srcUnder: "R")),
                                 child: Text(LocaleKeys.track_it.tr()),
                               ),
                             ],

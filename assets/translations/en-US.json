@@ -172,5 +172,11 @@
   "donwload_attachment": "Download Attachment",
   "error_dashboard_summary": "Error while fetching the Dashboard Summary. Please check your internet connection.",
   "raise_complaint": "Raise Complaint",
-  "track_it": "Track Complaint"
+  "track_it": "Track Complaint",
+  "total": "TOTAL",
+  "solved": "Solved",
+  "error_while_downloading_updated_app": "Error while downloading updated app.",
+  "downloading_updated_app": "Downloading updated version plesae wait...",
+  "history": "History",
+  "transfered": "Transfered"
 }

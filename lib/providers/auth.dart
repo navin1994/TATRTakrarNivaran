@@ -318,7 +318,13 @@ class Auth with ChangeNotifier {
       final response = await http.post(
         url,
         headers: {"Content-Type": "application/json"},
-        body: json.encode({'uLogin': loginData.uLogin, 'uPwd': loginData.uPwd}),
+        body: json.encode(
+          {
+            'clntId': "4G0T337M",
+            'uLogin': loginData.uLogin,
+            'uPwd': loginData.uPwd
+          },
+        ), // 4G0T337M   prod => YKV9BWUK
       );
       final loginResp = json.decode(response.body) as Map<String, dynamic>;
       print("Rsponse Login Attempt ===> $loginResp");
