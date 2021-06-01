@@ -158,7 +158,7 @@
   "hold_the_complaint": "Hold The Complaint",
   "do_you_want_to_hold": "Do you want to hold the complaint?",
   "could_not_launch": "Could not launch",
-  "error_while_checking_app_version": "Error while checking app version.",
+  "error_while_checking_app_version": "Error while verification.",
   "error_while_checking_login_id": "Error while checking loginId.",
   "middle_name": "Middle Name",
   "please_enter_middle_name": "Please enter middle name",
@@ -177,6 +177,6 @@
   "solved": "Solved",
   "error_while_downloading_updated_app": "Error while downloading updated app.",
   "downloading_updated_app": "Downloading updated version plesae wait...",
-  "history": "History",
+  "history": "View remarks",
   "transfered": "Transfered"
 }
