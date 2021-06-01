@@ -618,7 +618,9 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                             ),
                           ),
                         if (int.parse(comp.complaint.cmpAssigndTo) == _uid &&
-                            comp.complaint.stat == "H")
+                            (comp.complaint.stat != "C" ||
+                                comp.complaint.stat != "A" ||
+                                comp.complaint.stat != "R"))
                           Container(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,

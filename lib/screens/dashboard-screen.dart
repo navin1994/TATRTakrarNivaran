@@ -3,18 +3,40 @@ import 'package:provider/provider.dart';
 import 'package:sweetalertv2/sweetalertv2.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+import '../providers/auth.dart';
 import '../models/filter_cmpl_args.dart';
 import '../translations/locale_keys.g.dart';
 import '../providers/complaints.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/tile_widget.dart';
+import '../screens/login_signup_screen.dart';
 import '../screens/raise_complain_screen.dart';
 import '../screens/complaint_management_screen.dart';
 
 class Dashboard extends StatelessWidget {
   static const routeName = '/dashboard';
+
   @override
   Widget build(BuildContext context) {
+    void checkAppUpdate() async {
+      try {
+        final res = await Provider.of<Auth>(context).checkAppVersion();
+        if (res == null) {
+          return;
+        }
+        Navigator.of(context).pushReplacementNamed(LoginSignupScreen.routeName);
+        Provider.of<Auth>(context, listen: false).logout();
+      } catch (error) {
+        print("Error $error");
+        SweetAlertV2.show(context,
+            title: LocaleKeys.error.tr(),
+            subtitle: LocaleKeys.error_while_checking_app_version.tr(),
+            style: SweetAlertV2Style.error);
+      }
+    }
+
+    checkAppUpdate();
+
     Future<void> _getSummary() async {
       try {
         final result =

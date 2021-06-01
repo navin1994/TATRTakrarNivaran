@@ -117,6 +117,22 @@ class Auth with ChangeNotifier {
     }
   }
 
+  Future appUpdateDownload(String targetURL) async {
+    try {
+      final response = await http.get(
+        Uri.parse(targetURL),
+        headers: {"Content-Type": "application/json"},
+      );
+      if (response.contentLength == 0) {
+        return;
+      }
+      return response.bodyBytes;
+    } catch (error) {
+      print("Error while donwloading updated app ==> $error");
+      throw error;
+    }
+  }
+
   Future checkAppVersion() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String version = packageInfo.version;

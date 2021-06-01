@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sweetalertv2/sweetalertv2.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../screens/dashboard-screen.dart';
 import '../config/palette.dart';
@@ -27,7 +30,8 @@ class LoginSignupScreen extends StatefulWidget {
   _LoginSignupScreenState createState() => _LoginSignupScreenState();
 }
 
-class _LoginSignupScreenState extends State<LoginSignupScreen> {
+class _LoginSignupScreenState extends State<LoginSignupScreen>
+    with WidgetsBindingObserver {
   Language selLanguage =
       Language(language: LocaleKeys.english.tr(), value: Locale('en', 'US'));
   List<Language> _languages = [
@@ -37,8 +41,11 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   final TextEditingController _confirmPassword = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final TextEditingController _loginId = TextEditingController();
+  var updateResp;
   var _init = true;
   String loginIdMsg;
+  var _isUpdating = false;
+  var _isDownloading = false;
   var _isLoading = false;
   var _isLoginLoading = false;
   var _isRepOfcrLoading = false;
@@ -72,50 +79,84 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   ReportingOfficer selRprtOfcr;
   bool isSignupScreen = false;
 
+  Future<void> downloadUpdate(String url) async {
+    try {
+      setState(() {
+        _isDownloading = true;
+      });
+      final resp = await Provider.of<Auth>(context, listen: false)
+          .appUpdateDownload(url);
+      final externalDirectory = await getExternalStorageDirectory();
+      File file = new File('${externalDirectory.path}/ताडोबासंवाद.apk');
+      await file.writeAsBytes(resp);
+      setState(() {
+        _isDownloading = false;
+      });
+      OpenFile.open("${externalDirectory.path}/ताडोबासंवाद.apk");
+    } catch (error) {
+      SweetAlertV2.show(context,
+          title: LocaleKeys.error.tr(),
+          subtitle: "Error while downloading updated app.",
+          style: SweetAlertV2Style.error);
+    }
+  }
+
   void checkAppUpdate() async {
     try {
-      final res = await Provider.of<Auth>(context).checkAppVersion();
-      if (res == null) {
+      updateResp = await Provider.of<Auth>(context).checkAppVersion();
+      if (updateResp == null) {
+        setState(() {
+          _isDownloading = false;
+          _isUpdating = false;
+        });
         return;
       }
-      showDialog(
-        barrierColor: Colors.white,
-        barrierDismissible: false,
-        context: context,
-        builder: (_) => WillPopScope(
-          onWillPop: () => Future.value(false),
-          child: Dialog(
-            child: Container(
-              height: 200,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text("${res['Msg']}"),
-                  Flexible(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.blueAccent, // background
-                        onPrimary: Colors.white, // foreground
-                        textStyle: TextStyle(fontSize: 18),
-                      ),
-                      onPressed: () async => await canLaunch("${res['rtyp']}")
-                          ? await launch("${res['rtyp']}")
-                          : throw '${LocaleKeys.could_not_launch.tr()} ${res['rtyp']}',
-                      child: Text(LocaleKeys.update.tr()),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
+      setState(() {
+        _isUpdating = true;
+      });
+      // showDialog(
+      //   barrierColor: Colors.white,
+      //   barrierDismissible: false,
+      //   context: context,
+      //   builder: (_) => WillPopScope(
+      //     onWillPop: () => Future.value(false),
+      //     child: Dialog(
+      //       child: Container(
+      //         height: 200,
+      //         child: Column(
+      //           mainAxisAlignment: MainAxisAlignment.spaceAround,
+      //           children: [
+      //             Text("${res['Msg']}"),
+      //             Flexible(
+      //               child: ElevatedButton(
+      //                 style: ElevatedButton.styleFrom(
+      //                   primary: Colors.blueAccent, // background
+      //                   onPrimary: Colors.white, // foreground
+      //                   textStyle: TextStyle(fontSize: 18),
+      //                 ),
+      //                 onPressed: () => downloadUpdate(res['rtyp']),
+      //                 child: Text(LocaleKeys.update.tr()),
+      //               ),
+      //             ),
+      //           ],
+      //         ),
+      //       ),
+      //     ),
+      //   ),
+      // );
     } catch (error) {
       print("Error $error");
       SweetAlertV2.show(context,
           title: LocaleKeys.error.tr(),
           subtitle: LocaleKeys.error_while_checking_app_version.tr(),
           style: SweetAlertV2Style.error);
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      checkAppUpdate();
     }
   }
 
@@ -251,15 +292,6 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
     });
   }
 
-  @override
-  void dispose() {
-    _loginIdField.dispose();
-    _passwordField.dispose();
-    _confirmPassword.dispose();
-    _password.dispose();
-    super.dispose();
-  }
-
   void _submitLoginForm() async {
     final isValid = _loginForm.currentState
         .validate(); // this will trigger validator on each textFormField
@@ -378,12 +410,62 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   }
 
   @override
+  void dispose() {
+    _loginIdField.dispose();
+    _passwordField.dispose();
+    _confirmPassword.dispose();
+    _password.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Palette.backgroundColor,
-      body: _isLoading
+      body: _isUpdating
           ? Center(
-              child: CircularProgressIndicator(),
+              child: Container(
+                width: MediaQuery.of(context).size.width * .80,
+                height: MediaQuery.of(context).size.height * .30,
+                child: Card(
+                  elevation: 12,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text("${updateResp['Msg']}"),
+                      if (!_isDownloading)
+                        Flexible(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.blueAccent, // background
+                              onPrimary: Colors.white, // foreground
+                              textStyle: TextStyle(fontSize: 18),
+                            ),
+                            onPressed: () => downloadUpdate(updateResp['rtyp']),
+                            child: Text(LocaleKeys.update.tr()),
+                          ),
+                        ),
+                      if (_isDownloading)
+                        Center(
+                          child: Container(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CircularProgressIndicator(),
+                                Text(
+                                  "Downloading updated version plesae wait...",
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                    ],
+                  ),
+                ),
+              ),
             )
           : Stack(
               children: [
@@ -418,8 +500,8 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                 children: [
                                   TextSpan(
                                     text: isSignupScreen
-                                        ? "TATR तक्रार निवारण नोंदणी,"
-                                        : "TATR तक्रार निवारण लॉगिन,",
+                                        ? "ताडोबा संवाद नोंदणी,"
+                                        : "ताडोबा संवाद लॉगिन,",
                                     style: TextStyle(
                                       fontSize: 25,
                                       fontWeight: FontWeight.bold,
@@ -546,7 +628,12 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                               )
                             ],
                           ),
-                          if (isSignupScreen) buildSignupSection(),
+                          if (isSignupScreen)
+                            _isLoading
+                                ? Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : buildSignupSection(),
                           if (!isSignupScreen) buildSigninSection()
                         ],
                       ),

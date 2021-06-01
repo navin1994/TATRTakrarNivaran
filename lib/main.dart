@@ -143,7 +143,7 @@ class MyApp extends StatelessWidget {
           supportedLocales: context.supportedLocales,
           localizationsDelegates: context.localizationDelegates,
           locale: context.locale,
-          title: 'TATR तक्रार निवारण',
+          title: 'ताडोबा संवाद',
           theme: ThemeData(
             primarySwatch: Colors.blue,
             // brightness: Brightness.dark,
