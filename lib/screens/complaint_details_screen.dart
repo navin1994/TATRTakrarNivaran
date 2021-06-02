@@ -138,12 +138,12 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                                   ],
                                 ),
                                 ListTile(
-                                  title: Text("${comments[index].no}"),
-                                  subtitle: Text("${comments[index].text}"),
+                                  title: Text("${comments[index].text}"),
+                                  subtitle: Text("${comments[index].no}"),
                                 ),
                                 Divider(
                                   height: 0.6,
-                                  color: Colors.grey,
+                                  color: Colors.deepOrange,
                                 )
                               ],
                             ),
@@ -305,14 +305,6 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                 title:
                     Text("${LocaleKeys.complaint_id.tr()}: ${campData.cmpId}"),
               ),
-              Divider(
-                height: 0.6,
-                color: Colors.black87,
-              ),
-              ListTile(
-                leading: Icon(Icons.arrow_forward_ios),
-                title: Text("${LocaleKeys.date.tr()}: ${campData.regon}"),
-              ),
 
               Divider(
                 height: 0.6,
@@ -320,8 +312,10 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
               ),
               ListTile(
                 leading: Icon(Icons.arrow_forward_ios),
-                title: Text("${LocaleKeys.category.tr()}: ${campData.cmpCat}"),
+                title: Text("${LocaleKeys.category.tr()}: "),
+                subtitle: Text("${campData.cmpCat}"),
               ),
+
               Divider(
                 height: 0.6,
                 color: Colors.black87,
@@ -331,14 +325,15 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                 title: Text("${LocaleKeys.desc.tr()}:"),
                 subtitle: Text("${campData.desc}"),
               ),
+
               Divider(
                 height: 0.6,
                 color: Colors.black87,
               ),
               ListTile(
                 leading: Icon(Icons.arrow_forward_ios),
-                title: Text(
-                    "${LocaleKeys.complaint_assign_to.tr()}: ${campData.cmpAssignd}"),
+                title: Text("${LocaleKeys.complaint_assign_to.tr()}:"),
+                subtitle: Text("${campData.cmpAssignd}"),
               ),
 
               if (campData.cmpRcntRply != null)
@@ -365,7 +360,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                 ),
               if (campData.cmpRcntRply != null)
                 Align(
-                  alignment: Alignment.bottomRight,
+                  alignment: Alignment.bottomCenter,
                   child: TextButton(
                     child: Text(
                       "${LocaleKeys.history.tr()}...",
@@ -374,16 +369,27 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                     onPressed: () => showComments(context, campData.cmpId),
                   ),
                 ),
-              if (campData.cmpRjcnt != null)
+
+              Divider(
+                height: 0.6,
+                color: Colors.black87,
+              ),
+              ListTile(
+                leading: Icon(Icons.arrow_forward_ios),
+                title: Text("${LocaleKeys.date.tr()}"),
+                subtitle: Text("${campData.regon}"),
+              ),
+
+              if (campData.cmpRjcnt != null && campData.cmpRjcnt > 0)
                 Divider(
                   height: 0.6,
                   color: Colors.black87,
                 ),
-              if (campData.cmpRjcnt != null)
+              if (campData.cmpRjcnt != null && campData.cmpRjcnt > 0)
                 ListTile(
                   leading: Icon(Icons.arrow_forward_ios),
-                  title: Text(
-                      "${LocaleKeys.rejection_count.tr()}: ${campData.cmpRjcnt}"),
+                  title: Text("${LocaleKeys.rejection_count.tr()}: "),
+                  subtitle: Text("${campData.cmpRjcnt}"),
                 ),
               if (campData.updton != null)
                 Divider(
@@ -393,8 +399,8 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
               if (campData.updton != null)
                 ListTile(
                   leading: Icon(Icons.arrow_forward_ios),
-                  title:
-                      Text("${LocaleKeys.updated_on.tr()}: ${campData.updton}"),
+                  title: Text("${LocaleKeys.updated_on.tr()}:"),
+                  subtitle: Text("${campData.updton}"),
                 ),
               if (campData.updtby != null)
                 Divider(
@@ -404,8 +410,8 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
               if (campData.updtby != null)
                 ListTile(
                   leading: Icon(Icons.arrow_forward_ios),
-                  title:
-                      Text("${LocaleKeys.updated_by.tr()}: ${campData.updtby}"),
+                  title: Text("${LocaleKeys.updated_by.tr()}: "),
+                  subtitle: Text("${campData.updtby}"),
                 ),
 
               if (campData.rmrk != null)
@@ -645,41 +651,33 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                                     ),
                                   ],
                                 ),
-                              ],
-                            ),
-                          ),
-                        if (int.parse(comp.complaint.cmpAssigndTo) == _uid &&
-                            (comp.complaint.stat != "C" ||
-                                comp.complaint.stat != "A" ||
-                                comp.complaint.stat != "R"))
-                          Container(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Flexible(
-                                  child: ElevatedButton.icon(
-                                    style: ElevatedButton.styleFrom(
-                                      elevation: 12,
-                                      primary: Colors.deepOrange, // background
-                                      onPrimary: Colors.white, // foreground
-                                      textStyle: TextStyle(fontSize: 18),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Flexible(
+                                      child: ElevatedButton.icon(
+                                        style: ElevatedButton.styleFrom(
+                                          elevation: 12,
+                                          primary:
+                                              Colors.deepOrange, // background
+                                          onPrimary: Colors.white, // foreground
+                                          textStyle: TextStyle(fontSize: 18),
+                                        ),
+                                        icon: Icon(Icons.pause_circle_outline),
+                                        label: Text(
+                                            LocaleKeys.hold_the_complaint.tr()),
+                                        onPressed: () => _displayDialog(
+                                            context,
+                                            LocaleKeys.do_you_want_to_hold.tr(),
+                                            "H",
+                                            comp.complaint.cmpId),
+                                      ),
                                     ),
-                                    icon: Icon(Icons.pause_circle_outline),
-                                    label: Text(
-                                        LocaleKeys.hold_the_complaint.tr()),
-                                    onPressed: () => _displayDialog(
-                                        context,
-                                        LocaleKeys.do_you_want_to_hold.tr(),
-                                        "H",
-                                        comp.complaint.cmpId),
-                                  ),
+                                  ],
                                 ),
                               ],
                             ),
                           ),
-                        SizedBox(
-                          height: 20,
-                        )
                       ],
                     ),
                   ),
