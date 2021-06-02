@@ -53,7 +53,6 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
             style: SweetAlertV2Style.success);
       }
     } catch (error) {
-      print("Error ==> $error");
       if (error != null) {
         SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),
@@ -89,7 +88,6 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
       setState(() {
         _isLoading = false;
       });
-      print("Response ===> ${respo["Result"]}");
       if (respo["Result"] == "OK") {
         setState(() {
           _isEditable = false;
@@ -106,7 +104,6 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
       }
     } catch (error) {
       if (error != null) {
-        print("Error ===> $error");
         SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),
             subtitle: LocaleKeys.error_while_updating_prof.tr(),

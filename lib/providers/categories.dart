@@ -34,7 +34,6 @@ class Categories with ChangeNotifier {
       );
       List<Category> loadedCategories = [];
       final categoriesData = json.decode(response.body);
-      print("response from server: $categoriesData");
       if (categoriesData['Result'] == "OK") {
         final records = categoriesData['Records'] as List<dynamic>;
         loadedCategories = records
@@ -61,7 +60,6 @@ class Categories with ChangeNotifier {
       notifyListeners();
       return 0;
     } catch (error) {
-      print("Error while fetching complaint categories $error");
       throw error;
     }
   }

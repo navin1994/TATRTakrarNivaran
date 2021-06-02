@@ -181,5 +181,7 @@ abstract class  LocaleKeys {
   static const downloading_updated_app = 'downloading_updated_app';
   static const history = 'history';
   static const transfered = 'transfered';
+  static const please_enter_remarks = 'please_enter_remarks';
+  static const forgot_password = 'forgot_password';
 
 }

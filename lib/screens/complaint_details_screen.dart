@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:complaint_management/config/palette.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sweetalertv2/sweetalertv2.dart';
@@ -68,7 +70,6 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
       });
       final resp = await Provider.of<Complaints>(context, listen: false)
           .downloadAttachment(cmplId);
-      print("Download ${resp['fileName']}");
       Directory tempDir = await getTemporaryDirectory();
       String tempPath = tempDir.path;
       File file = new File('$tempPath/${resp['fileName']}');
@@ -77,9 +78,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
         _isLoading = false;
       });
       OpenFile.open("$tempPath/${resp['fileName']}");
-    } catch (error) {
-      print("Error ==> $error");
-    }
+    } catch (error) {}
   }
 
   Future<void> showComments(BuildContext context, int cmpId) async {
@@ -173,49 +172,78 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
 
   Future<void> _displayDialog(
       BuildContext context, String heading, String stat, int cmpId) async {
+    var errorFlag = false;
+    _rmrkController.text = null;
     return showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
-            title: Text(heading),
-            content: TextField(
-              maxLines: 5,
-              controller: _rmrkController,
-              decoration:
-                  InputDecoration(hintText: LocaleKeys.enter_remarks.tr()),
+          return StatefulBuilder(
+            builder: (context, setState) => AlertDialog(
+              title: Text(heading),
+              content: SingleChildScrollView(
+                child: Container(
+                  height: 170,
+                  child: Column(
+                    children: [
+                      if (errorFlag)
+                        Text(
+                          "${LocaleKeys.please_enter_remarks.tr()}*",
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      TextField(
+                        maxLines: 5,
+                        controller: _rmrkController,
+                        decoration: InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Palette.textColor1),
+                              // borderRadius: BorderRadius.all(Radius.circular(35.0)),
+                            ),
+                            hintText: LocaleKeys.enter_remarks.tr()),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              actions: <Widget>[
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                      elevation: 12,
+                      primary: Colors.red, // background
+                      onPrimary: Colors.white,
+                      textStyle: TextStyle(fontSize: 18)),
+                  label: Text(LocaleKeys.no.tr()),
+                  icon: Icon(Icons.highlight_remove_outlined),
+                  onPressed: () {
+                    setState(() {
+                      _rmrkController.text = null;
+                      Navigator.pop(context);
+                    });
+                  },
+                ),
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                      elevation: 12,
+                      primary: Colors.green, // background
+                      onPrimary: Colors.white,
+                      textStyle: TextStyle(fontSize: 18)),
+                  label: Text(LocaleKeys.yes.tr()),
+                  icon: Icon(Icons.check_circle_outline),
+                  onPressed: () {
+                    if (_rmrkController.text == null ||
+                        _rmrkController.text.trim() == "") {
+                      setState(() {
+                        errorFlag = true;
+                      });
+                      return;
+                    }
+                    updateStatus(cmpId, stat, _rmrkController.text);
+                    setState(() {
+                      Navigator.pop(context);
+                    });
+                  },
+                ),
+              ],
             ),
-            actions: <Widget>[
-              ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                    elevation: 12,
-                    primary: Colors.red, // background
-                    onPrimary: Colors.white,
-                    textStyle: TextStyle(fontSize: 18)),
-                label: Text(LocaleKeys.no.tr()),
-                icon: Icon(Icons.highlight_remove_outlined),
-                onPressed: () {
-                  setState(() {
-                    _rmrkController.text = null;
-                    Navigator.pop(context);
-                  });
-                },
-              ),
-              ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(
-                    elevation: 12,
-                    primary: Colors.green, // background
-                    onPrimary: Colors.white,
-                    textStyle: TextStyle(fontSize: 18)),
-                label: Text(LocaleKeys.yes.tr()),
-                icon: Icon(Icons.check_circle_outline),
-                onPressed: () {
-                  updateStatus(cmpId, stat, _rmrkController.text);
-                  setState(() {
-                    Navigator.pop(context);
-                  });
-                },
-              ),
-            ],
           );
         });
   }
@@ -226,12 +254,13 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
     });
     try {
       final resp = await Provider.of<Complaints>(context, listen: false)
-          .updateComplaint(cmpId, stat, rmrk);
+          .updateComplaint(cmpId, stat, rmrk.trim());
 
       setState(() {
         _isLoading = false;
       });
       if (resp['Result'] == "OK") {
+        Navigator.of(context).pop();
         SweetAlertV2.show(context,
             title: "${LocaleKeys.updated.tr()}!",
             subtitle: resp['Msg'],
@@ -246,7 +275,6 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
       setState(() {
         _isLoading = false;
       });
-      print("Error => $error");
       SweetAlertV2.show(context,
           title: LocaleKeys.error.tr(),
           subtitle: LocaleKeys.error_while_updating.tr(),
@@ -274,18 +302,14 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
               vertical: 5, // 5 top and bottom
             ),
             decoration: BoxDecoration(
-              color: _getStatus(campData.stat) == LocaleKeys.approved.tr()
-                  ? Colors.green.shade400
-                  : _getStatus(campData.stat) == LocaleKeys.pending.tr()
-                      ? Colors.yellow.shade400
-                      : Colors.red.shade400,
+              color: _getColor(campData.stat),
               borderRadius: BorderRadius.all(
                 Radius.circular(22),
               ),
             ),
             child: Text(
               _getStatus(campData.stat),
-              style: TextStyle(color: Colors.black),
+              style: TextStyle(color: Colors.white),
             ),
           ),
         ]),
@@ -346,17 +370,6 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                   leading: Icon(Icons.arrow_forward_ios),
                   title: Text("${LocaleKeys.reply.tr()}:"),
                   subtitle: Text("${campData.cmpRcntRply}"),
-                  // trailing: TextButton(
-                  //   onPressed: () => showComments(context, campData.cmpId),
-                  //   child: Text(LocaleKeys.history.tr()),
-                  // ),
-                  // trailing: ElevatedButton(
-                  //   child: Text(
-                  //     LocaleKeys.history.tr(),
-                  //     style: TextStyle(color: Colors.white),
-                  //   ),
-                  //   onPressed: () => showComments(context, campData.cmpId),
-                  // )
                 ),
               if (campData.cmpRcntRply != null)
                 Align(

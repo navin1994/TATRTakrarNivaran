@@ -21,8 +21,6 @@ class _ChangePasswordState extends State<ChangePassword> {
   TextEditingController _pwdController = TextEditingController();
 
   Future<void> _changePassword() async {
-    print("_cnfPwdController.text => ${_cnfPwdController.text}");
-    print("_pwdController.text => ${_pwdController.text}");
     if (_cnfPwdController.text == "" || _pwdController.text == "") {
       SweetAlertV2.show(context,
           title: LocaleKeys.error.tr(),
@@ -47,7 +45,6 @@ class _ChangePasswordState extends State<ChangePassword> {
       setState(() {
         _isLoading = false;
       });
-      print("respo ==> $respo");
 
       if (respo['Result'] == "OK") {
         _cnfPwdController.clear();
@@ -67,7 +64,6 @@ class _ChangePasswordState extends State<ChangePassword> {
       setState(() {
         _isLoading = false;
       });
-      print("Error--> $error");
       if (error != null) {
         SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),

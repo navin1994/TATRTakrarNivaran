@@ -7,6 +7,7 @@ import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sweetalertv2/sweetalertv2.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../screens/dashboard-screen.dart';
 import '../config/palette.dart';
@@ -23,6 +24,7 @@ import '../providers/divisions.dart';
 import '../providers/designationsWorkOffices.dart';
 import '../providers/auth.dart';
 import '../translations/locale_keys.g.dart';
+import '../config/env.dart';
 
 class LoginSignupScreen extends StatefulWidget {
   static const routeName = '/login-singup-screen';
@@ -41,6 +43,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
   final TextEditingController _confirmPassword = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final TextEditingController _loginId = TextEditingController();
+  final _url = Environment.url;
   var updateResp;
   var _init = true;
   String loginIdMsg;
@@ -115,7 +118,6 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
         _isUpdating = true;
       });
     } catch (error) {
-      print("Error $error");
       SweetAlertV2.show(context,
           title: LocaleKeys.error.tr(),
           subtitle: LocaleKeys.error_while_checking_app_version.tr(),
@@ -160,7 +162,6 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
         _init = false;
         _isLoading = false;
       });
-      print("Error $error");
       SweetAlertV2.show(context,
           title: LocaleKeys.error.tr(),
           subtitle: LocaleKeys.error_while_fetching_div.tr(),
@@ -250,7 +251,6 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
       setState(() {
         _isLoginLoading = false;
       });
-      print("Error $error");
       SweetAlertV2.show(context,
           title: LocaleKeys.error.tr(),
           subtitle: LocaleKeys.error_while_checking_login_id.tr(),
@@ -270,8 +270,6 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
     }
     _loginForm.currentState
         .save(); // this will trigger onSaved on each textFormField
-    print('Login Id: ${_loginData.uLogin}');
-    print('Login Password: ${_loginData.uPwd}');
     try {
       setState(() {
         _isLoading = true;
@@ -332,7 +330,6 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
       setState(() {
         _isLoading = false;
       });
-      print("Server response on signup => $res");
       if (res['Result'] == "OK") {
         _resetSignUpForm();
         SweetAlertV2.show(context,
@@ -517,13 +514,13 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
                 AnimatedPositioned(
                   duration: Duration(milliseconds: 500),
                   curve: Curves.bounceInOut,
-                  top: isSignupScreen ? 130 : 230,
+                  top: isSignupScreen ? 130 : 210,
                   child: AnimatedContainer(
                     duration: Duration(milliseconds: 500),
                     curve: Curves.bounceInOut,
                     height: isSignupScreen
                         ? MediaQuery.of(context).size.height - 140
-                        : 270,
+                        : 310,
                     padding: EdgeInsets.all(20),
                     width: MediaQuery.of(context).size.width - 40,
                     margin: EdgeInsets.symmetric(horizontal: 20),
@@ -690,6 +687,21 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
                   onFieldSubmitted: (_) {
                     _submitLoginForm();
                   },
+                ),
+              ),
+              TextButton(
+                onPressed: () async => await canLaunch("$_url/resetpasswd")
+                    ? await launch("$_url/resetpasswd")
+                    : SweetAlertV2.show(context,
+                        title: LocaleKeys.error.tr(),
+                        subtitle:
+                            '${LocaleKeys.could_not_launch.tr()} $_url/resetpasswd',
+                        style: SweetAlertV2Style.error),
+
+                // throw '${LocaleKeys.could_not_launch.tr()} $_url/resetpasswd',
+                child: Text(
+                  "${LocaleKeys.forgot_password.tr()}",
+                  textAlign: TextAlign.left,
                 ),
               ),
             ],
@@ -1181,7 +1193,6 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
                     );
                   },
                   validator: (String value) {
-                    print("${LocaleKeys.password.tr()}: $value");
                     if (value.isEmpty) {
                       return LocaleKeys.please_enter_password.tr();
                     }
@@ -1199,7 +1210,6 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
                   keyboardType: TextInputType.text,
                   decoration: decoration(label: LocaleKeys.cnf_pwd.tr()),
                   validator: (String value) {
-                    print("${LocaleKeys.cnf_pwd.tr()}: $value");
                     if (value.isEmpty) {
                       return LocaleKeys.please_enter_confirm_pas.tr();
                     }
@@ -1276,7 +1286,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
 
   Widget buildBottomHalfContainer(bool showShadow) {
     return Positioned(
-      top: 460,
+      top: 475,
       right: 0,
       left: 0,
       child: Center(

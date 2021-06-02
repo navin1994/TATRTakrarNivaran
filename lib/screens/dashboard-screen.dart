@@ -27,7 +27,6 @@ class Dashboard extends StatelessWidget {
         Navigator.of(context).pushReplacementNamed(LoginSignupScreen.routeName);
         Provider.of<Auth>(context, listen: false).logout();
       } catch (error) {
-        print("Error $error");
         SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),
             subtitle: LocaleKeys.error_while_checking_app_version.tr(),
@@ -48,7 +47,6 @@ class Dashboard extends StatelessWidget {
               style: SweetAlertV2Style.error);
         }
       } catch (error) {
-        print("Error ==> $error");
         if (error != null) {
           SweetAlertV2.show(context,
               title: LocaleKeys.error.tr(),

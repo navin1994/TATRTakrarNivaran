@@ -109,7 +109,6 @@ class _SearchBoxState extends State<SearchBox> {
                         hintStyle: TextStyle(fontSize: 14, color: Colors.white),
                       ),
                       onChanged: (value) {
-                        print(value);
                         widget.dropdownChangeFilter(value);
                       },
                       items: _dropdown

@@ -41,7 +41,6 @@ class RagistrationDetailsScreen extends StatelessWidget {
               style: SweetAlertV2Style.error);
         }
       } catch (error) {
-        print("Error => $error");
         SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),
             subtitle: LocaleKeys.error_while_updating.tr(),

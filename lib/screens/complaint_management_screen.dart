@@ -119,7 +119,6 @@ class _ComplaintManagementScreenState extends State<ComplaintManagementScreen> {
       setState(() {
         _isLoading = false;
       });
-      print("Error ===> $error");
       if (error != null) {
         SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),

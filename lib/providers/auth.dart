@@ -95,7 +95,6 @@ class Auth with ChangeNotifier {
   Future updateOrRegisterFCMToken(int clntId, int uid, String name) async {
     var url = Uri.parse("$api/userapp/updtfcm");
     final token = await _fcmMessaging.getToken(); // get FCM token here
-    print("FCM Token : $token");
     try {
       final response = await http.post(url,
           headers: {"Content-Type": "application/json"},
@@ -106,13 +105,11 @@ class Auth with ChangeNotifier {
             "tkn": token,
           }));
       final result = json.decode(response.body);
-      print("FCM Token registration result => $result");
       if (result['Result'] == "NOK") {
         return;
       }
       return token;
     } catch (error) {
-      print("Error while sending token $error");
       throw error;
     }
   }
@@ -128,7 +125,6 @@ class Auth with ChangeNotifier {
       }
       return response.bodyBytes;
     } catch (error) {
-      print("Error while donwloading updated app ==> $error");
       throw error;
     }
   }
@@ -136,7 +132,6 @@ class Auth with ChangeNotifier {
   Future checkAppVersion() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     String version = packageInfo.version;
-    print("version is: $version");
     var url = Uri.parse("$api/userapp/appversion");
     try {
       final response = await http.post(url,
@@ -144,11 +139,9 @@ class Auth with ChangeNotifier {
           body: json.encode({"version": version}));
       final result = json.decode(response.body);
       if (result['Result'] == "NOK") {
-        print("Version check response from server:  ${response.body}");
         return result;
       }
     } catch (error) {
-      print("Error while cheking version ==> $error");
       throw error;
     }
   }
@@ -170,7 +163,6 @@ class Auth with ChangeNotifier {
       );
       return json.decode(response.body);
     } catch (error) {
-      print("Error ==> $error");
       throw error;
     }
   }
@@ -200,7 +192,6 @@ class Auth with ChangeNotifier {
         getProfile();
       }
     } catch (error) {
-      print("Error ==> $error");
       throw error;
     }
     return rObject;
@@ -223,7 +214,6 @@ class Auth with ChangeNotifier {
         }),
       );
       object = json.decode(response.body);
-      print("Profile response from serve $object");
       if (object["Result"] == "OK") {
         final tempProf = object["Record"] as Map<String, dynamic>;
         loadProfile = Profile(
@@ -253,7 +243,6 @@ class Auth with ChangeNotifier {
         );
       }
     } catch (error) {
-      print("Error ==> $error");
       throw error;
     }
     _userProfile = loadProfile;
@@ -291,7 +280,6 @@ class Auth with ChangeNotifier {
       final signUpResp = json.decode(response.body);
       return signUpResp;
     } catch (error) {
-      print("Error => $error");
       throw error;
     }
   }
@@ -304,10 +292,8 @@ class Auth with ChangeNotifier {
         headers: {"Content-Type": "application/json"},
         body: json.encode({"act": "verfyloginid", "uLogin": loginId}),
       );
-      print("verifyLoginId response from serve: ${response.body}");
       return json.decode(response.body);
     } catch (error) {
-      print("Error while checking login Id => $error");
       throw error;
     }
   }
@@ -327,7 +313,7 @@ class Auth with ChangeNotifier {
         ), // 4G0T337M   prod => YKV9BWUK
       );
       final loginResp = json.decode(response.body) as Map<String, dynamic>;
-      print("Rsponse Login Attempt ===> $loginResp");
+
       if (loginResp['Result'] == "OK") {
         final record = loginResp['Record'] as Map<String, dynamic>;
         final respToken = await updateOrRegisterFCMToken(record['clntid'],
@@ -352,7 +338,6 @@ class Auth with ChangeNotifier {
         return loginResp['Msg'];
       }
     } catch (error) {
-      print("Error while login => $error");
       throw error;
     }
   }
@@ -367,7 +352,6 @@ class Auth with ChangeNotifier {
     _uFname = prefs.getString('uFname');
     _uLname = prefs.getString('uLname');
     _fcmToken = prefs.getString('fcmToken');
-    print("FCM Token $_fcmToken");
     notifyListeners();
     return true;
   }

@@ -36,9 +36,6 @@ class RegisteredUsers with ChangeNotifier {
   }
 
   Future fetchAndSetRegisteredUsers(String crit) async {
-    print("uid $uid");
-    print("clntId $clntId");
-    print("uid $name");
     var url = Uri.parse("$api/userapp/datcmplntsrvc");
     try {
       final response = await http.post(
@@ -54,7 +51,6 @@ class RegisteredUsers with ChangeNotifier {
       );
       List<RegisteredUser> loadedRegisteredUsers = [];
       final result = json.decode(response.body);
-      print("RegisteredUsers from server: $result");
       if (result['Result'] == "OK") {
         final rUsers = result['Records'] as List<dynamic>;
         loadedRegisteredUsers = rUsers
@@ -95,17 +91,11 @@ class RegisteredUsers with ChangeNotifier {
     } catch (error) {
       _registeredUsers = [];
       notifyListeners();
-      print("Error => $error");
       throw error;
     }
   }
 
   Future updateUserStatus(String stat, int userid) async {
-    print("uid $uid");
-    print("clntId $clntId");
-    print("name $name");
-    print("stat $stat");
-    print("uid $userid");
     var url = Uri.parse("$api/userapp/datcmplntsrvc");
     try {
       final response = await http.post(
@@ -121,14 +111,12 @@ class RegisteredUsers with ChangeNotifier {
         }),
       );
       final result = json.decode(response.body);
-      print("approveOrRejectUser from server: $result");
       if (result['Result'] == "OK") {
         _regUser.stat = stat;
         removeItem(userid);
       }
       return result;
     } catch (error) {
-      print("Error => $error");
       throw error;
     }
   }

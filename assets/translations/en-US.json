@@ -40,7 +40,7 @@
   "email": "Email",
   "email_id": "Email Id",
   "enter_login_id": "Enter Login Id",
-  "enter_remarks": "Enter remarks (optional) here…",
+  "enter_remarks": "Enter remarks here…",
   "error": "Error",
   "error_while_changing_pass": "Error while changing password.",
   "error_while_complaint_sub": "Error while complaint submission.",
@@ -178,5 +178,7 @@
   "error_while_downloading_updated_app": "Error while downloading updated app.",
   "downloading_updated_app": "Downloading updated version plesae wait...",
   "history": "View remarks",
-  "transfered": "Transfered"
+  "transfered": "Transfered",
+  "please_enter_remarks": "Please enter remarks",
+  "forgot_password": "Forgot Password?"
 }

@@ -28,7 +28,6 @@ class Divisions with ChangeNotifier {
       );
       List<Division> loadedDivisions = [];
       final divisionData = json.decode(response.body);
-      print("response from server: $divisionData");
       if (divisionData['Result'] == "OK") {
         final records = divisionData['Records'] as List<dynamic>;
         loadedDivisions = records
@@ -47,7 +46,6 @@ class Divisions with ChangeNotifier {
       notifyListeners();
       return 0;
     } catch (error) {
-      print("Error in executing the code $error");
       throw error;
     }
   }

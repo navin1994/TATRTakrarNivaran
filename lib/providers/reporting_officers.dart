@@ -32,7 +32,6 @@ class ReportingOfficers with ChangeNotifier {
       );
       List<ReportingOfficer> loadedReportingOfficers = [];
       final result = json.decode(response.body);
-      print("Reporting officers from server: $result");
       if (result['Result'] == "OK") {
         final officers = result['dta1'] as List<dynamic>;
         loadedReportingOfficers = officers
@@ -51,7 +50,6 @@ class ReportingOfficers with ChangeNotifier {
       notifyListeners();
       return;
     } catch (error) {
-      print("Error => $error");
       throw error;
     }
   }

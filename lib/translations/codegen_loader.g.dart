@@ -56,7 +56,7 @@ class CodegenLoader extends AssetLoader{
   "email": "Email",
   "email_id": "Email Id",
   "enter_login_id": "Enter Login Id",
-  "enter_remarks": "Enter remarks (optional) here…",
+  "enter_remarks": "Enter remarks here…",
   "error": "Error",
   "error_while_changing_pass": "Error while changing password.",
   "error_while_complaint_sub": "Error while complaint submission.",
@@ -174,7 +174,7 @@ class CodegenLoader extends AssetLoader{
   "hold_the_complaint": "Hold The Complaint",
   "do_you_want_to_hold": "Do you want to hold the complaint?",
   "could_not_launch": "Could not launch",
-  "error_while_checking_app_version": "Error while checking app version.",
+  "error_while_checking_app_version": "Error while verification.",
   "error_while_checking_login_id": "Error while checking loginId.",
   "middle_name": "Middle Name",
   "please_enter_middle_name": "Please enter middle name",
@@ -193,8 +193,10 @@ class CodegenLoader extends AssetLoader{
   "solved": "Solved",
   "error_while_downloading_updated_app": "Error while downloading updated app.",
   "downloading_updated_app": "Downloading updated version plesae wait...",
-  "history": "History",
-  "transfered": "Transfered"
+  "history": "View remarks",
+  "transfered": "Transfered",
+  "please_enter_remarks": "Please enter remarks",
+  "forgot_password": "Forgot Password?"
 };
 static const Map<String,dynamic> mr_IN = {
   "login": "लॉगिन",
@@ -238,7 +240,7 @@ static const Map<String,dynamic> mr_IN = {
   "email": "ईमेल",
   "email_id": " ईमेल आय डी ",
   "enter_login_id": "लॉगिन आयडी प्रविष्ट करा",
-  "enter_remarks": "येथे शेरा (पर्यायी) प्रविष्ट करा ...",
+  "enter_remarks": "येथे शेरा प्रविष्ट करा ...",
   "error": "त्रुटी",
   "error_while_changing_pass": "संकेतशब्द बदलताना त्रुटी.",
   "error_while_complaint_sub": "तक्रार प्रमविष्ट करताना त्रुटी.",
@@ -270,7 +272,7 @@ static const Map<String,dynamic> mr_IN = {
   "name": "नाव ",
   "new_complaint": "नवीन तक्रार",
   "new_password": "नवीन संकेतशब्द ",
-  "no": "क्रमांक ",
+  "no": "नाही ",
   "no_file_selected": "कोणतीही फाइल निवडली नाही",
   "password": "संकेतशब्द ",
   "password_and_con": "संकेतशब्द आणि पुष्टीकरण संकेतशब्द जुळत नाही",
@@ -356,7 +358,7 @@ static const Map<String,dynamic> mr_IN = {
   "hold_the_complaint": "तक्रार थांबवा",
   "do_you_want_to_hold": "आपण तक्रार थांबवू इच्छिता?",
   "could_not_launch": "लाँच करू शकलो नाही",
-  "error_while_checking_app_version": "अ‍ॅप आवृत्ती तपासताना त्रुटी.",
+  "error_while_checking_app_version": "अ‍ॅप तपासताना त्रुटी.",
   "error_while_checking_login_id": "लॉगइनआयडी तपासताना त्रुटी.",
   "middle_name": "मधले नाव",
   "please_enter_middle_name": "कृपया मधले नाव प्रविष्ट करा",
@@ -376,7 +378,9 @@ static const Map<String,dynamic> mr_IN = {
   "error_while_downloading_updated_app": "अद्यावत अ‍ॅप डाउनलोड करताना त्रुटी.",
   "downloading_updated_app": "अद्यावत आवृत्ती डाउनलोड करीत आहे, कृपया प्रतीक्षा करा ...",
   "history": "मागील टिप्पणी",
-  "transfered": "हस्तांतरित"
+  "transfered": "हस्तांतरित",
+  "please_enter_remarks": "कृपया टिप्पणी प्रविष्ट करा",
+  "forgot_password": "संकेतशब्द विसरलात?"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en_US": en_US, "mr_IN": mr_IN};
 }

@@ -88,7 +88,6 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
         _isLoading = false;
       });
       if (error != null) {
-        print("Error while complaint form submission => $error");
         SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),
             subtitle: LocaleKeys.error_while_complaint_sub.tr(),
@@ -125,7 +124,6 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
         _init = false;
         _isLoading = false;
       });
-      print("Error $error");
       SweetAlertV2.show(context,
           title: LocaleKeys.error.tr(),
           subtitle: LocaleKeys.error_while_fetching_cate.tr(),
@@ -156,12 +154,6 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
       });
     }
 
-    PlatformFile file = result.files.first;
-    print(file.name);
-    print(file.bytes);
-    print(file.size);
-    print(file.extension);
-    print(file.path);
     setState(() {
       _imagePath = null;
       files = result.files;
@@ -230,7 +222,6 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
                       return null;
                     },
                     onChanged: (category) {
-                      print('selected _complaintCategory $category');
                       setState(() {
                         _selCategory = category;
                       });
