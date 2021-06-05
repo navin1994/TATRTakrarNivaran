@@ -12,13 +12,17 @@ class Categories with ChangeNotifier {
   List<Category> _categories = [];
 
   List<Category> get categories {
+    // returns the copy of _categories
     return [..._categories];
   }
 
   int uid;
   int clntId;
   String name;
+  // Constructor to get the logged in user data from Auth provider class
   Categories(this.uid, this.clntId, this.name, this._categories);
+
+  // fetchAndSetCategories() method fetch the complaint categories from the server
   Future fetchAndSetCategories() async {
     var url = Uri.parse("$api/userapp/datcmplntsrvc");
     try {

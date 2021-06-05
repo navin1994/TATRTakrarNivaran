@@ -13,6 +13,7 @@ import '../models/signup.dart';
 import '../config/env.dart';
 
 class Auth with ChangeNotifier {
+  // Create firebase instance to generate the FCM token using it.
   FirebaseMessaging _fcmMessaging = FirebaseMessaging.instance;
   Map<String, dynamic> _userData;
   final String api = Environment.url;
@@ -92,6 +93,9 @@ class Auth with ChangeNotifier {
     return _userProfile;
   }
 
+  // updateOrRegisterFCMToken() to generate the FCM token and register it on the server
+  // to send FCM notification on targeted device/user
+
   Future updateOrRegisterFCMToken(int clntId, int uid, String name) async {
     var url = Uri.parse("$api/userapp/updtfcm");
     final token = await _fcmMessaging.getToken(); // get FCM token here
@@ -114,6 +118,8 @@ class Auth with ChangeNotifier {
     }
   }
 
+  // After cheking the version of mobile application if there is any version mismatch then call
+  // appUpdateDownload() method to update the existing application
   Future appUpdateDownload(String targetURL) async {
     try {
       final response = await http.get(
@@ -123,6 +129,7 @@ class Auth with ChangeNotifier {
       if (response.contentLength == 0) {
         return;
       }
+      // Body bytes contains the file in bytes format
       return response.bodyBytes;
     } catch (error) {
       throw error;
@@ -130,7 +137,9 @@ class Auth with ChangeNotifier {
   }
 
   Future checkAppVersion() async {
+    // PackageInfo is used to get the device information with the help of it's instance.
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    // Get the current app version on which device it's running.
     String version = packageInfo.version;
     var url = Uri.parse("$api/userapp/appversion");
     try {
@@ -138,6 +147,7 @@ class Auth with ChangeNotifier {
           headers: {"Content-Type": "application/json"},
           body: json.encode({"version": version}));
       final result = json.decode(response.body);
+      // If response is "NOK" means there is version mismatch
       if (result['Result'] == "NOK") {
         return result;
       }
@@ -146,6 +156,7 @@ class Auth with ChangeNotifier {
     }
   }
 
+  // changePassword() is called to update the user login password by passing the new password in it.
   Future changePassword(String loginId, String pwd) async {
     var url = Uri.parse("$api/userapp/datcmplntsrvc");
     try {
@@ -250,6 +261,7 @@ class Auth with ChangeNotifier {
     return object;
   }
 
+  // For user registration call signup() method
   Future signUp(Signup userData) async {
     var url = Uri.parse("$api/userapp/datcmplntsrvc");
     try {
@@ -284,6 +296,8 @@ class Auth with ChangeNotifier {
     }
   }
 
+  // Calling verifyLoginId() method at the time of user registratrion/singup
+  // to verify whether user login id is already taked or available.
   Future verifyLoginId(String loginId) async {
     var url = Uri.parse("$api/userapp/datcmplntsrvc");
     try {
@@ -342,6 +356,8 @@ class Auth with ChangeNotifier {
     }
   }
 
+  // tryAutoLogin() this method if user is already logged in but he closed an application
+  // and if user again opens an application then could be redirected to the home page.
   Future<bool> tryAutoLogin() async {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('uid')) {
@@ -356,6 +372,7 @@ class Auth with ChangeNotifier {
     return true;
   }
 
+  // In logout() everythig is cleared from variables and shared preferences.
   void logout() async {
     _clntId = null;
     _uid = null;
