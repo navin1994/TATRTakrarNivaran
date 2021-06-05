@@ -7,7 +7,7 @@ A new Flutter project to manage the **Complaints, Registrations and Leaves** at 
 ## Command-line Instructions
 
 - Clone this git repository `git clone https://github.com/navin1994/TATRTakrarNivaran.git`.
-- Open project directory in terminal and get packages listed inside the ~~pubspec.yaml~~ file using command `flutter pub get`.
+- Open project directory in terminal and get packages listed inside the _pubspec.yaml_ file using command `flutter pub get`.
 - Connect your real device (which should have USB debugging on under developer option) or create emulator and then run project using `flutter run`.
 
 ---
