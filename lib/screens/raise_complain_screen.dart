@@ -1,4 +1,3 @@
-import 'package:complaint_management/providers/complaints.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:provider/provider.dart';
@@ -6,6 +5,7 @@ import 'package:sweetalertv2/sweetalertv2.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../providers/complaints.dart';
 import '../translations/locale_keys.g.dart';
 import '../config/palette.dart';
 import '../widgets/form_field.dart' as padding;
