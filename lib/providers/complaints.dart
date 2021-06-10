@@ -19,29 +19,36 @@ class Complaints with ChangeNotifier {
   int clntId;
   String name;
 
+// Constructor to get the logged in user data from Auth provider class
   Complaints(this.uid, this.clntId, this.name, this._complaints);
 
   List<Complaint> get complaints {
+    // returns the copy of _complaints
     return [..._complaints];
   }
 
   Complaint get complaint {
+    // returns the single complaint
     return _complaint;
   }
 
   List<ComplaintSummary> get complaintSummary {
+    // returns the complaint summary to display on dashboard
     return _complaintSummary;
   }
 
+// Method to find the complaint by it's id
   Future<void> findById(int cmpId) async {
     _complaint = _complaints.firstWhere((comp) => comp.cmpId == cmpId);
   }
 
+// remove single complaint from the _complaints list
   void removeItem(int cmpId) {
     _complaints.removeWhere((cmp) => cmp.cmpId == cmpId);
     notifyListeners();
   }
 
+// Download the attachment file in the complaint
   Future downloadAttachment(int cmplId) async {
     var url = Uri.parse("$api/userapp/fleDownldsrvc");
 
@@ -73,6 +80,7 @@ class Complaints with ChangeNotifier {
     }
   }
 
+  // Search complaint from the server based on different complainations of filters and criterias
   Future serachComplaint(String crit, String srcCmpno, String inclUndr) async {
     var sResult;
     var url = Uri.parse("$api/userapp/cmplntmangesrvc");
@@ -138,6 +146,7 @@ class Complaints with ChangeNotifier {
     return sResult;
   }
 
+  // Fetch the complaints summary to display on dashboard
   Future getComplaintSummary() async {
     var url = Uri.parse("$api/userapp/cmplntsmryrvc");
     Map<String, dynamic> sResult = {};
