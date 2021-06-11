@@ -590,7 +590,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
                   // Position the logo of TATR
                   Positioned(
                     top: 23,
-                    left: 0,
+                    left: 10,
                     child: Container(
                       height: 100,
                       width: 100,
