@@ -20,64 +20,88 @@ class RaiseComplainScreen extends StatefulWidget {
 }
 
 class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
+  // _imagePath is used to store the selected image path
   String _imagePath;
+  // Create Instance of Image picker
   final picker = ImagePicker();
+  // _selCategory used to store the current complaint category
   Category _selCategory;
+  // files stores the list of multiple selected files
   List<PlatformFile> files;
   final _complaintForm = GlobalKey<FormState>();
+  // _msg used to display the message if file is picked or not
   String _msg;
+  // _isLoading used to show the progress indicator after complaint is submitted
   var _isLoading = false;
+  // _init is used to control the didChangeDependencies() methods executions
   var _init = true;
+  // _complaint used to store the new complaint data
   var _complaint = Complaint(cmpcatid: null, desc: "");
-
+// getImage() method get image through device camera
   Future getImage() async {
+    // Here image source is camera
     final pickedFile = await picker.getImage(source: ImageSource.camera);
 
     setState(() {
       if (pickedFile != null) {
+        // files set to null if there is any image taken from camera
         files = null;
+        // Set image path of clicked image by camera
         _imagePath = pickedFile.path;
+        // Set message to display image file selected or not
         _msg = LocaleKeys.image_file_detected.tr();
       } else {
+        // This is the case if camera is opened but image is not taken
         _imagePath = null;
         _msg = LocaleKeys.image_file_not_detected.tr();
       }
     });
   }
 
+// _submitComplaint() method to submit new complaint
   Future _submitComplaint() async {
-    final isValid = _complaintForm.currentState.validate();
+    final isValid = _complaintForm.currentState
+        .validate(); // Trigger validation on complaint form fields
     if (!isValid) {
+      // Stop execution if complaint form is invalid
       return;
     }
     setState(() {
+      // Set true to show progress indicator while saving complaint
       _isLoading = true;
     });
-    _complaintForm.currentState.save();
+    _complaintForm.currentState
+        .save(); // Triggers save on complaint form fields
 
     try {
+      // call saveComplaint() of Complaints provider class
       final res = await Provider.of<Complaints>(context, listen: false)
           .saveComplaint(
               _complaint, files != null ? files.first.path : _imagePath);
       setState(() {
+        // Set false to hide circular progress indicator and display complaint form
         _isLoading = false;
       });
       if (res['Result'] == "OK") {
+        // Reset the variables and complaint form if complaint is successfully saved
         setState(() {
           _complaintForm.currentState?.reset();
           _selCategory = null;
           files = null;
         });
+        // Show success message on complaint saved
         SweetAlertV2.show(context,
             title: "${LocaleKeys.svd.tr()}!",
             subtitle: res['Msg'],
             style: SweetAlertV2Style.success);
       } else if (res['Result'] == "NOK") {
+        // Show message if any error occurs while saving complaint
         SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),
             subtitle: res['Msg'],
             style: SweetAlertV2Style.error);
       } else {
+        // Show message if any error occurs while saving complaint
         SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),
             subtitle: LocaleKeys.error_while_submit_com.tr(),
@@ -85,9 +109,11 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
       }
     } catch (error) {
       setState(() {
+        // Set false to hide circular progress indicator and display complaint form
         _isLoading = false;
       });
       if (error != null) {
+        // Show message if any error occurs while saving new complaint
         SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),
             subtitle: LocaleKeys.error_while_complaint_sub.tr(),
@@ -105,6 +131,7 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
       _isLoading = true;
     });
     try {
+      // call fetchAndSetCategories() method of Categories provider class
       Provider.of<Categories>(context, listen: false)
           .fetchAndSetCategories()
           .then((res) {
@@ -113,6 +140,7 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
           _isLoading = false;
         });
         if (res != 0) {
+          // Show message if any error occurs while fetching complaint categories
           SweetAlertV2.show(context,
               title: LocaleKeys.error.tr(),
               subtitle: res,
@@ -124,6 +152,7 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
         _init = false;
         _isLoading = false;
       });
+      // Show message if any error occurs while fetching complaint categories
       SweetAlertV2.show(context,
           title: LocaleKeys.error.tr(),
           subtitle: LocaleKeys.error_while_fetching_cate.tr(),
@@ -136,33 +165,45 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
     super.didChangeDependencies();
   }
 
+  //  _loadFiles() is used to provide the file selection
   Future<void> _loadFiles() async {
+    // result stores the selected files
     FilePickerResult result =
         await FilePicker.platform.pickFiles(allowMultiple: false);
 
     if (result == null) {
       setState(() {
+        // files set to null if file picker is open but file is not selected
         files = null;
+        // Set message to display if file picker is open but file is not selected
         _msg = LocaleKeys.no_file_selected.tr();
       });
     }
-    var index = result.files.indexWhere((file) => file.size > 2097152);
+    var index = result.files.indexWhere((file) =>
+        file.size >
+        2097152); // Selected fiel size should not be greater than 2 MB
     if (index >= 0) {
       setState(() {
+        // Set files to null if any file found greater than 2 MB
         files = null;
+        // Set message if any file found greater than 2 MB
         _msg = LocaleKeys.selected_file_size_.tr();
       });
     }
 
     setState(() {
+      // Set _imagePath to null to remove the image clicked by camera
       _imagePath = null;
+      // Store selected files picked by file picker
       files = result.files;
+      // Set mesage to show count of selected files
       _msg = files.length == 1
           ? LocaleKeys.single_file_selected.tr()
           : '${files.length} ${LocaleKeys.files_are_selected.tr()}';
     });
   }
 
+// decoration() method to set decoration to complaint form fields
   InputDecoration decoration({IconData icon, String hintText}) {
     return InputDecoration(
       labelText: hintText,
@@ -184,6 +225,7 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
     );
   }
 
+// dropdownBuilder() method to set list of items in dropdown field
   dynamic dropdownBuilder(List<String> items) {
     return items.map<DropdownMenuItem<String>>((String value) {
       return DropdownMenuItem<String>(
@@ -193,7 +235,9 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
     }).toList();
   }
 
+// complaintFormSection() method contains the complaint form fields and buttons
   Container complaintFormSection() {
+    // Get fetched complaint categories from Categories provider class
     final _categories = Provider.of<Categories>(context).categories;
 
     return Container(
@@ -203,6 +247,7 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
           key: _complaintForm,
           child: Padding(
             padding: EdgeInsets.only(
+                // Padding to avoid the screen overflow if kaypad is opened
                 bottom: MediaQuery.of(context).viewInsets.bottom),
             child: Column(
               children: [
@@ -254,6 +299,7 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
                   ),
                 ),
                 padding.FormFieldWidget(
+                  // Button to open file picker for file selection
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       primary: files == null
@@ -266,6 +312,7 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
                   ),
                 ),
                 padding.FormFieldWidget(
+                  // Button to open take image by camera
                   ElevatedButton.icon(
                     icon: Icon(Icons.camera),
                     style: ElevatedButton.styleFrom(
@@ -280,6 +327,7 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
                 ),
                 if (_msg != null) Center(child: Text(_msg)),
                 padding.FormFieldWidget(SizedBox(height: 20)),
+                // Button to submit the complaint form
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       primary: Colors.green[600], // background

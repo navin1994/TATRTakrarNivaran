@@ -54,7 +54,7 @@ class Tilewidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            width: MediaQuery.of(context).size.width * 0.36,
+            width: MediaQuery.of(context).size.width * 0.46,
             child: Row(
               children: [
                 CircleAvatar(
@@ -62,13 +62,15 @@ class Tilewidget extends StatelessWidget {
                   backgroundColor: this.color,
                   child: this.icon,
                 ),
-                _getLabel,
+                FittedBox(
+                  child: _getLabel,
+                ),
                 // Text('$symbol', style: TextStyle(color: Colors.white)),
               ],
             ),
           ),
           Container(
-            width: MediaQuery.of(context).size.width * 0.30,
+            width: MediaQuery.of(context).size.width * 0.25,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -85,7 +87,7 @@ class Tilewidget extends StatelessWidget {
             ),
           ),
           Container(
-            width: MediaQuery.of(context).size.width * 0.20,
+            width: MediaQuery.of(context).size.width * 0.12,
             child: Text(
               '${perc.toStringAsFixed(0) == 'NaN' ? 0 : perc.toStringAsFixed(0)} %',
               style: TextStyle(color: this.textcolor),

@@ -9,7 +9,7 @@ import '../models/registered_user.dart';
 
 class RagistrationDetailsScreen extends StatelessWidget {
   static const routeName = '/registration-detail-screen';
-
+// _getStatus() method to show registered user status
   String _getStatus(String stat) {
     switch (stat) {
       case "NA":
@@ -25,22 +25,27 @@ class RagistrationDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // updateStatus() method updates the status of registered user
     Future<void> updateStatus(String stat, int userid) async {
       try {
+        // call updateUserStatus() method of RegisteredUsers provider class
         final resp = await Provider.of<RegisteredUsers>(context, listen: false)
             .updateUserStatus(stat, userid);
         if (resp['Result'] == "OK") {
+          // Show message if user status successfully updated
           SweetAlertV2.show(context,
               title: "${LocaleKeys.updated.tr()}!",
               subtitle: resp['Msg'],
               style: SweetAlertV2Style.success);
         } else {
+          // Show message if any error occured while updating the registered user status
           SweetAlertV2.show(context,
               title: LocaleKeys.error.tr(),
               subtitle: resp['Msg'],
               style: SweetAlertV2Style.error);
         }
       } catch (error) {
+        // Show message if any error occured while updating the registered user status
         SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),
             subtitle: LocaleKeys.error_while_updating.tr(),
@@ -48,9 +53,9 @@ class RagistrationDetailsScreen extends StatelessWidget {
       }
     }
 
+    // Get registered user id through routing arguments to fetch selected user details
     final userId =
         ModalRoute.of(context).settings.arguments as int; // is the id!
-
     Widget _heading(String heading, RegisteredUser userData) {
       return Container(
         width: MediaQuery.of(context).size.width * 0.80, //80% of width,
@@ -66,6 +71,7 @@ class RagistrationDetailsScreen extends StatelessWidget {
               vertical: 5, // 5 top and bottom
             ),
             decoration: BoxDecoration(
+              // _getStatus() to get registered users current status background colour
               color: _getStatus(userData.stat) == LocaleKeys.approved.tr()
                   ? Colors.green.shade400
                   : _getStatus(userData.stat) == LocaleKeys.pending.tr()
@@ -76,6 +82,7 @@ class RagistrationDetailsScreen extends StatelessWidget {
               ),
             ),
             child: Text(
+              // _getStatus() method to display registered user current status
               _getStatus(userData.stat),
               style: TextStyle(color: Colors.white),
             ),
@@ -180,6 +187,7 @@ class RagistrationDetailsScreen extends StatelessWidget {
         title: Text(LocaleKeys.registration_details.tr()),
       ),
       body: FutureBuilder(
+        // call findById() method of RegisteredUsers provider class to get data of selected user
         future: Provider.of<RegisteredUsers>(context, listen: false)
             .findById(userId),
         builder: (ctx, resultSnapshot) => resultSnapshot.connectionState ==
@@ -230,6 +238,7 @@ class RagistrationDetailsScreen extends StatelessWidget {
                                             MainAxisAlignment.spaceAround,
                                         children: [
                                           Flexible(
+                                            //  Button to update the status to registered user to approved
                                             child: ElevatedButton.icon(
                                               style: ElevatedButton.styleFrom(
                                                   primary: Colors
@@ -246,6 +255,7 @@ class RagistrationDetailsScreen extends StatelessWidget {
                                             ),
                                           ),
                                           Flexible(
+                                            //  Button to update the status to registered user to rejected
                                             child: ElevatedButton.icon(
                                               style: ElevatedButton.styleFrom(
                                                 primary:

@@ -15,6 +15,7 @@ class Divisions with ChangeNotifier {
     return [..._divisions];
   }
 
+// fetch divisions to populate in user registration form
   Future fetchAndSetDivisons() async {
     var url = Uri.parse("$api/userapp/datcmplntsrvc");
     try {

@@ -12,9 +12,12 @@ class ReportingOfficers with ChangeNotifier {
   List<ReportingOfficer> _reportingOfficers = [];
 
   List<ReportingOfficer> get reportingOfficers {
+    // Returns the copy of _reportingOfficers
     return [..._reportingOfficers];
   }
 
+  // Fetches the list of reporting officers based on data of Designation Id and Office Id of user
+  // which is being registered
   Future fetchAndSetReportingOfficers(int desigId, int ofcId) async {
     if (desigId == null || ofcId == null) {
       return;

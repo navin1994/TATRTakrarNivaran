@@ -22,6 +22,7 @@ class DesignationAndWorkOffices with ChangeNotifier {
     return [..._workOffices];
   }
 
+// fetch the designation and work offices to populate in user registration form
   Future fetchAndSetDesigAndWorkOfcs(int ofcid) async {
     var url = Uri.parse("$api/userapp/datcmplntsrvc");
     try {

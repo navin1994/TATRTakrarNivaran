@@ -32,10 +32,12 @@ class LoginSignupScreen extends StatefulWidget {
   _LoginSignupScreenState createState() => _LoginSignupScreenState();
 }
 
+//  WidgetsBindingObserver mixin to observe the screen widget activities
 class _LoginSignupScreenState extends State<LoginSignupScreen>
     with WidgetsBindingObserver {
   Language selLanguage =
       Language(language: LocaleKeys.english.tr(), value: Locale('en', 'US'));
+  // Localization language list Defaultis English
   List<Language> _languages = [
     Language(language: LocaleKeys.english.tr(), value: Locale('en', 'US')),
     Language(language: LocaleKeys.marathi.tr(), value: Locale('mr', 'IN')),
@@ -43,16 +45,26 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
   final TextEditingController _confirmPassword = TextEditingController();
   final TextEditingController _password = TextEditingController();
   final TextEditingController _loginId = TextEditingController();
+  // Base API  url
   final _url = Environment.url;
+  // updateResp is variable to hold the app version update response
   var updateResp;
+  // _init is used to control the didChangeDependencies() methods executions
   var _init = true;
   String loginIdMsg;
+  // _isUpdating to show the updating screen
   var _isUpdating = false;
+  // _isDownloading to show the downloading message and progress indicator on screen
   var _isDownloading = false;
+  // _isLoading is used to show circular progrss indicator while screen is loading
   var _isLoading = false;
+  // _isLoginLoading to show the progress indicator while checking availability of login id
   var _isLoginLoading = false;
+  //  _isRepOfcrLoading to show progress indicator while fetching the reporting officers list
   var _isRepOfcrLoading = false;
+  // _loginData is an object to save the login credentials
   var _loginData = Login(uLogin: '', uPwd: '');
+  // _signupData is object to save user registration data
   var _signupData = Signup(
     mainofcNm: "",
     mainclntofc: "",
@@ -72,31 +84,46 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
     uLoginId: "",
     uPwd: "",
   );
+  // _passwordField focus instance to manage the focus on password text field
   final _passwordField = FocusNode();
+  // _loginIdField focus instance to manage the focus on login id text field
   final _loginIdField = FocusNode();
   final _loginForm = GlobalKey<FormState>();
   final _signupForm = GlobalKey<FormState>();
+  // Store the value of current division
   Division selDivOfc;
+  // Store the value of current designation
   Designation selDesig;
+  // Store the value of current Work office
   WorkOffice selwrkOfc;
+  // Store the value of current reporting officer
   ReportingOfficer selRprtOfcr;
+  // Flag to manage displaying of login or regitration fields/widgets
   bool isSignupScreen = false;
-
+// Method to download the updated version app
   Future<void> downloadUpdate(String url) async {
     try {
       setState(() {
+        // To show downloading message and circular progress indicator
         _isDownloading = true;
       });
+      // call appUpdateDownload() method of Auth provider class
       final resp = await Provider.of<Auth>(context, listen: false)
           .appUpdateDownload(url);
+      // Get the external storage directory of current device
       final externalDirectory = await getExternalStorageDirectory();
+      // Get path and name for updated app to store
       File file = new File('${externalDirectory.path}/ताडोबासंवाद.apk');
+      // Write downloaded updated app to the device storage from body bytes
       await file.writeAsBytes(resp);
       setState(() {
+        // Hide the circular progress indicator
         _isDownloading = false;
       });
+      // Open downlaoded app for installation
       OpenFile.open("${externalDirectory.path}/ताडोबासंवाद.apk");
     } catch (error) {
+      // Show error message if any error occurs while downloading the updated app
       SweetAlertV2.show(context,
           title: LocaleKeys.error.tr(),
           subtitle: LocaleKeys.error_while_downloading_updated_app.tr(),
@@ -104,20 +131,25 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
     }
   }
 
+//  Method to check the current app version with server updated app version
   void checkAppUpdate() async {
     try {
+      // call checkAppVersion() method of Auth provider class
       updateResp = await Provider.of<Auth>(context).checkAppVersion();
       if (updateResp == null) {
         setState(() {
+          // hide Update screen of there is no version mismatch
           _isDownloading = false;
           _isUpdating = false;
         });
         return;
       }
       setState(() {
+        // Display the update screen if there is version mismatch
         _isUpdating = true;
       });
     } catch (error) {
+      // Show message if any error occurs while checking app version
       SweetAlertV2.show(context,
           title: LocaleKeys.error.tr(),
           subtitle: LocaleKeys.error_while_checking_app_version.tr(),
@@ -125,9 +157,12 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
     }
   }
 
+// didChangeAppLifecycleState() to observe the Login and signup screen widget lifecycle
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    // Check if app current screen is comes to foreground from background
     if (state == AppLifecycleState.resumed) {
+      // Call checkAppUpdate() method on every time screen is resumed
       checkAppUpdate();
     }
   }
@@ -138,20 +173,25 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
       return;
     }
     try {
+      // Check for app updated as soon as screen is loaded
       checkAppUpdate();
       // setState(() {
       //   _isLoading = true;
       // });
+
+      // call fetchAndSetDivisons() of Divisions provider class if app version is correct and
       final res = await Provider.of<Divisions>(context, listen: false)
           .fetchAndSetDivisons();
       setState(() {
         _init = false;
         _isLoading = false;
       });
+      //  Fetch desigantions and work offices under the fetched / selected division
       if (res == 0) {
         _fetchDesigAndWrkOfc(
             Provider.of<Divisions>(context, listen: false).divisions[0]);
       } else {
+        // Show message if any error occurs while fetching designations and work offices
         SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),
             subtitle: res,
@@ -162,6 +202,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
         _init = false;
         _isLoading = false;
       });
+      // Show message if any error occurs while fetching division
       SweetAlertV2.show(context,
           title: LocaleKeys.error.tr(),
           subtitle: LocaleKeys.error_while_fetching_div.tr(),
@@ -174,18 +215,24 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
     super.didChangeDependencies();
   }
 
+// _fetchReportingOfcr() method to fetch resporting officers
+// based on selected designation and work office
   Future<void> _fetchReportingOfcr() async {
     try {
       setState(() {
+        // Set true to show circular progrss indicator while fetching reporting officers
         _isRepOfcrLoading = true;
       });
+      // call fetchAndSetReportingOfficers() method of ReportingOfficers provider class
       final resp = await Provider.of<ReportingOfficers>(context, listen: false)
           .fetchAndSetReportingOfficers(selDesig?.hdid, selwrkOfc?.hdid);
 
       setState(() {
+        // Set false to hide circular progrss indicator while fetching reporting officers
         _isRepOfcrLoading = false;
       });
       if (resp != null && resp['Result'] != "OK") {
+        // Show message if any error occurs while fetching reporting officers
         SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),
             subtitle: resp['Msg'],
@@ -193,28 +240,36 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
       }
     } catch (error) {
       setState(() {
+        // Set false to hide circular progrss indicator while fetching reporting officers
         _isRepOfcrLoading = false;
       });
+      // Show message if any error occurs while fetching reporting officers
       SweetAlertV2.show(context,
           title: LocaleKeys.error.tr(),
           subtitle: LocaleKeys.error_while_fetching_rep.tr(),
           style: SweetAlertV2Style.error);
     }
     setState(() {
+      // Set false to hide circular progrss indicator while fetching reporting officers
       _isRepOfcrLoading = false;
     });
   }
 
+// _fetchDesigAndWrkOfc() method to fetch work offices and designation based on selected
+// division
   Future<void> _fetchDesigAndWrkOfc(Division value) async {
     if (value == null) {
       return;
     }
     selDivOfc = value;
     try {
+      // Call fetchAndSetDesigAndWorkOfcs() method of DesignationAndWorkOffices provider class
       Provider.of<DesignationAndWorkOffices>(context, listen: false)
           .fetchAndSetDesigAndWorkOfcs(int.parse(value.value))
           .then((resp) {
         if (resp != 0) {
+          // Show message if any error occurs while fetching designations
+          // and work offices under selected division
           SweetAlertV2.show(context,
               title: LocaleKeys.error.tr(),
               subtitle: resp,
@@ -222,6 +277,8 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
         }
       });
     } catch (error) {
+      // Show message if any error occurs while fetching designations
+      // and work offices under selected division
       SweetAlertV2.show(context,
           title: LocaleKeys.error.tr(),
           subtitle: LocaleKeys.error_while_fetching_desig.tr(),
@@ -233,24 +290,29 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
     // TextField lost focus
     try {
       setState(() {
+        // Set true to show progress indicator while checking availability of login id
         _isLoginLoading = true;
       });
       // Execute your API validation here
       final response = await Provider.of<Auth>(context, listen: false)
           .verifyLoginId(_loginId.text);
       setState(() {
+        // Set false to hide progress indicator of checking availability of login id
         _isLoginLoading = false;
       });
       if (response != null) {
         setState(() {
+          // Store login id availability message from server to display
           loginIdMsg = response['Msg'];
         });
         return;
       }
     } catch (error) {
       setState(() {
+        // Set false to hide progress indicator of checking availability of login id
         _isLoginLoading = false;
       });
+      // Show message if any error occurs while checking availability of login id
       SweetAlertV2.show(context,
           title: LocaleKeys.error.tr(),
           subtitle: LocaleKeys.error_while_checking_login_id.tr(),
@@ -258,40 +320,49 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
     }
     setState(() {
       _isLoginLoading = false;
+      // Set null login Id availability message if error occured
       loginIdMsg = null;
     });
   }
 
+// _submitLoginForm() Method to proceed for login process with credentials
   void _submitLoginForm() async {
     final isValid = _loginForm.currentState
         .validate(); // this will trigger validator on each textFormField
     if (!isValid) {
+      // Stop execution if login form is not valid
       return;
     }
     _loginForm.currentState
         .save(); // this will trigger onSaved on each textFormField
     try {
       setState(() {
+        // Set true to show progress indicator while getting login response from server
         _isLoading = true;
       });
+      // call login method of Auth provider class with login credentials
       final response =
           await Provider.of<Auth>(context, listen: false).login(_loginData);
       setState(() {
         _isLoading = false;
       });
       if (response != 0) {
+        // Show message if any error occurs while login process
         SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),
             subtitle: response,
             style: SweetAlertV2Style.error);
         return;
       }
+      // If loggin is successfull Navigate to the User Dashboard screen
       Navigator.of(context).pushReplacementNamed(Dashboard.routeName);
     } catch (error) {
       setState(() {
+        // Hide circular progress indicator after getting response from server
         _isLoading = false;
       });
       if (error != null) {
+        // Show message if any error occurs while login process
         SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),
             subtitle: LocaleKeys.error_while_user_login.tr(),
@@ -299,10 +370,12 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
       }
     }
     setState(() {
+      // Hide circular progress indicator after getting response from server
       _isLoading = false;
     });
   }
 
+// _resetSignUpForm() method to reset all signup form fields
   void _resetSignUpForm() {
     setState(() {
       _signupForm.currentState?.reset();
@@ -315,28 +388,38 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
     });
   }
 
+// _submitRegistrationForm() method to proceed for user registration
   void _submitRegistrationForm() async {
-    final isValid = _signupForm.currentState.validate();
+    final isValid = _signupForm.currentState
+        .validate(); // Trigger validation on all form fiels of signup form
     if (!isValid) {
+      // Stop execution if signup form is invalid
       return;
     }
     setState(() {
+      // Set true to show circular progress indicator while
+      // registering user on server with registration data
       _isLoading = true;
     });
-    _signupForm.currentState.save();
+    _signupForm.currentState
+        .save(); // Trigger save on all form fiels of signup form
     try {
+      // call signUp() method of Auth provider class
       final res =
           await Provider.of<Auth>(context, listen: false).signUp(_signupData);
       setState(() {
+        // Set false to hide circular progress indicator
         _isLoading = false;
       });
       if (res['Result'] == "OK") {
+        // call _resetSignUpForm() if user sucessfully registered and show message
         _resetSignUpForm();
         SweetAlertV2.show(context,
             title: LocaleKeys.registration.tr(),
             subtitle: res['Msg'],
             style: SweetAlertV2Style.success);
       } else {
+        // Show message if any error occured while user registration
         SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),
             subtitle: res['Msg'],
@@ -344,9 +427,11 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
       }
     } catch (error) {
       setState(() {
+        // Set false to hide circular progress indicator
         _isLoading = false;
       });
       if (error != null) {
+        // Show message if any error occured while user registration
         SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),
             subtitle: LocaleKeys.error_while_user_reg.tr(),
@@ -355,6 +440,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
     }
   }
 
+// decoration() method to set the decoration to form fields
   InputDecoration decoration({IconData icon, String label}) {
     return InputDecoration(
       labelText: label,
@@ -376,6 +462,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
     );
   }
 
+// call dispose() method to clear memory occupied vaiables
   @override
   void dispose() {
     _loginIdField.dispose();
@@ -392,7 +479,9 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
     return Scaffold(
       backgroundColor: Palette.backgroundColor,
       body: _isUpdating
-          ? Center(
+          ?
+          // To show app update message and update the app
+          Center(
               child: Container(
                 width: MediaQuery.of(context).size.width * .80,
                 height: MediaQuery.of(context).size.height * .30,
@@ -434,7 +523,9 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
                 ),
               ),
             )
-          : Stack(
+          :
+          //  Show this section if app version is correct
+          Stack(
               children: [
                 Positioned(
                   top: 0,
@@ -446,6 +537,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
                       image: DecorationImage(
                           colorFilter: ColorFilter.mode(
                               Colors.black.withOpacity(0.5), BlendMode.darken),
+                          // Set background image to the screen
                           image: AssetImage("assets/images/bg3.jpg"),
                           fit: BoxFit.fill),
                     ),
@@ -495,6 +587,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
                   ),
                 ),
                 if (!isSignupScreen)
+                  // Position the logo of TATR
                   Positioned(
                     top: 23,
                     left: 0,
@@ -539,6 +632,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
+                              // Detect the tap on Login text
                               GestureDetector(
                                 onTap: () {
                                   setState(() {
@@ -566,6 +660,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
                                   ],
                                 ),
                               ),
+                              // Detect the tap on Signup text
                               GestureDetector(
                                 onTap: () {
                                   setState(() {
@@ -712,11 +807,15 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
   }
 
   Container buildSignupSection() {
+    // Get the fetched divisions from Divisions provider class
     final _divisions = Provider.of<Divisions>(context).divisions;
+    // Get the fetched designations from DesignationAndWorkOffices provider class
     final _designations =
         Provider.of<DesignationAndWorkOffices>(context).designations;
+    // Get the fetched workoffices from DesignationAndWorkOffices provider class
     List<WorkOffice> _workOffices =
         Provider.of<DesignationAndWorkOffices>(context).workOffices;
+    // Get the fetched reporting officers from ReportingOfficers provider class
     List<ReportingOfficer> _reportingOfficers =
         Provider.of<ReportingOfficers>(context).reportingOfficers;
 
@@ -725,6 +824,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
       child: Form(
         key: _signupForm,
         child: Padding(
+          // Padding to prevent screen overlapping while keypad is showing
           padding:
               EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: Column(
@@ -771,6 +871,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
                     }
                     return null;
                   },
+                  //  Set divisions list in dropdown
                   items: _divisions
                       ?.map(
                         (div) => new DropdownMenuItem(
@@ -1126,6 +1227,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
                     : FocusScope(
                         child: Focus(
                           onFocusChange: (focus) =>
+                              // Check for loginid availability when field losses the focus
                               focus ? () {} : _loginIdCheck(),
                           child: TextFormField(
                             controller: _loginId,
@@ -1257,6 +1359,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
     );
   }
 
+// buildTextButton() to build the button for login
   TextButton buildTextButton(
       IconData icon, String title, Color backgroundColor) {
     return TextButton(
@@ -1284,6 +1387,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
     );
   }
 
+// buildBottomHalfContainer() to hold and manage background for login button
   Widget buildBottomHalfContainer(bool showShadow) {
     return Positioned(
       top: 475,

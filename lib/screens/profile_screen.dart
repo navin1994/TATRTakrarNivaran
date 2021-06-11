@@ -18,35 +18,47 @@ class ProfilePageScreen extends StatefulWidget {
 }
 
 class _ProfilePageScreenState extends State<ProfilePageScreen> {
+  // _pwdchng used to hide or show password change screen
   var _pwdchng = false;
+  //  _isLoading used to show circular progress indicator while loading the data on screen
   var _isLoading = false;
+  // _init is used to control the didChangeDependencies() methods executions
   var _isInit = true;
+  // _isEditable is used to show or hide profile update form fields
   bool _isEditable = false;
   final _profileForm = GlobalKey<FormState>();
+  // variables to store data for profile update
   String fName, uMname, lName, email, mobile;
 
+// _toggleEdit() method is to toggle between profile update form fields and profile details
   void _toggleEdit() {
     setState(() {
       _isEditable = !_isEditable;
     });
   }
 
+// _togglePwdChange() method to toggle between profile details and password form
   void _togglePwdChange() {
     setState(() {
       _pwdchng = !_pwdchng;
     });
   }
 
+// getUserPrfile() method to get the logged in user profile details
   Future<void> getUserPrfile() async {
     try {
       setState(() {
+        // Set true to show circular progress indicator while fetching data from server
         _isLoading = true;
       });
+      //  call getProfile() method of Auth provider class
       final resp = await Provider.of<Auth>(context, listen: false).getProfile();
       setState(() {
+        // Set false to hide circular progress indicator data fetched from server
         _isLoading = false;
       });
       if (resp['Result'] != "OK") {
+        // Show message if any error occurs while getting user profile details
         SweetAlertV2.show(context,
             title: '${LocaleKeys.svd.tr()}!',
             subtitle: resp['Msg'],
@@ -54,6 +66,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
       }
     } catch (error) {
       if (error != null) {
+        // Show message if any error occurs while getting user profile details
         SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),
             subtitle: LocaleKeys.error_while_getting_prof.tr(),
@@ -67,36 +80,45 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
     if (!_isInit) {
       return;
     }
+    // Call  getUserPrfile() to get logged in user profiel for first time
     getUserPrfile();
     _isInit = false;
     super.didChangeDependencies();
   }
 
+// _submitUpdateProfileForm() to update the user profile details
   Future<void> _submitUpdateProfileForm() async {
     final isValid = _profileForm.currentState
         .validate(); // this will trigger validator on each textFormField
     if (!isValid) {
+      // Stop execution if profile form is invalid
       return;
     }
-    _profileForm.currentState.save();
+    _profileForm.currentState.save(); // Trigger save on profile form fields
     try {
       setState(() {
+        //  Set false to hide circular progress indicator
         _isLoading = true;
       });
+      // call updateProfile() methode of Auth provider class
       final respo = await Provider.of<Auth>(context, listen: false)
           .updateProfile(fName, uMname, lName, mobile, email);
       setState(() {
+        //  Set false to hide circular progress indicator
         _isLoading = false;
       });
       if (respo["Result"] == "OK") {
         setState(() {
+          // Set false to hide profiel form fields
           _isEditable = false;
         });
+        // Show sucess message on update of profile
         SweetAlertV2.show(context,
             title: "${LocaleKeys.svd.tr()}!",
             subtitle: respo['Msg'],
             style: SweetAlertV2Style.success);
       } else {
+//  Show message if any error occures while updating the profile
         SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),
             subtitle: respo['Msg'],
@@ -104,6 +126,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
       }
     } catch (error) {
       if (error != null) {
+//  Show message if any error occures while updating the profile
         SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),
             subtitle: LocaleKeys.error_while_updating_prof.tr(),
@@ -112,6 +135,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
     }
   }
 
+// decoration() method to decorate the form fields
   InputDecoration decoration({IconData icon, String hintText}) {
     return InputDecoration(
       labelText: hintText,
@@ -133,6 +157,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
     );
   }
 
+// dropdownBuilder() to set dropdon values in dropdown
   dynamic dropdownBuilder(List<String> items) {
     return items.map<DropdownMenuItem<String>>((String value) {
       return DropdownMenuItem<String>(
@@ -144,6 +169,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Get fetched user profile data from Auth provder class
     final Profile profile =
         Provider.of<Auth>(context, listen: false).userProfile;
     Widget _heading(String heading) {
@@ -156,32 +182,38 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
             style: TextStyle(
                 fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
           ),
-          if (_isEditable)
-            ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                elevation: 12,
-                primary: Colors.red, // background
-                onPrimary: Colors.white, // foreground
-              ),
-              onPressed: _toggleEdit,
-              icon: Icon(Icons.edit_off),
-              label: Text(LocaleKeys.cancel.tr()),
+          // if (_isEditable)
+          // Button to toggle between profile form fields and profile details
+          ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+              elevation: 12,
+              primary:
+                  _isEditable ? Colors.red : Colors.pink.shade300, // background
+              onPrimary: Colors.white, // foreground
             ),
-          if (!_isEditable)
-            ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                elevation: 12,
-                primary: Colors.pink.shade300, // background
-                onPrimary: Colors.white, // foreground
-              ),
-              onPressed: _toggleEdit,
-              icon: Icon(Icons.edit),
-              label: Text(LocaleKeys.edit.tr()),
-            ),
+            onPressed: _toggleEdit,
+            icon: _isEditable ? Icon(Icons.edit_off) : Icon(Icons.edit),
+            label: _isEditable
+                ? Text(LocaleKeys.cancel.tr())
+                : Text(LocaleKeys.edit.tr()),
+          ),
+          // if (!_isEditable)
+          // Button to toggle between profile form fields and profile details
+          // ElevatedButton.icon(
+          //   style: ElevatedButton.styleFrom(
+          //     elevation: 12,
+          //     primary: , // background
+          //     onPrimary: Colors.white, // foreground
+          //   ),
+          //   onPressed: _toggleEdit,
+          //   icon: ,
+          //   label: ,
+          // ),
         ]),
       );
     }
 
+    //  _detailsCard() method to show profile details and update profile form fields
     Widget _detailsCard() {
       return Container(
         height: MediaQuery.of(context).size.height * 0.80,
@@ -369,6 +401,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Flexible(
+                              // Button to submit or update the profile details
                               child: ElevatedButton.icon(
                                 style: ElevatedButton.styleFrom(
                                     elevation: 12,
@@ -381,6 +414,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                               ),
                             ),
                             Flexible(
+                              // Button to toggle view between update profile form and profile details
                               child: ElevatedButton.icon(
                                 style: ElevatedButton.styleFrom(
                                   elevation: 12,
@@ -404,6 +438,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                           height: 20,
                         ),
                       if (!_isEditable && !_pwdchng)
+                        // Button to toggle between password change form and Profile details
                         ElevatedButton.icon(
                           style: ElevatedButton.styleFrom(
                             elevation: 12,
@@ -435,6 +470,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
         centerTitle: true,
         title: Text(LocaleKeys.user_profile.tr()),
       ),
+      // Side Navigation drower
       drawer: AppDrawer(),
       body: _isLoading
           ? Center(
@@ -482,6 +518,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                               margin: EdgeInsets.only(
                                   top:
                                       MediaQuery.of(context).size.height * .20),
+                              //  Change password widget
                               child: ChangePassword(profile.uLoginId,
                                   decoration, _togglePwdChange),
                             ),

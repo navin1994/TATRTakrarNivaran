@@ -15,10 +15,11 @@ class RegisteredUsers with ChangeNotifier {
   int uid;
   int clntId;
   String name;
-
+  // Constructor to get the logged in user details
   RegisteredUsers(this.uid, this.clntId, this.name, this._registeredUsers);
 
   List<RegisteredUser> get registeredUsers {
+    // Returns the copy of _registeredUsers
     return [..._registeredUsers];
   }
 
@@ -27,14 +28,17 @@ class RegisteredUsers with ChangeNotifier {
   }
 
   Future<void> findById(int uid) async {
+    // Find the single user using the user id
     _regUser = _registeredUsers.firstWhere((user) => user.uid == uid);
   }
 
   void removeItem(int userId) {
+    // Remove the user from users list using user id
     _registeredUsers.removeWhere((user) => user.uid == userId);
     notifyListeners();
   }
 
+// This method fetches the registered users and stores them in _registeredUsers
   Future fetchAndSetRegisteredUsers(String crit) async {
     var url = Uri.parse("$api/userapp/datcmplntsrvc");
     try {
@@ -95,6 +99,7 @@ class RegisteredUsers with ChangeNotifier {
     }
   }
 
+// This method is to update user status either Approved or Rejected
   Future updateUserStatus(String stat, int userid) async {
     var url = Uri.parse("$api/userapp/datcmplntsrvc");
     try {

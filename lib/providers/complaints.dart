@@ -184,6 +184,7 @@ class Complaints with ChangeNotifier {
     return sResult;
   }
 
+// This method returns the remarks on perticular complaint
   Future<List<Comment>> getComments(int cmpId) async {
     List<Comment> loadedComments = [];
 
@@ -218,6 +219,7 @@ class Complaints with ChangeNotifier {
     return loadedComments;
   }
 
+// Update the status with remark on complaint
   Future updateComplaint(int cmpId, String stat, String rmrk) async {
     var url = Uri.parse("$api/userapp/cmplntmangesrvc");
     try {
@@ -247,6 +249,7 @@ class Complaints with ChangeNotifier {
     }
   }
 
+  // This method fetch all the complaints from the server based on criteria which we provide
   Future fetchAndSetcomplaints(String crit) async {
     var url = Uri.parse("$api/userapp/cmplntmangesrvc");
     var complaintData;

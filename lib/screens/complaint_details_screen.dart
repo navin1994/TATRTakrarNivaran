@@ -23,8 +23,12 @@ class ComplaintDetailsScreen extends StatefulWidget {
 }
 
 class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
+  // _isLoading is used to diaplay the circular progress indicator while screen is loading
   var _isLoading = false;
+  // _rmrkController used to store the remarks / comments while taking any action on complaint.
   TextEditingController _rmrkController = TextEditingController();
+
+  // This method used to display the status of perticular complaint
   String _getStatus(String stat) {
     switch (stat) {
       case "NA":
@@ -44,6 +48,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
     }
   }
 
+// This method is used to give background color to complaint status based on it's status
   Color _getColor(String stat) {
     switch (stat) {
       case "NA":
@@ -63,28 +68,43 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
     }
   }
 
+// This method is used to donwload the attachment of complaint using complaint id.
   Future<void> _donwloadAttchment(int cmplId) async {
     try {
       setState(() {
+        // Show circular progress indicator
         _isLoading = true;
       });
+      // Call the downloadAttachment() method inside of "Complaints" class.
       final resp = await Provider.of<Complaints>(context, listen: false)
           .downloadAttachment(cmplId);
+      // Get the temporary directory store the file temporarily
       Directory tempDir = await getTemporaryDirectory();
+      // Get the path of the directory
       String tempPath = tempDir.path;
+      // Store the file returned from server to the file variable
       File file = new File('$tempPath/${resp['fileName']}');
+      // Write file bytes to the storage
       await file.writeAsBytes(resp['fileBytes']);
       setState(() {
+        // Remove the circular progress indicator and display the complaint screen again
         _isLoading = false;
       });
+      // Open downloaded file
       OpenFile.open("$tempPath/${resp['fileName']}");
-    } catch (error) {}
+    } catch (error) {
+      // Handle if any error occurs while file downloading
+    }
   }
 
+// This method displays the list of comments which mentioned while taking action of complait
   Future<void> showComments(BuildContext context, int cmpId) async {
+    /// Get the comments on perticular complaint using complaint id
     final List<Comment> comments =
         await Provider.of<Complaints>(context, listen: false)
             .getComments(cmpId);
+
+    /// If there is no comment return null
     return comments == null
         ? SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),
@@ -110,6 +130,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                     children: [
                       Expanded(
                         child: Material(
+                          /// Display the list of comments
                           child: ListView.builder(
                             itemCount: comments.length,
                             itemBuilder: (ctx, index) => Column(
@@ -149,6 +170,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                           ),
                         ),
                       ),
+                      // Button to close the dialog
                       ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
                             elevation: 12,
@@ -170,6 +192,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
             });
   }
 
+// This method displays dialog while taking any action on complaint
   Future<void> _displayDialog(
       BuildContext context, String heading, String stat, int cmpId) async {
     var errorFlag = false;
@@ -190,6 +213,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                           "${LocaleKeys.please_enter_remarks.tr()}*",
                           style: TextStyle(color: Colors.red),
                         ),
+                      // This textfield takes the remarks while acting on complaint
                       TextField(
                         maxLines: 5,
                         controller: _rmrkController,
@@ -204,6 +228,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                   ),
                 ),
               ),
+              // actions contains the "Yes" and "No" button to act on complaint
               actions: <Widget>[
                 ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
@@ -236,6 +261,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                       });
                       return;
                     }
+                    // Calling update status to update the status of complaint
                     updateStatus(cmpId, stat, _rmrkController.text);
                     setState(() {
                       Navigator.pop(context);
@@ -248,18 +274,23 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
         });
   }
 
+  // This method update the status of complaint Like "Transfer", "approved", etc.
   void updateStatus(int cmpId, String stat, String rmrk) async {
     setState(() {
+      // Show circular progrss indicator
       _isLoading = true;
     });
     try {
+      // Calling updateComplaint() method of Complaints class
       final resp = await Provider.of<Complaints>(context, listen: false)
           .updateComplaint(cmpId, stat, rmrk.trim());
 
       setState(() {
+        // Hide circular progrss indicator and display complaint screen
         _isLoading = false;
       });
       if (resp['Result'] == "OK") {
+        // Navigating to the previous screen, Complaint management screen
         Navigator.of(context).pop();
         SweetAlertV2.show(context,
             title: "${LocaleKeys.updated.tr()}!",
@@ -273,6 +304,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
       }
     } catch (error) {
       setState(() {
+        // Hide circular progrss indicator and display complaint screen
         _isLoading = false;
       });
       SweetAlertV2.show(context,
@@ -284,11 +316,15 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Get complaint Id from route arguments
     final cmpId =
         ModalRoute.of(context).settings.arguments as int; // is the id!
+    // Fetch user id from Auth Provider Class
     final int _uid = Provider.of<Auth>(context).uid;
+    // This method creates heading widget
     Widget _heading(String heading, Complaint campData) {
       return Container(
+        // MediaQuery.of(context).size.width takes device width
         width: MediaQuery.of(context).size.width * 0.80, //80% of width,
         child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
@@ -302,12 +338,14 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
               vertical: 5, // 5 top and bottom
             ),
             decoration: BoxDecoration(
+              // Get background colour for complaint status
               color: _getColor(campData.stat),
               borderRadius: BorderRadius.all(
                 Radius.circular(22),
               ),
             ),
             child: Text(
+              // Get complaint status String
               _getStatus(campData.stat),
               style: TextStyle(color: Colors.white),
             ),
@@ -316,6 +354,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
       );
     }
 
+    // Retruns details card widget which contails all the available info about complaint
     Widget _detailsCard(Complaint campData) {
       return Padding(
         padding: const EdgeInsets.all(8.0),
@@ -324,6 +363,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
           child: Column(
             children: [
               //row for each deatails
+              // display Complaint ID
               ListTile(
                 leading: Icon(Icons.arrow_forward_ios),
                 title:
@@ -334,6 +374,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                 height: 0.6,
                 color: Colors.black87,
               ),
+              // display Complaint category
               ListTile(
                 leading: Icon(Icons.arrow_forward_ios),
                 title: Text("${LocaleKeys.category.tr()}: "),
@@ -344,6 +385,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                 height: 0.6,
                 color: Colors.black87,
               ),
+              // display Complaint description
               ListTile(
                 leading: Icon(Icons.arrow_forward_ios),
                 title: Text("${LocaleKeys.desc.tr()}:"),
@@ -354,6 +396,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                 height: 0.6,
                 color: Colors.black87,
               ),
+              // display authority to whom complaint is assigned
               ListTile(
                 leading: Icon(Icons.arrow_forward_ios),
                 title: Text("${LocaleKeys.complaint_assign_to.tr()}:"),
@@ -365,6 +408,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                   height: 0.6,
                   color: Colors.black87,
                 ),
+              // display recent Comment on complaint if any
               if (campData.cmpRcntRply != null)
                 ListTile(
                   leading: Icon(Icons.arrow_forward_ios),
@@ -379,6 +423,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                       "${LocaleKeys.history.tr()}...",
                       style: TextStyle(color: Colors.blue),
                     ),
+                    // show all comments with action which taken on complait
                     onPressed: () => showComments(context, campData.cmpId),
                   ),
                 ),
@@ -387,6 +432,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                 height: 0.6,
                 color: Colors.black87,
               ),
+              // Complaint registration date
               ListTile(
                 leading: Icon(Icons.arrow_forward_ios),
                 title: Text("${LocaleKeys.date.tr()}"),
@@ -398,6 +444,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                   height: 0.6,
                   color: Colors.black87,
                 ),
+              // display count of how many times complaint is rejected
               if (campData.cmpRjcnt != null && campData.cmpRjcnt > 0)
                 ListTile(
                   leading: Icon(Icons.arrow_forward_ios),
@@ -409,6 +456,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                   height: 0.6,
                   color: Colors.black87,
                 ),
+              // display last updated date on complaint
               if (campData.updton != null)
                 ListTile(
                   leading: Icon(Icons.arrow_forward_ios),
@@ -420,6 +468,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                   height: 0.6,
                   color: Colors.black87,
                 ),
+              // Display name by whom complaint is last time updated
               if (campData.updtby != null)
                 ListTile(
                   leading: Icon(Icons.arrow_forward_ios),
@@ -432,7 +481,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                   height: 0.6,
                   color: Colors.black87,
                 ),
-
+              // Display remarks on complaint
               if (campData.rmrk != null)
                 ListTile(
                   leading: Icon(Icons.arrow_forward_ios),
@@ -456,13 +505,16 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
         backgroundColor: Color(0xFF581845),
       ),
       body: FutureBuilder(
+        // Future builder requests complaint by id
         future: Provider.of<Complaints>(context, listen: false).findById(cmpId),
         builder: (ctx, resultSnapshot) => resultSnapshot.connectionState ==
                 ConnectionState.waiting
             ? Center(
+                // Show Circular progree indicator untill request is in waiting state
                 child: CircularProgressIndicator(),
               )
             : Consumer<Complaints>(
+                // Fetch complaint data every time it's updated
                 builder: (ctx, comp, _) => SafeArea(
                     child: Center(
                   child: SingleChildScrollView(
@@ -536,6 +588,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                                   ],
                                 )
                               : TextButton.icon(
+                                  // Button to donlaod any attachment with complaint
                                   onPressed: () =>
                                       _donwloadAttchment(comp.complaint.cmpId),
                                   style: TextButton.styleFrom(
@@ -555,6 +608,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Flexible(
+                                // Button to re-open the complaint
                                 child: ElevatedButton.icon(
                                   style: ElevatedButton.styleFrom(
                                       elevation: 12,
@@ -570,6 +624,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                                       comp.complaint.cmpId),
                                 ),
                               ),
+                              // Button to close the complaint
                               Flexible(
                                 child: ElevatedButton.icon(
                                   style: ElevatedButton.styleFrom(
@@ -600,6 +655,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                                       MainAxisAlignment.spaceAround,
                                   children: [
                                     Flexible(
+                                      // Button to approve the complaint
                                       child: ElevatedButton.icon(
                                         style: ElevatedButton.styleFrom(
                                             elevation: 12,
@@ -618,6 +674,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                                       ),
                                     ),
                                     Flexible(
+                                      // Button to reject the complaint
                                       child: ElevatedButton.icon(
                                         style: ElevatedButton.styleFrom(
                                           elevation: 12,
@@ -642,6 +699,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                                       MainAxisAlignment.spaceAround,
                                   children: [
                                     Flexible(
+                                      // Button to transfer the complaint to higher authority
                                       child: ElevatedButton.icon(
                                         style: ElevatedButton.styleFrom(
                                           elevation: 12,
@@ -668,6 +726,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Flexible(
+                                      // Button to hold the complaint
                                       child: ElevatedButton.icon(
                                         style: ElevatedButton.styleFrom(
                                           elevation: 12,
