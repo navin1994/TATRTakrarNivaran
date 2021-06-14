@@ -29,10 +29,10 @@ class Tilewidget extends StatelessWidget {
         return Text("${LocaleKeys.solved.tr()}",
             style: TextStyle(color: Colors.white));
       case "Pending":
-        return Text("${LocaleKeys.pending.tr()}",
+        return Text("${LocaleKeys.pending_comp.tr()}",
             style: TextStyle(color: Colors.white));
       default:
-        return Text("${LocaleKeys.rejected.tr()}",
+        return Text("${LocaleKeys.rejec.tr()}",
             style: TextStyle(color: Colors.white));
     }
   }

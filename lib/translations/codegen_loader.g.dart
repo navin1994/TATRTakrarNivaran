@@ -21,7 +21,7 @@ class CodegenLoader extends AssetLoader{
   "add_range": "Add Range",
   "add_range_from": "Add Range Form",
   "all": "All",
-  "alloted_to_me": "Alloted to me",
+  "alloted_to_me": "Assigned to me",
   "approved": "Approved",
   "cancel": "Cancel",
   "category": "Category",
@@ -196,7 +196,9 @@ class CodegenLoader extends AssetLoader{
   "history": "View remarks",
   "transfered": "Transfered",
   "please_enter_remarks": "Please enter remarks",
-  "forgot_password": "Forgot Password?"
+  "forgot_password": "Forgot Password?",
+  "rejec": "Rejected",
+  "pending_comp": "Pending"
 };
 static const Map<String,dynamic> mr_IN = {
   "login": "लॉगिन",
@@ -205,7 +207,7 @@ static const Map<String,dynamic> mr_IN = {
   "add_range": "श्रेणी ठरवा",
   "add_range_from": "श्रेणी च्या पासून ",
   "all": "सर्व",
-  "alloted_to_me": "माझ्याकडे तक्रारी",
+  "alloted_to_me": "मी कार्यवाही करण्याच्या तक्रारी",
   "approved": "मंजूर",
   "cancel": "रद्द ",
   "category": "वर्ग",
@@ -268,7 +270,7 @@ static const Map<String,dynamic> mr_IN = {
   "manage_registrations": "नोंदणी व्यवस्थापन ",
   "mobile_no": "मोबाईल क्रमांक",
   "mobile_number": "मोबाईल क्रमांक",
-  "my_complaints": "माझ्या तक्रारी",
+  "my_complaints": "मी केलेल्या तक्रारी",
   "name": "नाव ",
   "new_complaint": "नवीन तक्रार",
   "new_password": "नवीन संकेतशब्द ",
@@ -277,7 +279,7 @@ static const Map<String,dynamic> mr_IN = {
   "password": "संकेतशब्द ",
   "password_and_con": "संकेतशब्द आणि पुष्टीकरण संकेतशब्द जुळत नाही",
   "password_does_not_ma": "कन्फर्म संकेतशब्द जुळत नाही आहे ",
-  "pending": "प्रलंबित तक्रारी",
+  "pending": "प्रलंबित",
   "please_category_of_complaint": "कृपया तक्रारीची श्रेणी निवडा",
   "please_enter_compl": "कृपया तक्रार क्रमांक प्रविष्ट करा आणि निकषांतर्गत शोध निवडा.",
   "please_enter_confirm_pas": "कृपया पुष्टीकरण संकेतशब्द प्रविष्ट करा",
@@ -307,7 +309,7 @@ static const Map<String,dynamic> mr_IN = {
   "registration_list": "नोंदणी यादी",
   "registration": "नोंदणी!",
   "reject": "अमान्य ",
-  "rejected": "नाकारलेल्या तक्रारी",
+  "rejected": "नामंजूर",
   "rejection_count": "नामंजूर संख्या ",
   "remarks": "शेरा ",
   "reopen": "पुन्हा सक्रिय",
@@ -331,7 +333,7 @@ static const Map<String,dynamic> mr_IN = {
   "single_file_selected": "एकल फाईल निवडली",
   "submit": "समाविष्ट",
   "transfer_to_higher_authority": "उच्च अधिकारी कडे हस्तांतरित ",
-  "under_my_authority": "माझ्या अधिकाराखाली",
+  "under_my_authority": "माझ्या कार्यक्षेत्रातील तक्रारी",
   "update": "अद्यावत",
   "updated": "अद्यावत",
   "updated_by": "द्वारा अद्यावत",
@@ -380,7 +382,9 @@ static const Map<String,dynamic> mr_IN = {
   "history": "मागील टिप्पणी",
   "transfered": "हस्तांतरित",
   "please_enter_remarks": "कृपया टिप्पणी प्रविष्ट करा",
-  "forgot_password": "संकेतशब्द विसरलात?"
+  "forgot_password": "संकेतशब्द विसरलात?",
+  "rejec": "नाकारलेल्या तक्रारी",
+  "pending_comp": "प्रलंबित तक्रारी"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en_US": en_US, "mr_IN": mr_IN};
 }

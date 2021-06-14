@@ -183,5 +183,7 @@ abstract class  LocaleKeys {
   static const transfered = 'transfered';
   static const please_enter_remarks = 'please_enter_remarks';
   static const forgot_password = 'forgot_password';
+  static const rejec = 'rejec';
+  static const pending_comp = 'pending_comp';
 
 }
