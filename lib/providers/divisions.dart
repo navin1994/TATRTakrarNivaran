@@ -15,6 +15,7 @@ class Divisions with ChangeNotifier {
     return [..._divisions];
   }
 
+// fetch divisions to populate in user registration form
   Future fetchAndSetDivisons() async {
     var url = Uri.parse("$api/userapp/datcmplntsrvc");
     try {
@@ -23,12 +24,11 @@ class Divisions with ChangeNotifier {
         headers: {"Content-Type": "application/json"},
         body: json.encode({
           "act": "clntmainofchd",
-          "clntId": "4G0T337M"
+          "clntId": "YKV9BWUK"
         }), // 4G0T337M   prod => YKV9BWUK
       );
       List<Division> loadedDivisions = [];
       final divisionData = json.decode(response.body);
-      print("response from server: $divisionData");
       if (divisionData['Result'] == "OK") {
         final records = divisionData['Records'] as List<dynamic>;
         loadedDivisions = records
@@ -47,7 +47,6 @@ class Divisions with ChangeNotifier {
       notifyListeners();
       return 0;
     } catch (error) {
-      print("Error in executing the code $error");
       throw error;
     }
   }

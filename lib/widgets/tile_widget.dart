@@ -1,4 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+
+import '../translations/locale_keys.g.dart';
 
 class Tilewidget extends StatelessWidget {
   final Color color;
@@ -17,6 +20,23 @@ class Tilewidget extends StatelessWidget {
       @required this.count})
       : super(key: key);
 
+  Widget get _getLabel {
+    switch (symbol) {
+      case "TOTAL":
+        return Text("${LocaleKeys.total.tr()}",
+            style: TextStyle(color: Colors.white));
+      case "Solved":
+        return Text("${LocaleKeys.solved.tr()}",
+            style: TextStyle(color: Colors.white));
+      case "Pending":
+        return Text("${LocaleKeys.pending_comp.tr()}",
+            style: TextStyle(color: Colors.white));
+      default:
+        return Text("${LocaleKeys.rejec.tr()}",
+            style: TextStyle(color: Colors.white));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -25,12 +45,16 @@ class Tilewidget extends StatelessWidget {
       height: 75,
       decoration: BoxDecoration(
           color: Color.fromRGBO(34, 37, 42, 1),
+          border: Border.all(
+            color: Colors.white30,
+            width: 1,
+          ),
           borderRadius: BorderRadius.circular(18)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            width: MediaQuery.of(context).size.width * 0.38,
+            width: MediaQuery.of(context).size.width * 0.46,
             child: Row(
               children: [
                 CircleAvatar(
@@ -38,12 +62,15 @@ class Tilewidget extends StatelessWidget {
                   backgroundColor: this.color,
                   child: this.icon,
                 ),
-                Text('$symbol', style: TextStyle(color: Colors.white)),
+                FittedBox(
+                  child: _getLabel,
+                ),
+                // Text('$symbol', style: TextStyle(color: Colors.white)),
               ],
             ),
           ),
           Container(
-            width: MediaQuery.of(context).size.width * 0.35,
+            width: MediaQuery.of(context).size.width * 0.25,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -60,7 +87,7 @@ class Tilewidget extends StatelessWidget {
             ),
           ),
           Container(
-            width: MediaQuery.of(context).size.width * 0.17,
+            width: MediaQuery.of(context).size.width * 0.12,
             child: Text(
               '${perc.toStringAsFixed(0) == 'NaN' ? 0 : perc.toStringAsFixed(0)} %',
               style: TextStyle(color: this.textcolor),

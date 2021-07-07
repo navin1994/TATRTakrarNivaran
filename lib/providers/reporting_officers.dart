@@ -12,9 +12,12 @@ class ReportingOfficers with ChangeNotifier {
   List<ReportingOfficer> _reportingOfficers = [];
 
   List<ReportingOfficer> get reportingOfficers {
+    // Returns the copy of _reportingOfficers
     return [..._reportingOfficers];
   }
 
+  // Fetches the list of reporting officers based on data of Designation Id and Office Id of user
+  // which is being registered
   Future fetchAndSetReportingOfficers(int desigId, int ofcId) async {
     if (desigId == null || ofcId == null) {
       return;
@@ -32,7 +35,6 @@ class ReportingOfficers with ChangeNotifier {
       );
       List<ReportingOfficer> loadedReportingOfficers = [];
       final result = json.decode(response.body);
-      print("Reporting officers from server: $result");
       if (result['Result'] == "OK") {
         final officers = result['dta1'] as List<dynamic>;
         loadedReportingOfficers = officers
@@ -51,7 +53,6 @@ class ReportingOfficers with ChangeNotifier {
       notifyListeners();
       return;
     } catch (error) {
-      print("Error => $error");
       throw error;
     }
   }

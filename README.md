@@ -1,16 +1,20 @@
-# complaint_management
+# ताडोबा संवाद
 
-A new Flutter project.
+A new Flutter project to manage the **Complaints, Registrations and Leaves** at **Tadoba Andheri Tiger Reserve**.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## Command-line Instructions
 
-A few resources to get you started if this is your first Flutter project:
+- Clone this git repository `git clone https://github.com/navin1994/TATRTakrarNivaran.git`.
+- Open project directory in terminal and get packages listed inside the _pubspec.yaml_ file using command `flutter pub get`.
+- Connect your real device (which should have USB debugging on under developer option) or create emulator and then run project using `flutter run`.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+---
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Some usefull commands while development
+
+- To generate translations file fot easy localization `flutter pub run easy_localization:generate -S "assets/translations" -O "lib/translations"`.
+- To generate keys of translation file `flutter pub run easy_localization:generate -S "assets/translations" -O "lib/translations" -o "locale_keys.g.dart" -f keys`.
+- To change the package name using command `flutter pub run change_app_package_name:main com.new.package.name`.
+- To generate the release build of project `flutter build apk --split-per-abi`.

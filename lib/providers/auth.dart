@@ -13,6 +13,7 @@ import '../models/signup.dart';
 import '../config/env.dart';
 
 class Auth with ChangeNotifier {
+  // Create firebase instance to generate the FCM token using it.
   FirebaseMessaging _fcmMessaging = FirebaseMessaging.instance;
   Map<String, dynamic> _userData;
   final String api = Environment.url;
@@ -26,6 +27,7 @@ class Auth with ChangeNotifier {
       mainclntofc: "",
       clntid: null,
       uFname: "",
+      uMname: "",
       uLname: "",
       uDesgId: null,
       uDesgNm: "",
@@ -91,50 +93,70 @@ class Auth with ChangeNotifier {
     return _userProfile;
   }
 
+  // updateOrRegisterFCMToken() to generate the FCM token and register it on the server
+  // to send FCM notification on targeted device/user
+
   Future updateOrRegisterFCMToken(int clntId, int uid, String name) async {
-    // var url = Uri.parse("$api/userapp/updtfcm");
+    var url = Uri.parse("$api/userapp/updtfcm");
     final token = await _fcmMessaging.getToken(); // get FCM token here
-    print("FCM Token : $token");
     try {
-      //   final response = await http.post(url,
-      //       headers: {"Content-Type": "application/json"},
-      //       body: json.encode({
-      //         "clntId": clntId,
-      //         "uid": uid,
-      //         "name": name,
-      //         "tkn": token,
-      //       }));
-      //   final result = json.decode(response.body);
-      //   if (result['Result'] == "NOK") {
-      //     return;
-      //   }
+      final response = await http.post(url,
+          headers: {"Content-Type": "application/json"},
+          body: json.encode({
+            "clntId": clntId,
+            "uid": uid,
+            "name": name,
+            "tkn": token,
+          }));
+      final result = json.decode(response.body);
+      if (result['Result'] == "NOK") {
+        return;
+      }
       return token;
     } catch (error) {
-      print("Error while sending token $error");
+      throw error;
+    }
+  }
+
+  // After cheking the version of mobile application if there is any version mismatch then call
+  // appUpdateDownload() method to update the existing application
+  Future appUpdateDownload(String targetURL) async {
+    try {
+      final response = await http.get(
+        Uri.parse(targetURL),
+        headers: {"Content-Type": "application/json"},
+      );
+      if (response.contentLength == 0) {
+        return;
+      }
+      // Body bytes contains the file in bytes format
+      return response.bodyBytes;
+    } catch (error) {
       throw error;
     }
   }
 
   Future checkAppVersion() async {
+    // PackageInfo is used to get the device information with the help of it's instance.
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    // Get the current app version on which device it's running.
     String version = packageInfo.version;
-    print("version is: $version");
     var url = Uri.parse("$api/userapp/appversion");
     try {
       final response = await http.post(url,
           headers: {"Content-Type": "application/json"},
           body: json.encode({"version": version}));
       final result = json.decode(response.body);
+      // If response is "NOK" means there is version mismatch
       if (result['Result'] == "NOK") {
-        print("Version check response from server:  ${response.body}");
         return result;
       }
     } catch (error) {
-      print("Error while cheking version ==> $error");
       throw error;
     }
   }
 
+  // changePassword() is called to update the user login password by passing the new password in it.
   Future changePassword(String loginId, String pwd) async {
     var url = Uri.parse("$api/userapp/datcmplntsrvc");
     try {
@@ -152,13 +174,12 @@ class Auth with ChangeNotifier {
       );
       return json.decode(response.body);
     } catch (error) {
-      print("Error ==> $error");
       throw error;
     }
   }
 
-  Future updateProfile(
-      String uFname, String uLname, String uMobile, String uEmail) async {
+  Future updateProfile(String uFname, String uMname, String uLname,
+      String uMobile, String uEmail) async {
     var url = Uri.parse("$api/userapp/datcmplntsrvc");
     var rObject;
     try {
@@ -171,6 +192,7 @@ class Auth with ChangeNotifier {
           "uid": _uid,
           "name": "$_uFname $_uLname",
           "uFname": uFname,
+          "uMname": uMname,
           "uLname": uLname,
           "uMobile": uMobile,
           "uEmail": uEmail
@@ -181,7 +203,6 @@ class Auth with ChangeNotifier {
         getProfile();
       }
     } catch (error) {
-      print("Error ==> $error");
       throw error;
     }
     return rObject;
@@ -204,7 +225,6 @@ class Auth with ChangeNotifier {
         }),
       );
       object = json.decode(response.body);
-      print("Profile response from serve $object");
       if (object["Result"] == "OK") {
         final tempProf = object["Record"] as Map<String, dynamic>;
         loadProfile = Profile(
@@ -212,6 +232,7 @@ class Auth with ChangeNotifier {
           mainclntofc: tempProf['mainclntofc'],
           clntid: tempProf['clntid'],
           uFname: tempProf['uFname'],
+          uMname: tempProf['uMname'],
           uLname: tempProf['uLname'],
           uDesgId: tempProf['uDesgId'],
           uDesgNm: tempProf['uDesgNm'],
@@ -233,13 +254,14 @@ class Auth with ChangeNotifier {
         );
       }
     } catch (error) {
-      print("Error ==> $error");
       throw error;
     }
     _userProfile = loadProfile;
+    notifyListeners();
     return object;
   }
 
+  // For user registration call signup() method
   Future signUp(Signup userData) async {
     var url = Uri.parse("$api/userapp/datcmplntsrvc");
     try {
@@ -270,11 +292,12 @@ class Auth with ChangeNotifier {
       final signUpResp = json.decode(response.body);
       return signUpResp;
     } catch (error) {
-      print("Error => $error");
       throw error;
     }
   }
 
+  // Calling verifyLoginId() method at the time of user registratrion/singup
+  // to verify whether user login id is already taked or available.
   Future verifyLoginId(String loginId) async {
     var url = Uri.parse("$api/userapp/datcmplntsrvc");
     try {
@@ -283,10 +306,8 @@ class Auth with ChangeNotifier {
         headers: {"Content-Type": "application/json"},
         body: json.encode({"act": "verfyloginid", "uLogin": loginId}),
       );
-      print("verifyLoginId response from serve: ${response.body}");
       return json.decode(response.body);
     } catch (error) {
-      print("Error while checking login Id => $error");
       throw error;
     }
   }
@@ -297,10 +318,16 @@ class Auth with ChangeNotifier {
       final response = await http.post(
         url,
         headers: {"Content-Type": "application/json"},
-        body: json.encode({'uLogin': loginData.uLogin, 'uPwd': loginData.uPwd}),
+        body: json.encode(
+          {
+            'clntId': "YKV9BWUK",
+            'uLogin': loginData.uLogin,
+            'uPwd': loginData.uPwd
+          },
+        ), // 4G0T337M   prod => YKV9BWUK
       );
       final loginResp = json.decode(response.body) as Map<String, dynamic>;
-      print("Rsponse Login Attempt ===> $loginResp");
+
       if (loginResp['Result'] == "OK") {
         final record = loginResp['Record'] as Map<String, dynamic>;
         final respToken = await updateOrRegisterFCMToken(record['clntid'],
@@ -325,11 +352,12 @@ class Auth with ChangeNotifier {
         return loginResp['Msg'];
       }
     } catch (error) {
-      print("Error while login => $error");
       throw error;
     }
   }
 
+  // tryAutoLogin() this method if user is already logged in but he closed an application
+  // and if user again opens an application then could be redirected to the home page.
   Future<bool> tryAutoLogin() async {
     final prefs = await SharedPreferences.getInstance();
     if (!prefs.containsKey('uid')) {
@@ -340,20 +368,25 @@ class Auth with ChangeNotifier {
     _uFname = prefs.getString('uFname');
     _uLname = prefs.getString('uLname');
     _fcmToken = prefs.getString('fcmToken');
-    print("FCM Token $_fcmToken");
     notifyListeners();
     return true;
   }
 
+  // In logout() everythig is cleared from variables and shared preferences.
   void logout() async {
     _clntId = null;
     _uid = null;
     _uFname = null;
     _uLname = null;
-    _fcmToken = null;
+    // _fcmToken = null;
+    // _fcmMessaging.deleteToken();
     notifyListeners();
     final prefs = await SharedPreferences.getInstance();
-    // prefs.remove('userData');
-    prefs.clear();
+    prefs.remove('uid');
+    prefs.remove('clntId');
+    prefs.remove('uFname');
+    prefs.remove('uLname');
+
+    // prefs.clear();
   }
 }

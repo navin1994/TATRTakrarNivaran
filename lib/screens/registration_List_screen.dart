@@ -18,7 +18,9 @@ class RegistrationListScreen extends StatefulWidget {
 
 class _RegistrationListScreenState extends State<RegistrationListScreen> {
   final String _listType = "users";
+  // Default criteria is pending
   String _crit = "NA";
+  // Status filter list it's sequence should be matched with _filterData()
   final List _filters = [
     LocaleKeys.pending.tr(),
     LocaleKeys.approved.tr(),
@@ -26,6 +28,8 @@ class _RegistrationListScreenState extends State<RegistrationListScreen> {
     LocaleKeys.reporting.tr()
   ];
   var _selectedIndex = 0;
+  // Fetch data based on fliter value selected according to index
+  // it's sequence should be matched with _filters List
   void _filterData(index) {
     setState(() {
       _selectedIndex = index;
@@ -33,37 +37,45 @@ class _RegistrationListScreenState extends State<RegistrationListScreen> {
     switch (_selectedIndex) {
       case 0:
         setState(() {
+          // Fetch pending status users
           _crit = "NA";
         });
         break;
       case 1:
         setState(() {
+          // Fetch approved status users
           _crit = "A";
         });
         break;
       case 2:
         setState(() {
+          // Fetch Rejected status users
           _crit = "R";
         });
         break;
       case 3:
         setState(() {
+          // Fetch Reporting users list
           _crit = "AU";
         });
         break;
       default:
         setState(() {
+          // Fetch pending users list
           _crit = "NA";
         });
     }
   }
 
+// _fetchAndSetRegistrations() method to fetch Registered users from server
   Future<void> _fetchAndSetRegistrations(String filterValue) async {
     try {
+      // call fetchAndSetRegisteredUsers() method of RegisteredUsers provider class
       final response =
           await Provider.of<RegisteredUsers>(context, listen: false)
               .fetchAndSetRegisteredUsers(filterValue);
       if (response != 0) {
+        // Show message if any error occured while fetching the Registered users
         SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),
             subtitle: response,
@@ -72,6 +84,7 @@ class _RegistrationListScreenState extends State<RegistrationListScreen> {
       }
     } catch (error) {
       if (error != null) {
+        // Show message if any error occured while fetching the Registered users
         SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),
             subtitle: LocaleKeys.error_while_loading_reg.tr(),
@@ -83,15 +96,13 @@ class _RegistrationListScreenState extends State<RegistrationListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF035AA6),
+      backgroundColor: Color(0xFF581845),
       appBar: AppBar(
         brightness: Brightness.dark,
-        backgroundColor: Color(0xFF035AA6),
+        backgroundColor: Color(0xFF581845),
         elevation: 0,
         centerTitle: true,
-        title: Text(
-          LocaleKeys.registration_list.tr(),
-        ),
+        title: Text(LocaleKeys.registration_list.tr()),
       ),
       drawer: AppDrawer(),
       body: SafeArea(
@@ -122,6 +133,7 @@ class _RegistrationListScreenState extends State<RegistrationListScreen> {
                       ),
                     ),
                     FutureBuilder(
+                        // Fetch registered user list based on selected filter criteria
                         future: _fetchAndSetRegistrations(_crit),
                         builder: (ctx, resultSnapshot) =>
                             resultSnapshot.connectionState ==

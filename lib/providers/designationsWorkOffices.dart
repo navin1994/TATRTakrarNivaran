@@ -22,6 +22,7 @@ class DesignationAndWorkOffices with ChangeNotifier {
     return [..._workOffices];
   }
 
+// fetch the designation and work offices to populate in user registration form
   Future fetchAndSetDesigAndWorkOfcs(int ofcid) async {
     var url = Uri.parse("$api/userapp/datcmplntsrvc");
     try {
@@ -33,7 +34,6 @@ class DesignationAndWorkOffices with ChangeNotifier {
       List<Designation> loadedDesignations = [];
       List<WorkOffice> loadedWorkOffices = [];
       final result = json.decode(response.body);
-      print("Designations and work office from server: $result");
       if (result['Result'] == "OK") {
         final offices = result['dta1'] as List<dynamic>;
         final designations = result['dta2'] as List<dynamic>;
@@ -78,7 +78,6 @@ class DesignationAndWorkOffices with ChangeNotifier {
       notifyListeners();
       return 0;
     } catch (error) {
-      print('Error : $error');
       throw error;
     }
   }

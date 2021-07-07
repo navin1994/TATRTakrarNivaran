@@ -19,29 +19,36 @@ class Complaints with ChangeNotifier {
   int clntId;
   String name;
 
+// Constructor to get the logged in user data from Auth provider class
   Complaints(this.uid, this.clntId, this.name, this._complaints);
 
   List<Complaint> get complaints {
+    // returns the copy of _complaints
     return [..._complaints];
   }
 
   Complaint get complaint {
+    // returns the single complaint
     return _complaint;
   }
 
   List<ComplaintSummary> get complaintSummary {
+    // returns the complaint summary to display on dashboard
     return _complaintSummary;
   }
 
+// Method to find the complaint by it's id
   Future<void> findById(int cmpId) async {
     _complaint = _complaints.firstWhere((comp) => comp.cmpId == cmpId);
   }
 
+// remove single complaint from the _complaints list
   void removeItem(int cmpId) {
     _complaints.removeWhere((cmp) => cmp.cmpId == cmpId);
     notifyListeners();
   }
 
+// Download the attachment file in the complaint
   Future downloadAttachment(int cmplId) async {
     var url = Uri.parse("$api/userapp/fleDownldsrvc");
 
@@ -69,15 +76,12 @@ class Complaints with ChangeNotifier {
       final fname = data.substring(data.indexOf('=') + 1, data.indexOf('"'));
       return {"fileBytes": resp.bodyBytes, "fileName": fname.toString()};
     } catch (error) {
-      print("Error while downloading attachment : $error");
       // throw error;
     }
   }
 
+  // Search complaint from the server based on different complainations of filters and criterias
   Future serachComplaint(String crit, String srcCmpno, String inclUndr) async {
-    print("crit : $crit");
-    print("srcCmpno : $srcCmpno");
-    print("inclUndr : $inclUndr");
     var sResult;
     var url = Uri.parse("$api/userapp/cmplntmangesrvc");
 
@@ -100,7 +104,6 @@ class Complaints with ChangeNotifier {
       );
       final result = json.decode(resp.body);
       sResult = result;
-      print("Complaint search from server: $result");
       if (result['Result'] == "OK") {
         final records = result["Records"] as List<dynamic>;
         srcResult = records
@@ -136,7 +139,6 @@ class Complaints with ChangeNotifier {
             .toList();
       }
     } catch (error) {
-      print("Error ==> $error");
       throw error;
     }
     _complaints = srcResult;
@@ -144,6 +146,7 @@ class Complaints with ChangeNotifier {
     return sResult;
   }
 
+  // Fetch the complaints summary to display on dashboard
   Future getComplaintSummary() async {
     var url = Uri.parse("$api/userapp/cmplntsmryrvc");
     Map<String, dynamic> sResult = {};
@@ -161,7 +164,6 @@ class Complaints with ChangeNotifier {
           ));
       final result = json.decode(resp.body);
       sResult = result;
-      print("Complaint summary from server: $result");
       if (result['Result'] == "OK") {
         final summary = result['Records'] as List<dynamic>;
         loadedSummary = summary
@@ -177,12 +179,12 @@ class Complaints with ChangeNotifier {
       }
     } catch (error) {
       _complaintSummary = loadedSummary;
-      print("Error => $error");
       throw error;
     }
     return sResult;
   }
 
+// This method returns the remarks on perticular complaint
   Future<List<Comment>> getComments(int cmpId) async {
     List<Comment> loadedComments = [];
 
@@ -202,7 +204,6 @@ class Complaints with ChangeNotifier {
           ));
       final result = json.decode(resp.body);
 
-      print("comments response from server: $result");
       final comm = result['Records'] as List<dynamic>;
       loadedComments = comm
           .map((comment) => Comment(
@@ -213,12 +214,12 @@ class Complaints with ChangeNotifier {
               extrainfo: comment['extrainfo']))
           .toList();
     } catch (error) {
-      print("Error => $error");
       throw error;
     }
     return loadedComments;
   }
 
+// Update the status with remark on complaint
   Future updateComplaint(int cmpId, String stat, String rmrk) async {
     var url = Uri.parse("$api/userapp/cmplntmangesrvc");
     try {
@@ -236,20 +237,20 @@ class Complaints with ChangeNotifier {
             },
           ));
       final result = json.decode(resp.body);
-      print("Update complaint response from server: $result");
       if (result['Result'] == "OK") {
         _complaint.stat = stat;
-        removeItem(cmpId);
+        if (stat != "H") {
+          removeItem(cmpId);
+        }
       }
       return result;
     } catch (error) {
-      print("Error => $error");
       throw error;
     }
   }
 
+  // This method fetch all the complaints from the server based on criteria which we provide
   Future fetchAndSetcomplaints(String crit) async {
-    print("crit $crit");
     var url = Uri.parse("$api/userapp/cmplntmangesrvc");
     var complaintData;
     List<Complaint> loadedComplaints = [];
@@ -267,7 +268,6 @@ class Complaints with ChangeNotifier {
           ));
       complaintData = json.decode(resp.body);
 
-      print("fetched complaint data ==> $complaintData");
       if (complaintData['Result'] == "OK") {
         final records = complaintData['Records'] as List<dynamic>;
         loadedComplaints = records
@@ -303,7 +303,6 @@ class Complaints with ChangeNotifier {
             .toList();
       }
     } catch (error) {
-      print("Error ==> $error");
       throw error;
     }
     _complaints = loadedComplaints;
@@ -312,12 +311,6 @@ class Complaints with ChangeNotifier {
   }
 
   Future saveComplaint(Complaint complaint, String uploadfilePath) async {
-    print("uid $uid");
-    print("clntId $clntId");
-    print("name $name");
-    print("complaint.cmpcatid ${complaint.cmpcatid}");
-    print("complaint.desc ${complaint.desc}");
-
     var url = Uri.parse("$api/userapp/cmplntmangesrvc");
     try {
       final response = await http.post(
@@ -335,7 +328,6 @@ class Complaints with ChangeNotifier {
         }),
       );
       final compSaveResp = json.decode(response.body);
-      print("Response from server complaint save ==> $compSaveResp");
       if (compSaveResp['Result'] == "OK") {
         if (compSaveResp['rtyp'] == "N") {
           fetchAndSetcomplaints("Y");
@@ -354,12 +346,6 @@ class Complaints with ChangeNotifier {
         request.fields['name'] = name;
         var fileUploadresp = await request.send();
 
-        print("Server Response on file upload ==> $fileUploadresp");
-        print(
-            "Server statusCode on file upload ==> ${fileUploadresp.statusCode}");
-        print("Server stream on file upload ==> ${fileUploadresp.stream}");
-        print("Server String on file upload ==> ${fileUploadresp.toString()}");
-
         if (fileUploadresp.statusCode == 200) {
           compSaveResp['Msg'] += " File is uploaded.";
         } else {
@@ -367,11 +353,9 @@ class Complaints with ChangeNotifier {
         }
       }
 
-      print("Response from server complaint save ==> $compSaveResp");
       fetchAndSetcomplaints("Y");
       return compSaveResp;
     } catch (error) {
-      print("Error ==> $error");
       throw error;
     }
   }

@@ -15,10 +15,11 @@ class RegisteredUsers with ChangeNotifier {
   int uid;
   int clntId;
   String name;
-
+  // Constructor to get the logged in user details
   RegisteredUsers(this.uid, this.clntId, this.name, this._registeredUsers);
 
   List<RegisteredUser> get registeredUsers {
+    // Returns the copy of _registeredUsers
     return [..._registeredUsers];
   }
 
@@ -27,18 +28,18 @@ class RegisteredUsers with ChangeNotifier {
   }
 
   Future<void> findById(int uid) async {
+    // Find the single user using the user id
     _regUser = _registeredUsers.firstWhere((user) => user.uid == uid);
   }
 
   void removeItem(int userId) {
+    // Remove the user from users list using user id
     _registeredUsers.removeWhere((user) => user.uid == userId);
     notifyListeners();
   }
 
+// This method fetches the registered users and stores them in _registeredUsers
   Future fetchAndSetRegisteredUsers(String crit) async {
-    print("uid $uid");
-    print("clntId $clntId");
-    print("uid $name");
     var url = Uri.parse("$api/userapp/datcmplntsrvc");
     try {
       final response = await http.post(
@@ -54,7 +55,6 @@ class RegisteredUsers with ChangeNotifier {
       );
       List<RegisteredUser> loadedRegisteredUsers = [];
       final result = json.decode(response.body);
-      print("RegisteredUsers from server: $result");
       if (result['Result'] == "OK") {
         final rUsers = result['Records'] as List<dynamic>;
         loadedRegisteredUsers = rUsers
@@ -64,6 +64,7 @@ class RegisteredUsers with ChangeNotifier {
                   mainclntofc: user['mainclntofc'],
                   clntid: user['clntid'],
                   uFname: user['uFname'],
+                  uMname: user['uMname'],
                   uLname: user['uLname'],
                   uDesgId: user['uDesgId'],
                   uDesgNm: user['uDesgNm'],
@@ -94,17 +95,12 @@ class RegisteredUsers with ChangeNotifier {
     } catch (error) {
       _registeredUsers = [];
       notifyListeners();
-      print("Error => $error");
       throw error;
     }
   }
 
+// This method is to update user status either Approved or Rejected
   Future updateUserStatus(String stat, int userid) async {
-    print("uid $uid");
-    print("clntId $clntId");
-    print("name $name");
-    print("stat $stat");
-    print("uid $userid");
     var url = Uri.parse("$api/userapp/datcmplntsrvc");
     try {
       final response = await http.post(
@@ -120,14 +116,12 @@ class RegisteredUsers with ChangeNotifier {
         }),
       );
       final result = json.decode(response.body);
-      print("approveOrRejectUser from server: $result");
       if (result['Result'] == "OK") {
         _regUser.stat = stat;
         removeItem(userid);
       }
       return result;
     } catch (error) {
-      print("Error => $error");
       throw error;
     }
   }

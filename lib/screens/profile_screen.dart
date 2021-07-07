@@ -18,43 +18,55 @@ class ProfilePageScreen extends StatefulWidget {
 }
 
 class _ProfilePageScreenState extends State<ProfilePageScreen> {
+  // _pwdchng used to hide or show password change screen
   var _pwdchng = false;
+  //  _isLoading used to show circular progress indicator while loading the data on screen
   var _isLoading = false;
+  // _init is used to control the didChangeDependencies() methods executions
   var _isInit = true;
+  // _isEditable is used to show or hide profile update form fields
   bool _isEditable = false;
   final _profileForm = GlobalKey<FormState>();
-  String fName, lName, email, mobile;
+  // variables to store data for profile update
+  String fName, uMname, lName, email, mobile;
 
+// _toggleEdit() method is to toggle between profile update form fields and profile details
   void _toggleEdit() {
     setState(() {
       _isEditable = !_isEditable;
     });
   }
 
+// _togglePwdChange() method to toggle between profile details and password form
   void _togglePwdChange() {
     setState(() {
       _pwdchng = !_pwdchng;
     });
   }
 
+// getUserPrfile() method to get the logged in user profile details
   Future<void> getUserPrfile() async {
     try {
       setState(() {
+        // Set true to show circular progress indicator while fetching data from server
         _isLoading = true;
       });
+      //  call getProfile() method of Auth provider class
       final resp = await Provider.of<Auth>(context, listen: false).getProfile();
       setState(() {
+        // Set false to hide circular progress indicator data fetched from server
         _isLoading = false;
       });
       if (resp['Result'] != "OK") {
+        // Show message if any error occurs while getting user profile details
         SweetAlertV2.show(context,
             title: '${LocaleKeys.svd.tr()}!',
             subtitle: resp['Msg'],
             style: SweetAlertV2Style.success);
       }
     } catch (error) {
-      print("Error ==> $error");
       if (error != null) {
+        // Show message if any error occurs while getting user profile details
         SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),
             subtitle: LocaleKeys.error_while_getting_prof.tr(),
@@ -68,37 +80,45 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
     if (!_isInit) {
       return;
     }
+    // Call  getUserPrfile() to get logged in user profiel for first time
     getUserPrfile();
     _isInit = false;
     super.didChangeDependencies();
   }
 
+// _submitUpdateProfileForm() to update the user profile details
   Future<void> _submitUpdateProfileForm() async {
     final isValid = _profileForm.currentState
         .validate(); // this will trigger validator on each textFormField
     if (!isValid) {
+      // Stop execution if profile form is invalid
       return;
     }
-    _profileForm.currentState.save();
+    _profileForm.currentState.save(); // Trigger save on profile form fields
     try {
       setState(() {
+        //  Set false to hide circular progress indicator
         _isLoading = true;
       });
+      // call updateProfile() methode of Auth provider class
       final respo = await Provider.of<Auth>(context, listen: false)
-          .updateProfile(fName, lName, mobile, email);
+          .updateProfile(fName, uMname, lName, mobile, email);
       setState(() {
+        //  Set false to hide circular progress indicator
         _isLoading = false;
       });
-      print("Response ===> ${respo["Result"]}");
       if (respo["Result"] == "OK") {
         setState(() {
+          // Set false to hide profiel form fields
           _isEditable = false;
         });
+        // Show sucess message on update of profile
         SweetAlertV2.show(context,
             title: "${LocaleKeys.svd.tr()}!",
             subtitle: respo['Msg'],
             style: SweetAlertV2Style.success);
       } else {
+//  Show message if any error occures while updating the profile
         SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),
             subtitle: respo['Msg'],
@@ -106,7 +126,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
       }
     } catch (error) {
       if (error != null) {
-        print("Error ===> $error");
+//  Show message if any error occures while updating the profile
         SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),
             subtitle: LocaleKeys.error_while_updating_prof.tr(),
@@ -115,6 +135,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
     }
   }
 
+// decoration() method to decorate the form fields
   InputDecoration decoration({IconData icon, String hintText}) {
     return InputDecoration(
       labelText: hintText,
@@ -136,6 +157,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
     );
   }
 
+// dropdownBuilder() to set dropdon values in dropdown
   dynamic dropdownBuilder(List<String> items) {
     return items.map<DropdownMenuItem<String>>((String value) {
       return DropdownMenuItem<String>(
@@ -147,6 +169,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Get fetched user profile data from Auth provder class
     final Profile profile =
         Provider.of<Auth>(context, listen: false).userProfile;
     Widget _heading(String heading) {
@@ -156,269 +179,229 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           Text(
             heading,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
           ),
-          if (_isEditable)
-            ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                elevation: 12,
-                primary: Colors.red, // background
-                onPrimary: Colors.white, // foreground
-              ),
-              onPressed: _toggleEdit,
-              icon: Icon(Icons.edit_off),
-              label: Text(LocaleKeys.cancel.tr()),
+          // if (_isEditable)
+          // Button to toggle between profile form fields and profile details
+          ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+              elevation: 12,
+              primary:
+                  _isEditable ? Colors.red : Colors.pink.shade300, // background
+              onPrimary: Colors.white, // foreground
             ),
-          if (!_isEditable)
-            ElevatedButton.icon(
-              style: ElevatedButton.styleFrom(
-                elevation: 12,
-                primary: Colors.pink.shade300, // background
-                onPrimary: Colors.white, // foreground
-              ),
-              onPressed: _toggleEdit,
-              icon: Icon(Icons.edit),
-              label: Text(LocaleKeys.edit.tr()),
-            ),
+            onPressed: _toggleEdit,
+            icon: _isEditable ? Icon(Icons.edit_off) : Icon(Icons.edit),
+            label: _isEditable
+                ? Text(LocaleKeys.cancel.tr())
+                : Text(LocaleKeys.edit.tr()),
+          ),
+          // if (!_isEditable)
+          // Button to toggle between profile form fields and profile details
+          // ElevatedButton.icon(
+          //   style: ElevatedButton.styleFrom(
+          //     elevation: 12,
+          //     primary: , // background
+          //     onPrimary: Colors.white, // foreground
+          //   ),
+          //   onPressed: _toggleEdit,
+          //   icon: ,
+          //   label: ,
+          // ),
         ]),
       );
     }
 
+    //  _detailsCard() method to show profile details and update profile form fields
     Widget _detailsCard() {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Form(
-          key: _profileForm,
-          child: Card(
-            elevation: 12,
-            child: Container(
-              padding: EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  if (_isEditable)
-                    SizedBox(
-                      height: 10,
-                    ),
-                  if (_isEditable)
-                    padding.FormFieldWidget(
-                      TextFormField(
-                        initialValue: profile.uFname,
-                        keyboardType: TextInputType.text,
-                        decoration:
-                            decoration(hintText: LocaleKeys.first_name.tr()),
-                        onSaved: (firstName) {
-                          setState(() {
-                            fName = firstName;
-                          });
-                        },
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return LocaleKeys.please_enter_first_name.tr();
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                  if (_isEditable)
-                    padding.FormFieldWidget(
-                      TextFormField(
-                        initialValue: profile.uLname,
-                        keyboardType: TextInputType.text,
-                        decoration:
-                            decoration(hintText: LocaleKeys.last_name.tr()),
-                        onSaved: (lastName) {
-                          setState(() {
-                            lName = lastName;
-                          });
-                        },
-                        validator: (value) {
-                          if (value.isEmpty) {
-                            return LocaleKeys.please_enter_last_name.tr();
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                  if (!_isEditable)
-                    ListTile(
-                      leading: Icon(Icons.badge),
-                      title: Text(
-                          "${LocaleKeys.designation.tr()}: ${profile.uDesgNm}"),
-                    ),
-                  if (!_isEditable)
-                    Divider(
-                      height: 0.6,
-                      color: Colors.black87,
-                    ),
-                  if (!_isEditable)
-                    ListTile(
-                      leading: Icon(Icons.person),
-                      title: Text(
-                          "${LocaleKeys.sevarth_number.tr()}: ${profile.uSevarthNo}"),
-                    ),
-                  if (!_isEditable)
-                    Divider(
-                      height: 0.6,
-                      color: Colors.black87,
-                    ),
-                  if (_isEditable)
-                    padding.FormFieldWidget(
-                      TextFormField(
-                        initialValue: profile.uEmail,
-                        keyboardType: TextInputType.text,
-                        decoration:
-                            decoration(hintText: LocaleKeys.email_id.tr()),
-                        onSaved: (eMail) {
-                          setState(() {
-                            email = eMail;
-                          });
-                        },
-                      ),
-                    ),
-                  if (!_isEditable)
-                    ListTile(
-                      leading: Icon(Icons.phone),
-                      title: Text(
-                          "${LocaleKeys.mobile_no.tr()}: ${profile.uMobile}"),
-                    ),
-                  if (!_isEditable)
-                    Divider(
-                      height: 0.6,
-                      color: Colors.black87,
-                    ),
-                  if (_isEditable)
-                    padding.FormFieldWidget(
-                      TextFormField(
-                        initialValue: profile.uMobile,
-                        keyboardType: TextInputType.number,
-                        decoration:
-                            decoration(hintText: LocaleKeys.mobile_number.tr()),
-                        onSaved: (mobileNo) {
-                          setState(() {
-                            mobile = mobileNo;
-                          });
-                        },
-                        validator: (value) {
-                          String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
-                          RegExp regExp = new RegExp(patttern);
-
-                          if (!regExp.hasMatch(value) && value != null) {
-                            return LocaleKeys.please_mobile_number.tr();
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                  if (!_isEditable)
-                    ListTile(
-                      leading: Icon(Icons.email),
-                      title: Text(
-                          "${LocaleKeys.email_id.tr()}: ${profile.uEmail}"),
-                    ),
-                  if (!_isEditable)
-                    Divider(
-                      height: 0.6,
-                      color: Colors.black87,
-                    ),
-                  if (!_isEditable)
-                    ListTile(
-                      leading: Icon(Icons.design_services_outlined),
-                      title: Text(
-                          "${LocaleKeys.work_office.tr()}: ${profile.uOfcNm}"),
-                    ),
-                  if (!_isEditable)
-                    Divider(
-                      height: 0.6,
-                      color: Colors.black87,
-                    ),
-                  if (!_isEditable)
-                    ListTile(
-                      leading: Icon(Icons.person),
-                      title: Text(
-                          "${LocaleKeys.reporting_to.tr()}: ${profile.uReportUNm}"),
-                    ),
-                  if (_isEditable)
-                    SizedBox(
-                      height: 10,
-                    ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
-    }
-
-    return Scaffold(
-      appBar: AppBar(
-        brightness: Brightness.dark,
-        centerTitle: true,
-        title: Text(LocaleKeys.user_profile.tr()),
-      ),
-      drawer: AppDrawer(),
-      body: _isLoading
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : SafeArea(
-              child: Container(
-              // decoration: BoxDecoration(
-              //   gradient: LinearGradient(
-              //     begin: Alignment.topRight,
-              //     end: Alignment.bottomLeft,
-              //     colors: [
-              //       Colors.blue,
-              //       Colors.red,
-              //     ],
-              //   ),
-              // ),
-              child: Center(
-                child: SingleChildScrollView(
+      return Container(
+        height: MediaQuery.of(context).size.height * 0.80,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+            child: Form(
+              key: _profileForm,
+              child: Card(
+                margin: const EdgeInsets.only(top: 15.0),
+                color: Colors.transparent,
+                elevation: 0,
+                child: Container(
+                  padding: EdgeInsets.all(20),
                   child: Column(
                     children: [
+                      if (_isEditable)
+                        SizedBox(
+                          height: 10,
+                        ),
+                      if (_isEditable)
+                        padding.FormFieldWidget(
+                          TextFormField(
+                            initialValue: profile.uFname,
+                            keyboardType: TextInputType.text,
+                            decoration: decoration(
+                                hintText: LocaleKeys.first_name.tr()),
+                            onSaved: (firstName) {
+                              setState(() {
+                                fName = firstName;
+                              });
+                            },
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return LocaleKeys.please_enter_first_name.tr();
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      if (_isEditable)
+                        padding.FormFieldWidget(
+                          TextFormField(
+                            initialValue: profile.uMname,
+                            keyboardType: TextInputType.text,
+                            decoration: decoration(
+                                hintText: LocaleKeys.middle_name.tr()),
+                            onSaved: (middleName) {
+                              setState(() {
+                                uMname = middleName;
+                              });
+                            },
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return LocaleKeys.please_enter_middle_name.tr();
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      if (_isEditable)
+                        padding.FormFieldWidget(
+                          TextFormField(
+                            initialValue: profile.uLname,
+                            keyboardType: TextInputType.text,
+                            decoration:
+                                decoration(hintText: LocaleKeys.last_name.tr()),
+                            onSaved: (lastName) {
+                              setState(() {
+                                lName = lastName;
+                              });
+                            },
+                            validator: (value) {
+                              if (value.isEmpty) {
+                                return LocaleKeys.please_enter_last_name.tr();
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
                       if (!_isEditable)
-                        Container(
-                          margin: EdgeInsets.all(10),
-                          width: MediaQuery.of(context).size.width * 0.80,
-                          child: Center(
-                            child: Text(
-                              '${profile.uFname} ${profile.uLname}',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w800),
-                            ),
+                        ListTile(
+                          leading: Icon(Icons.badge),
+                          title: Text(
+                              "${LocaleKeys.designation.tr()}: ${profile.uDesgNm}"),
+                        ),
+                      if (!_isEditable)
+                        Divider(
+                          height: 0.6,
+                          color: Colors.black87,
+                        ),
+                      if (!_isEditable)
+                        ListTile(
+                          leading: Icon(Icons.person),
+                          title: Text(
+                              "${LocaleKeys.sevarth_number.tr()}: ${profile.uSevarthNo}"),
+                        ),
+                      if (!_isEditable)
+                        Divider(
+                          height: 0.6,
+                          color: Colors.black87,
+                        ),
+                      if (_isEditable)
+                        padding.FormFieldWidget(
+                          TextFormField(
+                            initialValue: profile.uEmail,
+                            keyboardType: TextInputType.text,
+                            decoration:
+                                decoration(hintText: LocaleKeys.email_id.tr()),
+                            onSaved: (eMail) {
+                              setState(() {
+                                email = eMail;
+                              });
+                            },
                           ),
                         ),
-                      if (!_pwdchng) _heading(LocaleKeys.user_profile.tr()),
-                      if (!_pwdchng) _detailsCard(),
-                      if (_pwdchng)
-                        ChangePassword(
-                            profile.uLoginId, decoration, _togglePwdChange),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      if (!_isEditable && !_pwdchng)
-                        ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                            elevation: 12,
-                            primary: Colors.pink.shade300, // background
-                            onPrimary: Colors.white, // foreground
-                          ),
-                          onPressed: _togglePwdChange,
-                          icon: Icon(Icons.vpn_key),
-                          label: _pwdchng
-                              ? Text(LocaleKeys.close.tr())
-                              : Text(LocaleKeys.change_password.tr()),
+                      if (!_isEditable)
+                        ListTile(
+                          leading: Icon(Icons.phone),
+                          title: Text(
+                              "${LocaleKeys.mobile_no.tr()}: ${profile.uMobile}"),
                         ),
-                      SizedBox(
-                        height: 10,
-                      ),
+                      if (!_isEditable)
+                        Divider(
+                          height: 0.6,
+                          color: Colors.black87,
+                        ),
+                      if (_isEditable)
+                        padding.FormFieldWidget(
+                          TextFormField(
+                            initialValue: profile.uMobile,
+                            keyboardType: TextInputType.number,
+                            decoration: decoration(
+                                hintText: LocaleKeys.mobile_number.tr()),
+                            onSaved: (mobileNo) {
+                              setState(() {
+                                mobile = mobileNo;
+                              });
+                            },
+                            validator: (value) {
+                              String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+                              RegExp regExp = new RegExp(patttern);
+
+                              if (!regExp.hasMatch(value) && value != null) {
+                                return LocaleKeys.please_mobile_number.tr();
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      if (!_isEditable)
+                        ListTile(
+                          leading: Icon(Icons.email),
+                          title: Text(
+                              "${LocaleKeys.email_id.tr()}: ${profile.uEmail}"),
+                        ),
+                      if (!_isEditable)
+                        Divider(
+                          height: 0.6,
+                          color: Colors.black87,
+                        ),
+                      if (!_isEditable)
+                        ListTile(
+                          leading: Icon(Icons.design_services_outlined),
+                          title: Text(
+                              "${LocaleKeys.work_office.tr()}: ${profile.uOfcNm}"),
+                        ),
+                      if (!_isEditable)
+                        Divider(
+                          height: 0.6,
+                          color: Colors.black87,
+                        ),
+                      if (!_isEditable)
+                        ListTile(
+                          leading: Icon(Icons.person),
+                          title: Text(
+                              "${LocaleKeys.reporting_to.tr()}: ${profile.uReportUNm}"),
+                        ),
+                      if (_isEditable)
+                        SizedBox(
+                          height: 10,
+                        ),
                       if (_isEditable)
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Flexible(
+                              // Button to submit or update the profile details
                               child: ElevatedButton.icon(
                                 style: ElevatedButton.styleFrom(
                                     elevation: 12,
@@ -431,6 +414,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                               ),
                             ),
                             Flexible(
+                              // Button to toggle view between update profile form and profile details
                               child: ElevatedButton.icon(
                                 style: ElevatedButton.styleFrom(
                                   elevation: 12,
@@ -449,11 +433,105 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                             ),
                           ],
                         ),
+                      if (!_isEditable)
+                        SizedBox(
+                          height: 20,
+                        ),
+                      if (!_isEditable && !_pwdchng)
+                        // Button to toggle between password change form and Profile details
+                        ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            elevation: 12,
+                            primary: Colors.pink.shade300, // background
+                            onPrimary: Colors.white, // foreground
+                          ),
+                          onPressed: _togglePwdChange,
+                          icon: Icon(Icons.vpn_key),
+                          label: _pwdchng
+                              ? Text(LocaleKeys.close.tr())
+                              : Text(LocaleKeys.change_password.tr()),
+                        ),
                     ],
                   ),
                 ),
               ),
-            )),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return Scaffold(
+      backgroundColor: Color(0xFF581845),
+      appBar: AppBar(
+        brightness: Brightness.dark,
+        backgroundColor: Color(0xFF581845),
+        elevation: 0,
+        centerTitle: true,
+        title: Text(LocaleKeys.user_profile.tr()),
+      ),
+      // Side Navigation drower
+      drawer: AppDrawer(),
+      body: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : SafeArea(
+              bottom: false,
+              child: Container(
+                child: Column(
+                  children: [
+                    if (!_isEditable)
+                      Container(
+                        // margin: EdgeInsets.all(10),
+                        width: MediaQuery.of(context).size.width * 0.80,
+                        child: Center(
+                          child: Text(
+                            '${profile.uFname} ${profile.uMname} ${profile.uLname}',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w800),
+                          ),
+                        ),
+                      ),
+                    if (!_pwdchng) _heading(LocaleKeys.user_profile.tr()),
+                    Expanded(
+                      child: Stack(
+                        children: [
+                          // Our background
+                          Container(
+                            height: MediaQuery.of(context).size.height,
+                            width: MediaQuery.of(context).size.width,
+                            margin: EdgeInsets.only(top: 30),
+                            decoration: BoxDecoration(
+                              color: Color(0xFFF1EFF1),
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(40),
+                                topRight: Radius.circular(40),
+                              ),
+                            ),
+                          ),
+                          if (!_pwdchng) _detailsCard(),
+                          if (_pwdchng)
+                            Container(
+                              margin: EdgeInsets.only(
+                                  top:
+                                      MediaQuery.of(context).size.height * .20),
+                              //  Change password widget
+                              child: ChangePassword(profile.uLoginId,
+                                  decoration, _togglePwdChange),
+                            ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
     );
   }
 }

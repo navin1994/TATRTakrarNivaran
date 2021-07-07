@@ -170,5 +170,20 @@ abstract class  LocaleKeys {
   static const english = 'english';
   static const marathi = 'marathi';
   static const closed = 'closed';
+  static const donwloading_file = 'donwloading_file';
+  static const donwload_attachment = 'donwload_attachment';
+  static const error_dashboard_summary = 'error_dashboard_summary';
+  static const raise_complaint = 'raise_complaint';
+  static const track_it = 'track_it';
+  static const total = 'total';
+  static const solved = 'solved';
+  static const error_while_downloading_updated_app = 'error_while_downloading_updated_app';
+  static const downloading_updated_app = 'downloading_updated_app';
+  static const history = 'history';
+  static const transfered = 'transfered';
+  static const please_enter_remarks = 'please_enter_remarks';
+  static const forgot_password = 'forgot_password';
+  static const rejec = 'rejec';
+  static const pending_comp = 'pending_comp';
 
 }

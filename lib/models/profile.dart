@@ -5,6 +5,7 @@ class Profile {
   final String mainclntofc;
   final int clntid;
   final String uFname;
+  final String uMname;
   final String uLname;
   final int uDesgId;
   final String uDesgNm;
@@ -29,6 +30,7 @@ class Profile {
     @required this.mainclntofc,
     @required this.clntid,
     @required this.uFname,
+    @required this.uMname,
     @required this.uLname,
     @required this.uDesgId,
     @required this.uDesgNm,

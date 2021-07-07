@@ -94,7 +94,7 @@ class RegistrationCard extends StatelessWidget {
                       child: ListTile(
                         title: Text('${LocaleKeys.name.tr()}: $name'),
                         subtitle:
-                            Text('${LocaleKeys.division.tr()}: $division'),
+                            Text('${LocaleKeys.work_office.tr()}: $division'),
                       ),
                     ),
                     Row(children: [
