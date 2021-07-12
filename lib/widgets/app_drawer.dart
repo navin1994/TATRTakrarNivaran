@@ -11,6 +11,8 @@ import '../screens/profile_screen.dart';
 import '../screens/complaint_management_screen.dart';
 
 class AppDrawer extends StatelessWidget {
+  final Function closeDrawer;
+  const AppDrawer({this.closeDrawer});
   @override
   Widget build(BuildContext context) {
     String _userName = Provider.of<Auth>(context, listen: false).name;
@@ -42,6 +44,7 @@ class AppDrawer extends StatelessWidget {
               onTap: () {
                 Navigator.of(context)
                     .pushReplacementNamed(ProfilePageScreen.routeName);
+                closeDrawer();
               },
             ),
             Divider(
@@ -56,6 +59,7 @@ class AppDrawer extends StatelessWidget {
                       color: Colors.teal[900], fontWeight: FontWeight.bold)),
               onTap: () {
                 Navigator.of(context).pushReplacementNamed(Dashboard.routeName);
+                closeDrawer();
               },
             ),
             Divider(
@@ -71,6 +75,7 @@ class AppDrawer extends StatelessWidget {
               onTap: () {
                 Navigator.of(context)
                     .pushReplacementNamed(ComplaintManagementScreen.routeName);
+                closeDrawer();
               },
             ),
             // Divider(
@@ -122,6 +127,7 @@ class AppDrawer extends StatelessWidget {
               onTap: () {
                 Navigator.of(context)
                     .pushReplacementNamed(RegistrationListScreen.routeName);
+                closeDrawer();
               },
             ),
             Divider(
@@ -139,6 +145,7 @@ class AppDrawer extends StatelessWidget {
                 Navigator.of(context)
                     .pushReplacementNamed(LoginSignupScreen.routeName);
                 Provider.of<Auth>(context, listen: false).logout();
+                closeDrawer();
               },
             ),
             Divider(

@@ -218,50 +218,42 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                 child: _isShowRemarks
                     ? SavedRemarks(_setRemarks)
                     : Container(
-                        height: 210,
-                        child: Column(
-                          children: [
-                            if (errorFlag)
-                              Text(
-                                "${LocaleKeys.please_enter_remarks.tr()}*",
-                                style: TextStyle(color: Colors.red),
-                              ),
+                        height: 200,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              if (errorFlag)
+                                Text(
+                                  "${LocaleKeys.please_enter_remarks.tr()}*",
+                                  style: TextStyle(color: Colors.red),
+                                ),
 
-                            // the texfield is given to enter the remarks while acting on complaint
-                            TextField(
-                              maxLines: 5,
-                              controller: _rmrkController,
-                              decoration: InputDecoration(
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Palette.textColor1),
-                                    // borderRadius: BorderRadius.all(Radius.circular(35.0)),
+                              // the texfield is given to enter the remarks while acting on complaint
+                              TextField(
+                                maxLines: 5,
+                                controller: _rmrkController,
+                                decoration: InputDecoration(
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Palette.textColor1),
+                                      // borderRadius: BorderRadius.all(Radius.circular(35.0)),
+                                    ),
+                                    hintText: LocaleKeys.enter_remarks.tr()),
+                              ),
+                              // Checkbox to save entered remarks for future auto fill use
+                              Row(
+                                children: [
+                                  Checkbox(
+                                    value: _rmrkSvFlag,
+                                    onChanged: (bool value) => setState(() {
+                                      _rmrkSvFlag = value;
+                                    }),
                                   ),
-                                  hintText: LocaleKeys.enter_remarks.tr()),
-                            ),
-                            // Checkbox to save entered remarks for future auto fill use
-                            Row(
-                              children: [
-                                Checkbox(
-                                  value: _rmrkSvFlag,
-                                  onChanged: (bool value) => setState(() {
-                                    _rmrkSvFlag = value;
-                                  }),
-                                ),
-                                Text(LocaleKeys.save_remark.tr()),
-                                SizedBox(
-                                  width: 40,
-                                ),
-                                IconButton(
-                                  onPressed: () => setState(() {
-                                    _isShowRemarks = !_isShowRemarks;
-                                  }),
-                                  icon: Icon(Icons.comment_bank_outlined,
-                                      color: Colors.amber[900]),
-                                ),
-                              ],
-                            )
-                          ],
+                                  Text(LocaleKeys.save_remark.tr()),
+                                ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
               ),
@@ -322,6 +314,17 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                         Navigator.pop(context);
                       });
                     },
+                  ),
+                if (!_isShowRemarks)
+                  IconButton(
+                    onPressed: () => setState(() {
+                      _isShowRemarks = !_isShowRemarks;
+                    }),
+                    icon: Icon(
+                      Icons.comment_bank_outlined,
+                      color: Colors.orange[900],
+                      size: 35,
+                    ),
                   ),
               ],
             ),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:foldable_sidebar/foldable_sidebar.dart';
 import 'package:provider/provider.dart';
 import 'package:sweetalertv2/sweetalertv2.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:swipedetector/swipedetector.dart';
 
 import '../translations/locale_keys.g.dart';
 import '../models/profile.dart';
@@ -18,6 +20,7 @@ class ProfilePageScreen extends StatefulWidget {
 }
 
 class _ProfilePageScreenState extends State<ProfilePageScreen> {
+  FSBStatus drawerStatus;
   // _pwdchng used to hide or show password change screen
   var _pwdchng = false;
   //  _isLoading used to show circular progress indicator while loading the data on screen
@@ -41,6 +44,14 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
   void _togglePwdChange() {
     setState(() {
       _pwdchng = !_pwdchng;
+    });
+  }
+
+  void _toggleAppDrawer() {
+    setState(() {
+      drawerStatus = drawerStatus == FSBStatus.FSB_OPEN
+          ? FSBStatus.FSB_CLOSE
+          : FSBStatus.FSB_OPEN;
     });
   }
 
@@ -468,70 +479,87 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
         backgroundColor: Color(0xFF581845),
         elevation: 0,
         centerTitle: true,
+        leading:
+            IconButton(onPressed: _toggleAppDrawer, icon: Icon(Icons.menu)),
         title: Text(LocaleKeys.user_profile.tr()),
       ),
       // Side Navigation drower
-      drawer: AppDrawer(),
-      body: _isLoading
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : SafeArea(
-              bottom: false,
-              child: Container(
-                child: Column(
-                  children: [
-                    if (!_isEditable)
-                      Container(
-                        // margin: EdgeInsets.all(10),
-                        width: MediaQuery.of(context).size.width * 0.80,
-                        child: Center(
-                          child: Text(
-                            '${profile.uFname} ${profile.uMname} ${profile.uLname}',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w800),
-                          ),
-                        ),
-                      ),
-                    if (!_pwdchng) _heading(LocaleKeys.user_profile.tr()),
-                    Expanded(
-                      child: Stack(
-                        children: [
-                          // Our background
+      // drawer: AppDrawer(),
+      body: SwipeDetector(
+        onSwipeLeft: _toggleAppDrawer,
+        onSwipeRight: _toggleAppDrawer,
+        child: FoldableSidebarBuilder(
+          drawerBackgroundColor: Color(0xFF581845),
+          status: drawerStatus,
+          drawer: AppDrawer(
+            closeDrawer: () {
+              setState(() {
+                drawerStatus = FSBStatus.FSB_CLOSE;
+              });
+            },
+          ),
+          screenContents: _isLoading
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : SafeArea(
+                  bottom: false,
+                  child: Container(
+                    child: Column(
+                      children: [
+                        if (!_isEditable)
                           Container(
-                            height: MediaQuery.of(context).size.height,
-                            width: MediaQuery.of(context).size.width,
-                            margin: EdgeInsets.only(top: 30),
-                            decoration: BoxDecoration(
-                              color: Color(0xFFF1EFF1),
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(40),
-                                topRight: Radius.circular(40),
+                            // margin: EdgeInsets.all(10),
+                            width: MediaQuery.of(context).size.width * 0.80,
+                            child: Center(
+                              child: Text(
+                                '${profile.uFname} ${profile.uMname} ${profile.uLname}',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w800),
                               ),
                             ),
                           ),
-                          if (!_pwdchng) _detailsCard(),
-                          if (_pwdchng)
-                            Container(
-                              margin: EdgeInsets.only(
-                                  top:
-                                      MediaQuery.of(context).size.height * .20),
-                              //  Change password widget
-                              child: ChangePassword(profile.uLoginId,
-                                  decoration, _togglePwdChange),
-                            ),
-                          SizedBox(
-                            height: 10,
+                        if (!_pwdchng) _heading(LocaleKeys.user_profile.tr()),
+                        Expanded(
+                          child: Stack(
+                            children: [
+                              // Our background
+                              Container(
+                                height: MediaQuery.of(context).size.height,
+                                width: MediaQuery.of(context).size.width,
+                                margin: EdgeInsets.only(top: 30),
+                                decoration: BoxDecoration(
+                                  color: Color(0xFFF1EFF1),
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(40),
+                                    topRight: Radius.circular(40),
+                                  ),
+                                ),
+                              ),
+                              if (!_pwdchng) _detailsCard(),
+                              if (_pwdchng)
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      top: MediaQuery.of(context).size.height *
+                                          .20),
+                                  //  Change password widget
+                                  child: ChangePassword(profile.uLoginId,
+                                      decoration, _togglePwdChange),
+                                ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
+        ),
+      ),
     );
   }
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:foldable_sidebar/foldable_sidebar.dart';
 import 'package:provider/provider.dart';
 import 'package:sweetalertv2/sweetalertv2.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:swipedetector/swipedetector.dart';
 
 import '../models/filter_cmpl_args.dart';
 import '../translations/locale_keys.g.dart';
@@ -21,6 +23,7 @@ class ComplaintManagementScreen extends StatefulWidget {
 }
 
 class _ComplaintManagementScreenState extends State<ComplaintManagementScreen> {
+  FSBStatus drawerStatus;
   // _isLoading is used to show circular progrss indicator while screen is loading
   var _isLoading = false;
   // _init is used to control the didChangeDependencies() methods executions
@@ -149,6 +152,14 @@ class _ComplaintManagementScreenState extends State<ComplaintManagementScreen> {
     }
   }
 
+  void _toggleAppDrawer() {
+    setState(() {
+      drawerStatus = drawerStatus == FSBStatus.FSB_OPEN
+          ? FSBStatus.FSB_CLOSE
+          : FSBStatus.FSB_OPEN;
+    });
+  }
+
   @override
   void didChangeDependencies() {
     if (!_init) {
@@ -183,6 +194,8 @@ class _ComplaintManagementScreenState extends State<ComplaintManagementScreen> {
         backgroundColor: Color(0xFF581845),
         elevation: 0,
         centerTitle: true,
+        leading:
+            IconButton(onPressed: _toggleAppDrawer, icon: Icon(Icons.menu)),
         title: Text(
           LocaleKeys.complt_mngmnt.tr(),
         ),
@@ -199,70 +212,86 @@ class _ComplaintManagementScreenState extends State<ComplaintManagementScreen> {
         // ],
       ),
       // AppDrawer() is a Navigation drawer
-      drawer: AppDrawer(),
+      // drawer: AppDrawer(),
       // GestureDetector to hide the keypad on clicking outside of input field
-      body: new GestureDetector(
-        onTap: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
-        },
-        child: SafeArea(
-          bottom: false,
-          child: Container(
-            height: screenSize.height,
-            // decoration: BoxDecoration(
-            //   image: DecorationImage(
-            //       image: AssetImage("assets/images/background-waterfall.jpg"),
-            //       fit: BoxFit.fill),
-            // ),
-            child: Column(
-              children: <Widget>[
-                // Search Box widget
-                SearchBox(_searchFeature, _srchUnder, _dropdownChangeFilter),
-                // Filter list widget
-                FilterList(_filters, _filterData, _selectedIndex),
-                SizedBox(height: 10),
-                Expanded(
-                  child: Stack(
-                    children: <Widget>[
-                      // Our background
-                      Container(
-                        margin: EdgeInsets.only(top: 60),
-                        decoration: BoxDecoration(
-                          color: Color(0xFFF1EFF1),
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(40),
-                            topRight: Radius.circular(40),
-                          ),
-                        ),
-                      ),
-                      _isLoading
-                          ? Center(
-                              // Circular progress indicator to show loading screen
-                              child: CircularProgressIndicator(),
-                            )
-                          // Show list of complaints
-                          : ShowList(_listType),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 5, bottom: 5),
-                        child: Align(
-                          alignment: FractionalOffset.bottomRight,
-                          child: FloatingActionButton(
-                            backgroundColor: Colors.deepOrange[900],
-                            elevation: 40,
-                            child: Icon(
-                              Icons.add,
-                              size: 35,
+      body: SwipeDetector(
+        onSwipeLeft: _toggleAppDrawer,
+        onSwipeRight: _toggleAppDrawer,
+        child: FoldableSidebarBuilder(
+          drawerBackgroundColor: Color(0xFF581845),
+          status: drawerStatus,
+          drawer: AppDrawer(
+            closeDrawer: () {
+              setState(() {
+                drawerStatus = FSBStatus.FSB_CLOSE;
+              });
+            },
+          ),
+          screenContents: new GestureDetector(
+            onTap: () {
+              FocusScope.of(context).requestFocus(new FocusNode());
+            },
+            child: SafeArea(
+              bottom: false,
+              child: Container(
+                height: screenSize.height,
+                // decoration: BoxDecoration(
+                //   image: DecorationImage(
+                //       image: AssetImage("assets/images/background-waterfall.jpg"),
+                //       fit: BoxFit.fill),
+                // ),
+                child: Column(
+                  children: <Widget>[
+                    // Search Box widget
+                    SearchBox(
+                        _searchFeature, _srchUnder, _dropdownChangeFilter),
+                    // Filter list widget
+                    FilterList(_filters, _filterData, _selectedIndex),
+                    SizedBox(height: 10),
+                    Expanded(
+                      child: Stack(
+                        children: <Widget>[
+                          // Our background
+                          Container(
+                            margin: EdgeInsets.only(top: 60),
+                            decoration: BoxDecoration(
+                              color: Color(0xFFF1EFF1),
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(40),
+                                topRight: Radius.circular(40),
+                              ),
                             ),
-                            // Create complaint screen navigation
-                            onPressed: () => Navigator.of(context)
-                                .pushNamed(RaiseComplainScreen.routeName),
                           ),
-                        ),
+                          _isLoading
+                              ? Center(
+                                  // Circular progress indicator to show loading screen
+                                  child: CircularProgressIndicator(),
+                                )
+                              // Show list of complaints
+                              : ShowList(_listType),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 5, bottom: 5),
+                            child: Align(
+                              alignment: FractionalOffset.bottomRight,
+                              child: FloatingActionButton(
+                                backgroundColor: Colors.deepOrange[900],
+                                elevation: 40,
+                                child: Icon(
+                                  Icons.add,
+                                  size: 35,
+                                ),
+                                // Create complaint screen navigation
+                                onPressed: () => Navigator.of(context)
+                                    .pushNamed(RaiseComplainScreen.routeName),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ),

@@ -179,9 +179,11 @@ class Complaints with ChangeNotifier {
             .toList();
 
         _complaintSummary = loadedSummary;
+        notifyListeners();
       }
     } catch (error) {
       _complaintSummary = loadedSummary;
+      notifyListeners();
       throw error;
     }
     return sResult;
@@ -372,35 +374,29 @@ class Complaints with ChangeNotifier {
   }
 
   Future<void> saveRemark(String rmrk) async {
-    
-      if (rmrk.trim() != '') {
-        DBHelper.insert('remarks', {'remark': rmrk});
-      }
-  
+    if (rmrk.trim() != '') {
+      DBHelper.insert('remarks', {'remark': rmrk});
+    }
   }
 
   Future<void> fetchSavedComments() async {
-   
-      final remarks = await DBHelper.getLocalRemarks('remarks');
-      _remarks = remarks
-          .map((remark) => Remark(
-                id: remark['id'],
-                title: remark['remark'].length > 15
-                    ? "${remark['remark'].substring(0, 15)}..."
-                    : remark['remark'],
-                remark: remark['remark'],
-              ))
-          .toList();
-      notifyListeners();
-   
+    final remarks = await DBHelper.getLocalRemarks('remarks');
+    _remarks = remarks
+        .map((remark) => Remark(
+              id: remark['id'],
+              title: remark['remark'].length > 15
+                  ? "${remark['remark'].substring(0, 15)}..."
+                  : remark['remark'],
+              remark: remark['remark'],
+            ))
+        .toList();
+    notifyListeners();
   }
 
   Future<void> deleteRemarkById(int id) async {
-   
-      if (id != null) {
-        await DBHelper.delete('remarks', id);
-        fetchSavedComments();
-      }
-
+    if (id != null) {
+      await DBHelper.delete('remarks', id);
+      fetchSavedComments();
+    }
   }
 }

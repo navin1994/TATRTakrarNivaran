@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:foldable_sidebar/foldable_sidebar.dart';
 import 'package:provider/provider.dart';
 import 'package:sweetalertv2/sweetalertv2.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:swipedetector/swipedetector.dart';
 
 import '../translations/locale_keys.g.dart';
 import '../providers/registered_users.dart';
@@ -17,6 +19,7 @@ class RegistrationListScreen extends StatefulWidget {
 }
 
 class _RegistrationListScreenState extends State<RegistrationListScreen> {
+  FSBStatus drawerStatus;
   final String _listType = "users";
   // Default criteria is pending
   String _crit = "NA";
@@ -93,6 +96,14 @@ class _RegistrationListScreenState extends State<RegistrationListScreen> {
     }
   }
 
+  void _toggleAppDrawer() {
+    setState(() {
+      drawerStatus = drawerStatus == FSBStatus.FSB_OPEN
+          ? FSBStatus.FSB_CLOSE
+          : FSBStatus.FSB_OPEN;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,50 +113,67 @@ class _RegistrationListScreenState extends State<RegistrationListScreen> {
         backgroundColor: Color(0xFF581845),
         elevation: 0,
         centerTitle: true,
+        leading:
+            IconButton(onPressed: _toggleAppDrawer, icon: Icon(Icons.menu)),
         title: Text(LocaleKeys.registration_list.tr()),
       ),
-      drawer: AppDrawer(),
+      // drawer: AppDrawer(),
       body: SafeArea(
         bottom: false,
-        child: Container(
-          // decoration: BoxDecoration(
-          //   image: DecorationImage(
-          //       image: AssetImage("assets/images/background-waterfall.jpg"),
-          //       fit: BoxFit.fill),
-          // ),
-          child: Column(
-            children: <Widget>[
-              // SearchBox(),
-              FilterList(_filters, _filterData, _selectedIndex),
-              SizedBox(height: 10),
-              Expanded(
-                child: Stack(
-                  children: <Widget>[
-                    // Our background
-                    Container(
-                      margin: EdgeInsets.only(top: 60),
-                      decoration: BoxDecoration(
-                        color: Color(0xFFF1EFF1),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(40),
-                          topRight: Radius.circular(40),
+        child: SwipeDetector(
+          onSwipeLeft: _toggleAppDrawer,
+          onSwipeRight: _toggleAppDrawer,
+          child: FoldableSidebarBuilder(
+            drawerBackgroundColor: Color(0xFF581845),
+            status: drawerStatus,
+            drawer: AppDrawer(
+              closeDrawer: () {
+                setState(() {
+                  drawerStatus = FSBStatus.FSB_CLOSE;
+                });
+              },
+            ),
+            screenContents: Container(
+              // decoration: BoxDecoration(
+              //   image: DecorationImage(
+              //       image: AssetImage("assets/images/background-waterfall.jpg"),
+              //       fit: BoxFit.fill),
+              // ),
+              child: Column(
+                children: <Widget>[
+                  // SearchBox(),
+                  FilterList(_filters, _filterData, _selectedIndex),
+                  SizedBox(height: 10),
+                  Expanded(
+                    child: Stack(
+                      children: <Widget>[
+                        // Our background
+                        Container(
+                          margin: EdgeInsets.only(top: 60),
+                          decoration: BoxDecoration(
+                            color: Color(0xFFF1EFF1),
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(40),
+                              topRight: Radius.circular(40),
+                            ),
+                          ),
                         ),
-                      ),
+                        FutureBuilder(
+                            // Fetch registered user list based on selected filter criteria
+                            future: _fetchAndSetRegistrations(_crit),
+                            builder: (ctx, resultSnapshot) =>
+                                resultSnapshot.connectionState ==
+                                        ConnectionState.waiting
+                                    ? Center(
+                                        child: CircularProgressIndicator(),
+                                      )
+                                    : ShowList(_listType)),
+                      ],
                     ),
-                    FutureBuilder(
-                        // Fetch registered user list based on selected filter criteria
-                        future: _fetchAndSetRegistrations(_crit),
-                        builder: (ctx, resultSnapshot) =>
-                            resultSnapshot.connectionState ==
-                                    ConnectionState.waiting
-                                ? Center(
-                                    child: CircularProgressIndicator(),
-                                  )
-                                : ShowList(_listType)),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
