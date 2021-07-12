@@ -185,5 +185,14 @@ abstract class  LocaleKeys {
   static const forgot_password = 'forgot_password';
   static const rejec = 'rejec';
   static const pending_comp = 'pending_comp';
+  static const do_you_want_to_reply = 'do_you_want_to_reply';
+  static const pending_with_me = 'pending_with_me';
+  static const in_progress = 'in_progress';
+  static const saved_remarks = 'saved_remarks';
+  static const save_remark = 'save_remark';
+  static const back = 'back';
+  static const solve = 'solve';
+  static const do_you_want_to_solve = 'do_you_want_to_solve';
+  static const no_remarks_available = 'no_remarks_available';
 
 }

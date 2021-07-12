@@ -182,5 +182,14 @@
   "please_enter_remarks": "कृपया टिप्पणी प्रविष्ट करा",
   "forgot_password": "संकेतशब्द विसरलात?",
   "rejec": "नाकारलेल्या तक्रारी",
-  "pending_comp": "प्रलंबित तक्रारी"
+  "pending_comp": "प्रलंबित तक्रारी",
+  "do_you_want_to_reply": "आपण या तक्रारीचे उत्तर देऊ इच्छिता?",
+  "pending_with_me": "माझ्याकडे प्रलंबित",
+  "in_progress": "चालु तक्रारी",
+  "saved_remarks": "जतन टिप्पण्या",
+  "save_remark": "टिप्पणी जतन करा",
+  "back": "मागे",
+  "solve": "निराकरण करा",
+  "do_you_want_to_solve": "आपण तक्रार सोडवू इच्छिता?",
+  "no_remarks_available": "टिप्पण्या उपलब्ध नाहीत"
 }

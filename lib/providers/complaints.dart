@@ -4,9 +4,11 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:flutter/widgets.dart';
 
+import '../models/remark.dart';
 import '../models/complaint_summary.dart';
 import '../models/comments.dart';
 import '../models/complaint.dart';
+import '../helpers/db_helper.dart';
 import '../config/env.dart';
 
 class Complaints with ChangeNotifier {
@@ -14,6 +16,7 @@ class Complaints with ChangeNotifier {
   List<Complaint> _complaints = [];
   Complaint _complaint = Complaint();
   List<ComplaintSummary> _complaintSummary = [];
+  List<Remark> _remarks = [];
 
   int uid;
   int clntId;
@@ -220,7 +223,8 @@ class Complaints with ChangeNotifier {
   }
 
 // Update the status with remark on complaint
-  Future updateComplaint(int cmpId, String stat, String rmrk) async {
+  Future updateComplaint(
+      int cmpId, String stat, String rmrk, bool rmrkSvFlag) async {
     var url = Uri.parse("$api/userapp/cmplntmangesrvc");
     try {
       final resp = await http.post(url,
@@ -238,6 +242,9 @@ class Complaints with ChangeNotifier {
           ));
       final result = json.decode(resp.body);
       if (result['Result'] == "OK") {
+        if (rmrkSvFlag) {
+          saveRemark(rmrk);
+        }
         _complaint.stat = stat;
         if (stat != "H") {
           removeItem(cmpId);
@@ -330,7 +337,7 @@ class Complaints with ChangeNotifier {
       final compSaveResp = json.decode(response.body);
       if (compSaveResp['Result'] == "OK") {
         if (compSaveResp['rtyp'] == "N") {
-          fetchAndSetcomplaints("Y");
+          fetchAndSetcomplaints("IP");
           return compSaveResp;
         }
         var url2 = Uri.parse("$api/userapp/fleUpldsrvc");
@@ -353,10 +360,47 @@ class Complaints with ChangeNotifier {
         }
       }
 
-      fetchAndSetcomplaints("Y");
+      fetchAndSetcomplaints("IP");
       return compSaveResp;
     } catch (error) {
       throw error;
     }
+  }
+
+  List<Remark> get savedRemarks {
+    return [..._remarks];
+  }
+
+  Future<void> saveRemark(String rmrk) async {
+    
+      if (rmrk.trim() != '') {
+        DBHelper.insert('remarks', {'remark': rmrk});
+      }
+  
+  }
+
+  Future<void> fetchSavedComments() async {
+   
+      final remarks = await DBHelper.getLocalRemarks('remarks');
+      _remarks = remarks
+          .map((remark) => Remark(
+                id: remark['id'],
+                title: remark['remark'].length > 15
+                    ? "${remark['remark'].substring(0, 15)}..."
+                    : remark['remark'],
+                remark: remark['remark'],
+              ))
+          .toList();
+      notifyListeners();
+   
+  }
+
+  Future<void> deleteRemarkById(int id) async {
+   
+      if (id != null) {
+        await DBHelper.delete('remarks', id);
+        fetchSavedComments();
+      }
+
   }
 }

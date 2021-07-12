@@ -144,7 +144,10 @@ class Auth with ChangeNotifier {
     var url = Uri.parse("$api/userapp/appversion");
     try {
       final response = await http.post(url,
-          headers: {"Content-Type": "application/json"},
+          headers: {
+            "Content-Type": "application/json",
+            "clntId": "4G0T337M"
+          }, // 4G0T337M   prod => YKV9BWUK
           body: json.encode({"version": version}));
       final result = json.decode(response.body);
       // If response is "NOK" means there is version mismatch
@@ -320,7 +323,7 @@ class Auth with ChangeNotifier {
         headers: {"Content-Type": "application/json"},
         body: json.encode(
           {
-            'clntId': "YKV9BWUK",
+            'clntId': "4G0T337M",
             'uLogin': loginData.uLogin,
             'uPwd': loginData.uPwd
           },

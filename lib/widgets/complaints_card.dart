@@ -25,23 +25,23 @@ class ComplaintCard extends StatelessWidget {
     switch (status) {
       case 'A':
         return Colors.green.shade400;
-      case 'R':
+      case 'C':
         return Colors.red.shade400;
       case 'NA':
         return Colors.yellow.shade400;
       case 'H':
         return Colors.orange.shade400;
       default:
-        return Colors.red.shade400;
+        return Colors.yellow.shade400;
     }
   }
 
   String get _status {
     switch (status) {
       case 'A':
-        return LocaleKeys.approved.tr();
-      case 'R':
-        return LocaleKeys.rejected.tr();
+        return LocaleKeys.solved.tr();
+      // case 'R':
+      //   return LocaleKeys.rejected.tr();
       case 'NA':
         return LocaleKeys.pending.tr();
       case 'H':
@@ -49,7 +49,7 @@ class ComplaintCard extends StatelessWidget {
       case 'C':
         return LocaleKeys.closed.tr();
       default:
-        return LocaleKeys.rejected.tr();
+        return LocaleKeys.pending.tr();
     }
   }
 

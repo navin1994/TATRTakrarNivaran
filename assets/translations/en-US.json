@@ -182,5 +182,14 @@
   "please_enter_remarks": "Please enter remarks",
   "forgot_password": "Forgot Password?",
   "rejec": "Rejected",
-  "pending_comp": "Pending"
+  "pending_comp": "Pending",
+  "do_you_want_to_reply": "Do you want to reply this complaint?",
+  "pending_with_me": "Pending With Me",
+  "in_progress": "In Progress",
+  "saved_remarks": "Saved Remarks",
+  "save_remark": "Save remark",
+  "back": "Back",
+  "solve": "Solve",
+  "do_you_want_to_solve": "Do you want to solve the complaint?",
+  "no_remarks_available": "No Remarks Available"
 }

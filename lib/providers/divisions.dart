@@ -24,7 +24,7 @@ class Divisions with ChangeNotifier {
         headers: {"Content-Type": "application/json"},
         body: json.encode({
           "act": "clntmainofchd",
-          "clntId": "YKV9BWUK"
+          "clntId": "4G0T337M"
         }), // 4G0T337M   prod => YKV9BWUK
       );
       List<Division> loadedDivisions = [];

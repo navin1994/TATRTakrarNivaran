@@ -26,22 +26,23 @@ class _ComplaintManagementScreenState extends State<ComplaintManagementScreen> {
   // _init is used to control the didChangeDependencies() methods executions
   var _init = true;
   // _crit is used to maintain the filter state
-  String _crit = "NA";
+  String _crit = "PM";
   final String _listType = "complaints";
   // Please match sequence with _filterData method
   final List _filters = [
     LocaleKeys.my_complaints.tr(),
-    LocaleKeys.pending.tr(),
+    LocaleKeys.pending_with_me.tr(),
+    LocaleKeys.in_progress.tr(),
+    LocaleKeys.solved.tr(),
+    LocaleKeys.closed.tr(),
     LocaleKeys.on_hold.tr(),
     LocaleKeys.transfered.tr(),
-    LocaleKeys.approved.tr(),
-    LocaleKeys.rejected.tr(),
     LocaleKeys.all.tr()
   ];
   // _selectedIndex is used to maintain the selected index of filter state
   var _selectedIndex = 1;
   // _srchUnder is used to maintain the value of dropdown selection
-  var _srchUnder = "U";
+  var _srchUnder = "A";
   // Please match sequence with _filters variable
   void _filterData(index) {
     _selectedIndex = index;
@@ -49,31 +50,35 @@ class _ComplaintManagementScreenState extends State<ComplaintManagementScreen> {
     switch (_selectedIndex) {
       case 0:
         // Fetch my complaints
-        _fetchAndSetComplaints("Y", true, inclUndr: _srchUnder);
+        _fetchAndSetComplaints("IP", true, inclUndr: _srchUnder);
         break;
       case 1:
-        // Fetch pending complaints
-        _fetchAndSetComplaints("NA", true, inclUndr: _srchUnder);
+        // Fetch pending with me complaints
+        _fetchAndSetComplaints("PM", true, inclUndr: _srchUnder);
         break;
       case 2:
-        // Fetch hold complaints
-        _fetchAndSetComplaints("H", true, inclUndr: _srchUnder);
+        // Fetch in progress complaints
+        _fetchAndSetComplaints("IP", true, inclUndr: _srchUnder);
         break;
       case 3:
+        // Fetch solved complaints
+        _fetchAndSetComplaints("A", true, inclUndr: _srchUnder);
+        break;
+      case 4:
+        // Fetch closed complaints
+        _fetchAndSetComplaints("C", true, inclUndr: _srchUnder);
+        break;
+      case 5:
+        // Fetch on hold complaints
+        _fetchAndSetComplaints("H", true, inclUndr: _srchUnder);
+        break;
+      case 6:
         // Fetche transfer to higher authority complaints
         _fetchAndSetComplaints("AH", true, inclUndr: _srchUnder);
         break;
-      case 4:
-        // Fetch approved complaints
-        _fetchAndSetComplaints("A", true, inclUndr: _srchUnder);
-        break;
-      case 5:
-        // Fetch rejected complaints
-        _fetchAndSetComplaints("R", true, inclUndr: _srchUnder);
-        break;
       default:
         // Fetch all raised complaints
-        _fetchAndSetComplaints("AR", true, inclUndr: _srchUnder);
+        _fetchAndSetComplaints("AL", true, inclUndr: _srchUnder);
     }
   }
 
