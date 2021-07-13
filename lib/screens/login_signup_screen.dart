@@ -198,6 +198,10 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
             style: SweetAlertV2Style.error);
       }
     } catch (error) {
+      setState(() {
+        _init = false;
+        _isLoading = false;
+      });
       // Show message if any error occurs while fetching division
       SweetAlertV2.show(context,
           title: LocaleKeys.error.tr(),

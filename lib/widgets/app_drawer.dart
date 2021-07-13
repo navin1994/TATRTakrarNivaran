@@ -141,7 +141,7 @@ class AppDrawer extends StatelessWidget {
                   style: TextStyle(
                       color: Colors.green[900], fontWeight: FontWeight.bold)),
               onTap: () {
-                Navigator.of(context).pop();
+                // Navigator.of(context).pop();
                 Navigator.of(context)
                     .pushReplacementNamed(LoginSignupScreen.routeName);
                 Provider.of<Auth>(context, listen: false).logout();
