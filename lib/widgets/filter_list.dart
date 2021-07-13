@@ -14,6 +14,7 @@ class FilterList extends StatelessWidget {
       // margin: EdgeInsets.symmetric(vertical: 10),
       height: 30,
       child: ListView.builder(
+        physics: BouncingScrollPhysics(),
         scrollDirection: Axis.horizontal,
         itemCount: filters.length,
         itemBuilder: (context, index) => GestureDetector(

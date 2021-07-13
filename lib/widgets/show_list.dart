@@ -24,6 +24,7 @@ class ShowList extends StatelessWidget {
                     child: Text(LocaleKeys.cmpl_not_avlbl.tr()),
                   )
                 : ListView.builder(
+                    physics: BouncingScrollPhysics(),
                     itemCount: cmp.complaints.length,
                     itemBuilder: (context, index) => ComplaintCard(
                       itemIndex: index,
@@ -46,6 +47,7 @@ class ShowList extends StatelessWidget {
                     child: Text(LocaleKeys.users_not_available.tr()),
                   )
                 : ListView.builder(
+                    physics: BouncingScrollPhysics(),
                     itemCount: users.registeredUsers.length,
                     itemBuilder: (context, index) => RegistrationCard(
                       itemIndex: index,
