@@ -147,17 +147,17 @@ class MyApp extends StatelessWidget {
             // accentColor: Colors.deepOrange,
             fontFamily: 'Lato',
           ),
-          home: LoginSignupScreen(),
-          // home: auth.isAuth
-          //     ? Dashboard()
-          //     : FutureBuilder(
-          //         future: auth.tryAutoLogin(),
-          //         builder: (ctx, authResultSnapshot) =>
-          //             authResultSnapshot.connectionState ==
-          //                     ConnectionState.waiting
-          //                 ? SplashScreen()
-          //                 : LoginSignupScreen(),
-          //       ),
+          // home: LoginSignupScreen(),
+          home: auth.isAuth
+              ? Dashboard()
+              : FutureBuilder(
+                  future: auth.tryAutoLogin(),
+                  builder: (ctx, authResultSnapshot) =>
+                      authResultSnapshot.connectionState ==
+                              ConnectionState.waiting
+                          ? SplashScreen()
+                          : LoginSignupScreen(),
+                ),
           routes: {
             Dashboard.routeName: (ctx) => Dashboard(),
             ComplaintManagementScreen.routeName: (ctx) =>
