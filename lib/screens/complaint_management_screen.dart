@@ -245,6 +245,7 @@ class _ComplaintManagementScreenState extends State<ComplaintManagementScreen> {
                     // Search Box widget
                     SearchBox(
                         _searchFeature, _srchUnder, _dropdownChangeFilter),
+
                     // Filter list widget
                     FilterList(_filters, _filterData, _selectedIndex),
                     SizedBox(height: 10),

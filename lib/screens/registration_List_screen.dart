@@ -159,15 +159,16 @@ class _RegistrationListScreenState extends State<RegistrationListScreen> {
                           ),
                         ),
                         FutureBuilder(
-                            // Fetch registered user list based on selected filter criteria
-                            future: _fetchAndSetRegistrations(_crit),
-                            builder: (ctx, resultSnapshot) =>
-                                resultSnapshot.connectionState ==
-                                        ConnectionState.waiting
-                                    ? Center(
-                                        child: CircularProgressIndicator(),
-                                      )
-                                    : ShowList(_listType)),
+                          // Fetch registered user list based on selected filter criteria
+                          future: _fetchAndSetRegistrations(_crit),
+                          builder: (ctx, resultSnapshot) =>
+                              resultSnapshot.connectionState ==
+                                      ConnectionState.waiting
+                                  ? Center(
+                                      child: CircularProgressIndicator(),
+                                    )
+                                  : ShowList(_listType),
+                        ),
                       ],
                     ),
                   ),
