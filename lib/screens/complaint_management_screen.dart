@@ -282,8 +282,14 @@ class _ComplaintManagementScreenState extends State<ComplaintManagementScreen> {
                                   size: 35,
                                 ),
                                 // Create complaint screen navigation
-                                onPressed: () => Navigator.of(context)
-                                    .pushNamed(RaiseComplainScreen.routeName),
+                                onPressed: () => Navigator.of(context).push(
+                                  PageRouteBuilder(
+                                    pageBuilder: (context, animation, _) {
+                                      return RaiseComplainScreen();
+                                    },
+                                    opaque: false,
+                                  ),
+                                ),
                               ),
                             ),
                           ),

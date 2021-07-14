@@ -351,20 +351,23 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFF035AA6),
+      appBar: AppBar(
+        brightness: Brightness.dark,
         backgroundColor: Color(0xFF035AA6),
-        appBar: AppBar(
-          brightness: Brightness.dark,
-          backgroundColor: Color(0xFF035AA6),
-          elevation: 0,
-          centerTitle: true,
-          title: Text(LocaleKeys.new_complaint.tr()),
-        ),
-        body: _isLoading
-            ? Center(
-                child: CircularProgressIndicator(),
-              )
-            : SafeArea(
-                bottom: false,
+        elevation: 0,
+        centerTitle: true,
+        title: Text(LocaleKeys.new_complaint.tr()),
+      ),
+      body: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : SafeArea(
+              bottom: false,
+              child: TweenAnimationBuilder(
+                tween: Tween(begin: 0.0, end: 1.0),
+                duration: Duration(milliseconds: 2000),
                 child: Center(
                   child: Container(
                     child: Column(
@@ -422,6 +425,23 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
                       ],
                     ),
                   ),
-                )));
+                ),
+                builder: (context, value, child) => ShaderMask(
+                  shaderCallback: (rect) => RadialGradient(
+                    radius: value * 5,
+                    colors: [
+                      Colors.white,
+                      Colors.white,
+                      Colors.transparent,
+                      Colors.transparent
+                    ],
+                    stops: [0.0, 0.55, 0.6, 1.0],
+                    center: FractionalOffset(0.95, 0.90),
+                  ).createShader(rect),
+                  child: child,
+                ),
+              ),
+            ),
+    );
   }
 }
