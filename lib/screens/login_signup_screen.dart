@@ -627,6 +627,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
                               spreadRadius: 5),
                         ]),
                     child: SingleChildScrollView(
+                      physics: BouncingScrollPhysics(),
                       child: Column(
                         children: [
                           Row(
