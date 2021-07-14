@@ -215,11 +215,15 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                   ? Text(LocaleKeys.saved_remarks.tr())
                   : Text(heading),
               content: SingleChildScrollView(
-                child: _isShowRemarks
-                    ? SavedRemarks(_setRemarks)
-                    : Container(
-                        height: 200,
-                        child: SingleChildScrollView(
+                child: AnimatedContainer(
+                  duration: Duration(milliseconds: 2000),
+                  curve: Curves.fastOutSlowIn,
+                  height: _isShowRemarks
+                      ? MediaQuery.of(context).size.height * .70
+                      : 200,
+                  child: _isShowRemarks
+                      ? SavedRemarks(_setRemarks)
+                      : SingleChildScrollView(
                           child: Column(
                             children: [
                               if (errorFlag)
@@ -255,7 +259,7 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
                             ],
                           ),
                         ),
-                      ),
+                ),
               ),
               // actions contains the "Yes" and "No" button to act on complaint
               actions: <Widget>[
