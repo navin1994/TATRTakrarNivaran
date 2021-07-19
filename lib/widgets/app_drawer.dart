@@ -45,7 +45,7 @@ class AppDrawer extends StatelessWidget {
                 ),
                 onTap: () {
                   Navigator.of(context)
-                      .pushReplacementNamed(ProfilePageScreen.routeName);
+                      .pushNamed(ProfilePageScreen.routeName);
                   closeDrawer();
                 },
               ),
@@ -61,7 +61,7 @@ class AppDrawer extends StatelessWidget {
                         color: Colors.teal[900], fontWeight: FontWeight.bold)),
                 onTap: () {
                   Navigator.of(context)
-                      .pushReplacementNamed(Dashboard.routeName);
+                      .pushNamed(Dashboard.routeName);
                   closeDrawer();
                 },
               ),
@@ -76,7 +76,7 @@ class AppDrawer extends StatelessWidget {
                     style: TextStyle(
                         color: Colors.teal[900], fontWeight: FontWeight.bold)),
                 onTap: () {
-                  Navigator.of(context).pushReplacementNamed(
+                  Navigator.of(context).pushNamed(
                       ComplaintManagementScreen.routeName);
                   closeDrawer();
                 },
@@ -93,7 +93,7 @@ class AppDrawer extends StatelessWidget {
                         color: Colors.green[900], fontWeight: FontWeight.bold)),
                 onTap: () {
                   Navigator.of(context)
-                      .pushReplacementNamed(RegistrationListScreen.routeName);
+                      .pushNamed(RegistrationListScreen.routeName);
                   closeDrawer();
                 },
               ),

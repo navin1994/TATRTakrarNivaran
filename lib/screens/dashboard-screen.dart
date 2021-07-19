@@ -50,7 +50,8 @@ class _DashboardState extends State<Dashboard> {
         return;
       }
       // If Version is mismatched route on Login screen and logout the user
-      Navigator.of(context).pushReplacementNamed(LoginSignupScreen.routeName);
+      Navigator.of(context).pushNamedAndRemoveUntil(
+          LoginSignupScreen.routeName, (route) => false);
       // Logout the user if version is mismatched
       Provider.of<Auth>(context, listen: false).logout();
     } catch (error) {
@@ -183,7 +184,7 @@ class _DashboardState extends State<Dashboard> {
                                                     color: Colors.white)),
                                             // Navigate to the complaint management screen with default filter
                                             onTap: () => Navigator.of(context)
-                                                .pushReplacementNamed(
+                                                .pushNamed(
                                                     ComplaintManagementScreen
                                                         .routeName),
                                           ),
@@ -193,7 +194,7 @@ class _DashboardState extends State<Dashboard> {
                                       InkWell(
                                         // Navigate to the complaint management screen on all complaints under my authority
                                         onTap: () => Navigator.of(context)
-                                            .pushReplacementNamed(
+                                            .pushNamed(
                                                 ComplaintManagementScreen
                                                     .routeName,
                                                 arguments: FilterComplaintArgs(
@@ -212,7 +213,7 @@ class _DashboardState extends State<Dashboard> {
                                       InkWell(
                                         // Navigate to the complaint management screen on approved complaints under my authority
                                         onTap: () => Navigator.of(context)
-                                            .pushReplacementNamed(
+                                            .pushNamed(
                                                 ComplaintManagementScreen
                                                     .routeName,
                                                 arguments: FilterComplaintArgs(
@@ -236,7 +237,7 @@ class _DashboardState extends State<Dashboard> {
                                       InkWell(
                                         // Navigate to the complaint management screen on pending complaints under my authority
                                         onTap: () => Navigator.of(context)
-                                            .pushReplacementNamed(
+                                            .pushNamed(
                                                 ComplaintManagementScreen
                                                     .routeName,
                                                 arguments: FilterComplaintArgs(
@@ -260,7 +261,7 @@ class _DashboardState extends State<Dashboard> {
                                       InkWell(
                                         // Navigate to the complaint management screen on rejected complaints under my authority
                                         onTap: () => Navigator.of(context)
-                                            .pushReplacementNamed(
+                                            .pushNamed(
                                                 ComplaintManagementScreen
                                                     .routeName,
                                                 arguments: FilterComplaintArgs(
@@ -285,7 +286,7 @@ class _DashboardState extends State<Dashboard> {
                                       InkWell(
                                         // Navigate to the complaint management screen on approved complaints under my authority
                                         onTap: () => Navigator.of(context)
-                                            .pushReplacementNamed(
+                                            .pushNamed(
                                                 ComplaintManagementScreen
                                                     .routeName,
                                                 arguments: FilterComplaintArgs(
@@ -310,7 +311,7 @@ class _DashboardState extends State<Dashboard> {
                                       InkWell(
                                         // Navigate to the complaint management screen on approved complaints under my authority
                                         onTap: () => Navigator.of(context)
-                                            .pushReplacementNamed(
+                                            .pushNamed(
                                                 ComplaintManagementScreen
                                                     .routeName,
                                                 arguments: FilterComplaintArgs(
@@ -361,7 +362,7 @@ class _DashboardState extends State<Dashboard> {
                                     onPrimary: Colors.white, // foreground
                                   ),
                                   onPressed: () => Navigator.of(context)
-                                      .pushReplacementNamed(
+                                      .pushNamed(
                                           ComplaintManagementScreen.routeName,
                                           arguments: FilterComplaintArgs(
                                               indx: 7, srcUnder: "R")),
