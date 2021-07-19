@@ -1,15 +1,19 @@
 import 'dart:convert';
 import 'dart:async';
 
-import 'package:http/http.dart' as http;
 import 'package:flutter/widgets.dart';
+import 'package:http_interceptor/http_interceptor.dart';
 
+import '../Interceptor/interceptor.dart';
 import '../models/division.dart';
 import '../config/env.dart';
 
 class Divisions with ChangeNotifier {
   List<Division> _divisions = [];
   final String api = Environment.url;
+  final http = InterceptedHttp.build(interceptors: [
+    HttpInterceptor(),
+  ]);
 
   List<Division> get divisions {
     return [..._divisions];
@@ -21,7 +25,6 @@ class Divisions with ChangeNotifier {
     try {
       final response = await http.post(
         url,
-        headers: {"Content-Type": "application/json"},
         body: json.encode({
           "act": "clntmainofchd",
           "clntId": "4G0T337M"

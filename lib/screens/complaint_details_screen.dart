@@ -10,11 +10,11 @@ import 'package:open_file/open_file.dart';
 
 import '../config/palette.dart';
 import '../translations/locale_keys.g.dart';
-import '../models/comments.dart';
 import '../models/complaint.dart';
 import '../providers/complaints.dart';
 import '../providers/auth.dart';
 import '../widgets/saved_remarks.dart';
+import '../widgets/session_alert.dart';
 
 class ComplaintDetailsScreen extends StatefulWidget {
   static const routeName = '/complaint-detail-screen';
@@ -98,97 +98,126 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
 
 // This method displays the list of comments which mentioned while taking action of complait
   Future<void> showComments(BuildContext context, int cmpId) async {
-    /// Get the comments on perticular complaint using complaint id
-    final List<Comment> comments =
-        await Provider.of<Complaints>(context, listen: false)
-            .getComments(cmpId);
+    try {
+      /// Get the comments on perticular complaint using complaint id
+      final result = await Provider.of<Complaints>(context, listen: false)
+          .getComments(cmpId);
 
-    /// If there is no comment return null
-    return comments == null
-        ? SweetAlertV2.show(context,
+      /// If there is no comment return null
+      if (result['Result'] == "NOK") {
+        SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),
-            subtitle: LocaleKeys.error_while_loading_com.tr(),
-            style: SweetAlertV2Style.error)
-        : showGeneralDialog(
-            context: context,
-            barrierDismissible: true,
-            barrierLabel:
-                MaterialLocalizations.of(context).modalBarrierDismissLabel,
-            barrierColor: Colors.black45,
-            transitionDuration: const Duration(milliseconds: 200),
-            pageBuilder: (BuildContext buildContext, Animation animation,
-                Animation secondaryAnimation) {
-              return Center(
-                child: Container(
-                  width: MediaQuery.of(context).size.width - 10,
-                  height: MediaQuery.of(context).size.height - 80,
-                  padding: EdgeInsets.all(20),
-                  color: Colors.white,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Material(
-                          /// Display the list of comments
-                          child: ListView.builder(
-                            itemCount: comments.length,
-                            itemBuilder: (ctx, index) => Column(
-                              children: [
-                                SizedBox(height: 5),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 15, // 30 padding
-                                        vertical: 5, // 5 top and bottom
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: _getColor(comments[index].value),
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(22),
-                                        ),
-                                      ),
-                                      child: Text(
-                                        _getStatus(comments[index].value),
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                ListTile(
-                                  title: Text("${comments[index].text}"),
-                                  subtitle: Text("${comments[index].no}"),
-                                ),
-                                Divider(
-                                  height: 0.6,
-                                  color: Colors.deepOrange,
+            subtitle: result['Msg'],
+            style: SweetAlertV2Style.error);
+      } else if (result['Result'] == "SESS") {
+        return showDialog(
+          context: context,
+          barrierDismissible: false,
+          barrierColor: Colors.black45,
+          builder: (context) => SessionAlert(result['Msg']),
+        );
+      } else if (result['Result'] == "OK") {
+        return showGeneralDialog(
+          context: context,
+          barrierDismissible: true,
+          barrierLabel:
+              MaterialLocalizations.of(context).modalBarrierDismissLabel,
+          barrierColor: Colors.black45,
+          transitionDuration: const Duration(milliseconds: 200),
+          pageBuilder: (BuildContext buildContext, Animation animation,
+              Animation secondaryAnimation) {
+            return Center(
+              child: Container(
+                width: MediaQuery.of(context).size.width - 10,
+                height: MediaQuery.of(context).size.height - 80,
+                padding: EdgeInsets.all(20),
+                color: Colors.white,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Material(
+                        /// Display the list of comments
+                        child: Consumer<Complaints>(
+                          builder: (ctx, cmp, _) => cmp.comments.length <= 0
+                              ? Center(
+                                  child: Text(
+                                      LocaleKeys.comments_not_available.tr()),
                                 )
-                              ],
-                            ),
-                          ),
+                              : ListView.builder(
+                                  itemCount: cmp.comments.length,
+                                  itemBuilder: (ctx, index) => Column(
+                                    children: [
+                                      SizedBox(height: 5),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Container(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 15, // 30 padding
+                                              vertical: 5, // 5 top and bottom
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: _getColor(
+                                                  cmp.comments[index].value),
+                                              borderRadius: BorderRadius.all(
+                                                Radius.circular(22),
+                                              ),
+                                            ),
+                                            child: Text(
+                                              _getStatus(
+                                                  cmp.comments[index].value),
+                                              style: TextStyle(
+                                                  color: Colors.white),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      ListTile(
+                                        title:
+                                            Text("${cmp.comments[index].text}"),
+                                        subtitle:
+                                            Text("${cmp.comments[index].no}"),
+                                      ),
+                                      Divider(
+                                        height: 0.6,
+                                        color: Colors.deepOrange,
+                                      )
+                                    ],
+                                  ),
+                                ),
                         ),
                       ),
-                      // Button to close the dialog
-                      ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                            elevation: 12,
-                            primary: Colors.red, // background
-                            onPrimary: Colors.white,
-                            textStyle: TextStyle(fontSize: 16)),
-                        label: Text(LocaleKeys.close.tr()),
-                        icon: Icon(Icons.highlight_remove_outlined),
-                        onPressed: () {
-                          setState(() {
-                            Navigator.pop(context);
-                          });
-                        },
-                      ),
-                    ],
-                  ),
+                    ),
+                    // Button to close the dialog
+                    ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                          elevation: 12,
+                          primary: Colors.red, // background
+                          onPrimary: Colors.white,
+                          textStyle: TextStyle(fontSize: 16)),
+                      label: Text(LocaleKeys.close.tr()),
+                      icon: Icon(Icons.highlight_remove_outlined),
+                      onPressed: () {
+                        setState(() {
+                          Navigator.pop(context);
+                        });
+                      },
+                    ),
+                  ],
                 ),
-              );
-            });
+              ),
+            );
+          },
+        );
+      }
+    } catch (error) {
+      SweetAlertV2.show(context,
+          title: LocaleKeys.error.tr(),
+          subtitle: LocaleKeys.error_while_loading_com.tr(),
+          style: SweetAlertV2Style.error);
+    }
   }
 
 // This method displays dialog while taking any action on complaint
@@ -359,6 +388,13 @@ class _ComplaintDetailsScreenState extends State<ComplaintDetailsScreen> {
             title: "${LocaleKeys.updated.tr()}!",
             subtitle: resp['Msg'],
             style: SweetAlertV2Style.success);
+      } else if (resp['Result'] == "SESS") {
+        return showDialog(
+          context: context,
+          barrierDismissible: false,
+          barrierColor: Colors.black45,
+          builder: (context) => SessionAlert(resp['Msg']),
+        );
       } else {
         SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),

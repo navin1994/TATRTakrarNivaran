@@ -1,15 +1,19 @@
 import 'dart:convert';
 import 'dart:async';
 
-import 'package:http/http.dart' as http;
 import 'package:flutter/widgets.dart';
+import 'package:http_interceptor/http_interceptor.dart';
 
+import '../Interceptor/interceptor.dart';
 import '../models/category.dart';
 import '../config/env.dart';
 
 class Categories with ChangeNotifier {
   final String api = Environment.url;
   List<Category> _categories = [];
+  final http = InterceptedHttp.build(interceptors: [
+    HttpInterceptor(),
+  ]);
 
   List<Category> get categories {
     // returns the copy of _categories
@@ -28,7 +32,6 @@ class Categories with ChangeNotifier {
     try {
       final response = await http.post(
         url,
-        headers: {"Content-Type": "application/json"},
         body: json.encode({
           "act": "getcmptyphd",
           "clntId": clntId,

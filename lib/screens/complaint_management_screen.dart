@@ -11,6 +11,7 @@ import '../widgets/show_list.dart';
 import '../widgets/filter_list.dart';
 import '../widgets/search_box.dart';
 import '../widgets/app_drawer.dart';
+import '../widgets/session_alert.dart';
 import '../providers/complaints.dart';
 import '../screens/raise_complain_screen.dart';
 
@@ -133,11 +134,18 @@ class _ComplaintManagementScreenState extends State<ComplaintManagementScreen> {
       setState(() {
         _isLoading = false;
       });
-      if (response['Result'] != "OK") {
+      if (response['Result'] == "NOK") {
         SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),
             subtitle: response['Msg'],
             style: SweetAlertV2Style.error);
+      } else if (response['Result'] == "SESS") {
+        return showDialog(
+          context: context,
+          barrierDismissible: false,
+          barrierColor: Colors.black45,
+          builder: (context) => SessionAlert(response['Msg']),
+        );
       }
     } catch (error) {
       setState(() {
@@ -199,20 +207,7 @@ class _ComplaintManagementScreenState extends State<ComplaintManagementScreen> {
         title: Text(
           LocaleKeys.complt_mngmnt.tr(),
         ),
-        // actions: [
-        //   IconButton(
-        //     icon: Icon(Icons.add_comment_outlined),
-        //     padding: EdgeInsets.all(10),
-        //     iconSize: 34,
-        //     color: Colors.white,
-        //     onPressed: () {
-        //       Navigator.of(context).pushNamed(RaiseComplainScreen.routeName);
-        //     },
-        //   )
-        // ],
       ),
-      // AppDrawer() is a Navigation drawer
-      // drawer: AppDrawer(),
       // GestureDetector to hide the keypad on clicking outside of input field
       body: SwipeDetector(
         onSwipeLeft: _toggleAppDrawer,

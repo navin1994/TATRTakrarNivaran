@@ -191,5 +191,7 @@
   "back": "मागे",
   "solve": "निराकरण करा",
   "do_you_want_to_solve": "आपण तक्रार सोडवू इच्छिता?",
-  "no_remarks_available": "टिप्पण्या उपलब्ध नाहीत"
+  "no_remarks_available": "टिप्पण्या उपलब्ध नाहीत",
+  "not_acted_in_7_days": "७ दिवसांत कार्य न केलेले",
+  "comments_not_available": "टिप्पण्या उपलब्ध नाहीत"
 }

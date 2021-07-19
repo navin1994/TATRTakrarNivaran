@@ -81,42 +81,6 @@ class AppDrawer extends StatelessWidget {
                   closeDrawer();
                 },
               ),
-              // Divider(
-              //   height: 0.6,
-              //   color: Colors.black87,
-              // ),
-              // ListTile(
-              //   leading: Icon(Icons.add_comment),
-              //   title: Text('New Complaint'),
-              //   onTap: () {
-              //     Navigator.of(context)
-              //         .pushReplacementNamed(RaiseComplainScreen.routeName);
-              //   },
-              // ),
-              // Divider(
-              //   height: 0.6,
-              //   color: Colors.black87,
-              // ),
-              // ListTile(
-              //   leading: Icon(Icons.settings),
-              //   title: Text('Data Management'),
-              //   onTap: () {
-              //     Navigator.of(context)
-              //         .pushReplacementNamed(DataManagementScreen.routeName);
-              //   },
-              // ),
-              // Divider(
-              //   height: 0.6,
-              //   color: Colors.black87,
-              // ),
-              // ListTile(
-              //   leading: Icon(Icons.comment_bank),
-              //   title: Text('My Complaints'),
-              //   onTap: () {
-              //     Navigator.of(context)
-              //         .pushReplacementNamed(ComplaintManagementScreen.routeName);
-              //   },
-              // ),
               Divider(
                 height: 0.8,
                 color: Colors.deepOrange,
@@ -144,9 +108,8 @@ class AppDrawer extends StatelessWidget {
                     style: TextStyle(
                         color: Colors.green[900], fontWeight: FontWeight.bold)),
                 onTap: () {
-                  // Navigator.of(context).pop();
-                  Navigator.of(context)
-                      .pushReplacementNamed(LoginSignupScreen.routeName);
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      LoginSignupScreen.routeName, (route) => false);
                   Provider.of<Auth>(context, listen: false).logout();
                   closeDrawer();
                 },

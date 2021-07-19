@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'dart:async';
 
-import 'package:http/http.dart' as http;
 import 'package:flutter/widgets.dart';
+import 'package:http/http.dart' as httpReq;
+import 'package:http_interceptor/http_interceptor.dart';
 
+import '../Interceptor/interceptor.dart';
 import '../models/remark.dart';
 import '../models/complaint_summary.dart';
 import '../models/comments.dart';
@@ -17,6 +19,10 @@ class Complaints with ChangeNotifier {
   Complaint _complaint = Complaint();
   List<ComplaintSummary> _complaintSummary = [];
   List<Remark> _remarks = [];
+  List<Comment> _comments = [];
+  final http = InterceptedHttp.build(interceptors: [
+    HttpInterceptor(),
+  ]);
 
   int uid;
   int clntId;
@@ -28,6 +34,10 @@ class Complaints with ChangeNotifier {
   List<Complaint> get complaints {
     // returns the copy of _complaints
     return [..._complaints];
+  }
+
+  List<Comment> get comments {
+    return [..._comments];
   }
 
   Complaint get complaint {
@@ -58,7 +68,7 @@ class Complaints with ChangeNotifier {
     try {
       final resp = await http.post(
         url,
-        headers: {"Content-Type": "application/json"},
+        // headers: {"Content-Type": "application/json"},
         body: utf8.encode(
           json.encode(
             {
@@ -92,7 +102,7 @@ class Complaints with ChangeNotifier {
     try {
       final resp = await http.post(
         url,
-        headers: {"Content-Type": "application/json"},
+        // headers: {"Content-Type": "application/json"},
         body: json.encode(
           {
             "act": "srchcmplntlst",
@@ -156,7 +166,7 @@ class Complaints with ChangeNotifier {
     List<ComplaintSummary> loadedSummary = [];
     try {
       final resp = await http.post(url,
-          headers: {"Content-Type": "application/json"},
+          // headers: {"Content-Type": "application/json"},
           body: json.encode(
             {
               "act": "getusrsmry",
@@ -190,13 +200,14 @@ class Complaints with ChangeNotifier {
   }
 
 // This method returns the remarks on perticular complaint
-  Future<List<Comment>> getComments(int cmpId) async {
+  Future getComments(int cmpId) async {
     List<Comment> loadedComments = [];
+    var result;
 
     var url = Uri.parse("$api/userapp/cmplntmangesrvc");
     try {
       final resp = await http.post(url,
-          headers: {"Content-Type": "application/json"},
+          // headers: {"Content-Type": "application/json"},
           body: json.encode(
             {
               "act": "getcomments",
@@ -207,21 +218,24 @@ class Complaints with ChangeNotifier {
               "typ": "cmplnt",
             },
           ));
-      final result = json.decode(resp.body);
-
-      final comm = result['Records'] as List<dynamic>;
-      loadedComments = comm
-          .map((comment) => Comment(
-              value: comment['value'],
-              text: comment['text'],
-              no: comment['no'],
-              extra: comment['extra'],
-              extrainfo: comment['extrainfo']))
-          .toList();
+      result = json.decode(resp.body);
+      if (result['Result'] == "OK") {
+        final comm = result['Records'] as List<dynamic>;
+        loadedComments = comm
+            .map((comment) => Comment(
+                value: comment['value'],
+                text: comment['text'],
+                no: comment['no'],
+                extra: comment['extra'],
+                extrainfo: comment['extrainfo']))
+            .toList();
+      }
+      _comments = loadedComments;
+      notifyListeners();
     } catch (error) {
       throw error;
     }
-    return loadedComments;
+    return result;
   }
 
 // Update the status with remark on complaint
@@ -230,7 +244,7 @@ class Complaints with ChangeNotifier {
     var url = Uri.parse("$api/userapp/cmplntmangesrvc");
     try {
       final resp = await http.post(url,
-          headers: {"Content-Type": "application/json"},
+          // headers: {"Content-Type": "application/json"},
           body: json.encode(
             {
               "act": "updtcmplntstat",
@@ -265,7 +279,6 @@ class Complaints with ChangeNotifier {
     List<Complaint> loadedComplaints = [];
     try {
       final resp = await http.post(url,
-          headers: {"Content-Type": "application/json"},
           body: json.encode(
             {
               "act": "getregcmplntlst",
@@ -324,7 +337,6 @@ class Complaints with ChangeNotifier {
     try {
       final response = await http.post(
         url,
-        headers: {"Content-Type": "application/json"},
         body: json.encode({
           "act": "savecmplnt",
           "cmpcatid": complaint.cmpcatid,
@@ -343,8 +355,8 @@ class Complaints with ChangeNotifier {
           return compSaveResp;
         }
         var url2 = Uri.parse("$api/userapp/fleUpldsrvc");
-        var request = http.MultipartRequest('POST', url2);
-        request.files.add(await http.MultipartFile.fromPath(
+        var request = httpReq.MultipartRequest('POST', url2);
+        request.files.add(await httpReq.MultipartFile.fromPath(
           'fleupldsp',
           uploadfilePath,
         ));

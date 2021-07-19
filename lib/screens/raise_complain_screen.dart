@@ -9,6 +9,7 @@ import '../providers/complaints.dart';
 import '../translations/locale_keys.g.dart';
 import '../config/palette.dart';
 import '../widgets/form_field.dart' as padding;
+import '../widgets/session_alert.dart';
 import '../providers/categories.dart';
 import '../models/complaint.dart';
 import '../models/category.dart';
@@ -100,12 +101,13 @@ class _RaiseComplainScreenState extends State<RaiseComplainScreen> {
             title: LocaleKeys.error.tr(),
             subtitle: res['Msg'],
             style: SweetAlertV2Style.error);
-      } else {
-        // Show message if any error occurs while saving complaint
-        SweetAlertV2.show(context,
-            title: LocaleKeys.error.tr(),
-            subtitle: LocaleKeys.error_while_submit_com.tr(),
-            style: SweetAlertV2Style.error);
+      } else if (res['Result'] == "SESS") {
+        return showDialog(
+          context: context,
+          barrierDismissible: false,
+          barrierColor: Colors.black45,
+          builder: (context) => SessionAlert(res['Msg']),
+        );
       }
     } catch (error) {
       setState(() {

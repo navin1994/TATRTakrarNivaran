@@ -174,7 +174,7 @@
   "raise_complaint": "Raise Complaint",
   "track_it": "Track Complaint",
   "total": "TOTAL",
-  "solved": "Approved",
+  "solved": "Solved",
   "error_while_downloading_updated_app": "Error while downloading updated app.",
   "downloading_updated_app": "Downloading updated version plesae wait...",
   "history": "View remarks",
@@ -191,5 +191,7 @@
   "back": "Back",
   "solve": "Solve",
   "do_you_want_to_solve": "Do you want to solve the complaint?",
-  "no_remarks_available": "No Remarks Available"
+  "no_remarks_available": "No Remarks Available",
+  "not_acted_in_7_days": "Not acted in 7 Days",
+  "comments_not_available": "Comments Not Available"
 }

@@ -6,6 +6,7 @@ import 'package:easy_localization/easy_localization.dart';
 import '../translations/locale_keys.g.dart';
 import '../providers/registered_users.dart';
 import '../models/registered_user.dart';
+import '../widgets/session_alert.dart';
 
 class RagistrationDetailsScreen extends StatelessWidget {
   static const routeName = '/registration-detail-screen';
@@ -37,7 +38,14 @@ class RagistrationDetailsScreen extends StatelessWidget {
               title: "${LocaleKeys.updated.tr()}!",
               subtitle: resp['Msg'],
               style: SweetAlertV2Style.success);
-        } else {
+        } else if (resp['Result'] == "SESS") {
+          return showDialog(
+            context: context,
+            barrierDismissible: false,
+            barrierColor: Colors.black45,
+            builder: (context) => SessionAlert(resp['Msg']),
+          );
+        } else if (resp['Result'] == "NOK") {
           // Show message if any error occured while updating the registered user status
           SweetAlertV2.show(context,
               title: LocaleKeys.error.tr(),

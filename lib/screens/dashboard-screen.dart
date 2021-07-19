@@ -9,6 +9,7 @@ import '../providers/auth.dart';
 import '../models/filter_cmpl_args.dart';
 import '../translations/locale_keys.g.dart';
 import '../providers/complaints.dart';
+import '../widgets/session_alert.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/tile_widget.dart';
 import '../screens/login_signup_screen.dart';
@@ -79,6 +80,13 @@ class _DashboardState extends State<Dashboard> {
             title: LocaleKeys.error.tr(),
             subtitle: result['Msg'],
             style: SweetAlertV2Style.error);
+      } else if (result['Result'] == "SESS") {
+        return showDialog(
+          context: context,
+          barrierDismissible: false,
+          barrierColor: Colors.black45,
+          builder: (context) => SessionAlert(result['Msg']),
+        );
       }
     } catch (error) {
       if (error != null) {
@@ -158,10 +166,6 @@ class _DashboardState extends State<Dashboard> {
                                             fontSize: 22, color: Colors.white)))
                                 : ListView(
                                     children: [
-                                      // Text('Pending Complaints',
-                                      //     style: TextStyle(fontSize: 22, color: Colors.white)),
-                                      // SizedBox(height: 10),
-                                      // PendingComplaintCard(),
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceAround,
@@ -193,7 +197,7 @@ class _DashboardState extends State<Dashboard> {
                                                 ComplaintManagementScreen
                                                     .routeName,
                                                 arguments: FilterComplaintArgs(
-                                                    indx: 6, srcUnder: "U")),
+                                                    indx: 7, srcUnder: "A")),
                                         child: Tilewidget(
                                           color: Colors.yellow,
                                           symbol: cmpl.complaintSummary[0].text,
@@ -212,7 +216,7 @@ class _DashboardState extends State<Dashboard> {
                                                 ComplaintManagementScreen
                                                     .routeName,
                                                 arguments: FilterComplaintArgs(
-                                                    indx: 4, srcUnder: "U")),
+                                                    indx: 3, srcUnder: "A")),
                                         child: Tilewidget(
                                           color: Colors.greenAccent,
                                           symbol: cmpl.complaintSummary[1].text,
@@ -236,7 +240,7 @@ class _DashboardState extends State<Dashboard> {
                                                 ComplaintManagementScreen
                                                     .routeName,
                                                 arguments: FilterComplaintArgs(
-                                                    indx: 1, srcUnder: "U")),
+                                                    indx: 1, srcUnder: "A")),
                                         child: Tilewidget(
                                           color: Colors.orange,
                                           symbol: cmpl.complaintSummary[3].text,
@@ -260,12 +264,12 @@ class _DashboardState extends State<Dashboard> {
                                                 ComplaintManagementScreen
                                                     .routeName,
                                                 arguments: FilterComplaintArgs(
-                                                    indx: 5, srcUnder: "U")),
+                                                    indx: 4, srcUnder: "A")),
                                         child: Tilewidget(
                                           color: Colors.red,
                                           symbol: cmpl.complaintSummary[2].text,
                                           icon: Icon(
-                                              Icons.highlight_remove_outlined,
+                                              Icons.close_fullscreen_outlined,
                                               size: 32),
                                           perc: ((double.parse(cmpl
                                                       .complaintSummary[2]
@@ -276,6 +280,56 @@ class _DashboardState extends State<Dashboard> {
                                           textcolor: Colors.redAccent,
                                           count: int.parse(
                                               cmpl.complaintSummary[2].value),
+                                        ),
+                                      ),
+                                      InkWell(
+                                        // Navigate to the complaint management screen on approved complaints under my authority
+                                        onTap: () => Navigator.of(context)
+                                            .pushReplacementNamed(
+                                                ComplaintManagementScreen
+                                                    .routeName,
+                                                arguments: FilterComplaintArgs(
+                                                    indx: 5, srcUnder: "A")),
+                                        child: Tilewidget(
+                                          color: Colors.purpleAccent,
+                                          symbol: cmpl.complaintSummary[5].text,
+                                          icon: Icon(
+                                              Icons.pause_circle_outline_sharp,
+                                              size: 32),
+                                          perc: ((double.parse(cmpl
+                                                      .complaintSummary[5]
+                                                      .value) *
+                                                  100) /
+                                              double.parse(cmpl
+                                                  .complaintSummary[0].value)),
+                                          textcolor: Colors.blueAccent,
+                                          count: int.parse(
+                                              cmpl.complaintSummary[5].value),
+                                        ),
+                                      ),
+                                      InkWell(
+                                        // Navigate to the complaint management screen on approved complaints under my authority
+                                        onTap: () => Navigator.of(context)
+                                            .pushReplacementNamed(
+                                                ComplaintManagementScreen
+                                                    .routeName,
+                                                arguments: FilterComplaintArgs(
+                                                    indx: 6, srcUnder: "A")),
+                                        child: Tilewidget(
+                                          color: Colors.pinkAccent,
+                                          symbol: cmpl.complaintSummary[4].text,
+                                          icon: Icon(
+                                              Icons.do_not_disturb_alt_outlined,
+                                              size: 32),
+                                          perc: ((double.parse(cmpl
+                                                      .complaintSummary[4]
+                                                      .value) *
+                                                  100) /
+                                              double.parse(cmpl
+                                                  .complaintSummary[0].value)),
+                                          textcolor: Colors.pinkAccent,
+                                          count: int.parse(
+                                              cmpl.complaintSummary[4].value),
                                         ),
                                       ),
                                     ],
@@ -310,7 +364,7 @@ class _DashboardState extends State<Dashboard> {
                                       .pushReplacementNamed(
                                           ComplaintManagementScreen.routeName,
                                           arguments: FilterComplaintArgs(
-                                              indx: 6, srcUnder: "R")),
+                                              indx: 7, srcUnder: "R")),
                                   child: Text(LocaleKeys.track_it.tr()),
                                 ),
                               ],

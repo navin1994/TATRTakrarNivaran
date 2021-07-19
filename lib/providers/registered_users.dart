@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'dart:async';
 
-import 'package:http/http.dart' as http;
 import 'package:flutter/widgets.dart';
+import 'package:http_interceptor/http_interceptor.dart';
 
+import '../Interceptor/interceptor.dart';
 import '../models/registered_user.dart';
 import '../config/env.dart';
 
@@ -11,6 +12,9 @@ class RegisteredUsers with ChangeNotifier {
   final api = Environment.url;
   List<RegisteredUser> _registeredUsers = [];
   RegisteredUser _regUser = RegisteredUser();
+  final http = InterceptedHttp.build(interceptors: [
+    HttpInterceptor(),
+  ]);
 
   int uid;
   int clntId;
@@ -44,7 +48,6 @@ class RegisteredUsers with ChangeNotifier {
     try {
       final response = await http.post(
         url,
-        headers: {"Content-Type": "application/json"},
         body: json.encode({
           "act": "getreguserlst",
           "crit": crit,
@@ -87,11 +90,10 @@ class RegisteredUsers with ChangeNotifier {
       } else {
         _registeredUsers = loadedRegisteredUsers;
         notifyListeners();
-        return result['Msg'];
       }
       _registeredUsers = loadedRegisteredUsers;
       notifyListeners();
-      return 0;
+      return result;
     } catch (error) {
       _registeredUsers = [];
       notifyListeners();
@@ -105,7 +107,6 @@ class RegisteredUsers with ChangeNotifier {
     try {
       final response = await http.post(
         url,
-        headers: {"Content-Type": "application/json"},
         body: json.encode({
           "act": "actregusrstat",
           "stat": stat,

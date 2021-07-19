@@ -7,6 +7,7 @@ import 'package:swipedetector/swipedetector.dart';
 
 import '../translations/locale_keys.g.dart';
 import '../providers/registered_users.dart';
+import '../widgets/session_alert.dart';
 import '../widgets/show_list.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/filter_list.dart';
@@ -31,6 +32,7 @@ class _RegistrationListScreenState extends State<RegistrationListScreen> {
     LocaleKeys.reporting.tr()
   ];
   var _selectedIndex = 0;
+
   // Fetch data based on fliter value selected according to index
   // it's sequence should be matched with _filters List
   void _filterData(index) {
@@ -77,13 +79,19 @@ class _RegistrationListScreenState extends State<RegistrationListScreen> {
       final response =
           await Provider.of<RegisteredUsers>(context, listen: false)
               .fetchAndSetRegisteredUsers(filterValue);
-      if (response != 0) {
+      if (response['Result'] == "NOK") {
         // Show message if any error occured while fetching the Registered users
         SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),
             subtitle: response,
             style: SweetAlertV2Style.error);
-        return;
+      } else if (response['Result'] == "SESS") {
+        return showDialog(
+          context: context,
+          barrierDismissible: false,
+          barrierColor: Colors.black45,
+          builder: (context) => SessionAlert(response['Msg']),
+        );
       }
     } catch (error) {
       if (error != null) {

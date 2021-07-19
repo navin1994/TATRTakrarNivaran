@@ -194,5 +194,7 @@ abstract class  LocaleKeys {
   static const solve = 'solve';
   static const do_you_want_to_solve = 'do_you_want_to_solve';
   static const no_remarks_available = 'no_remarks_available';
+  static const not_acted_in_7_days = 'not_acted_in_7_days';
+  static const comments_not_available = 'comments_not_available';
 
 }

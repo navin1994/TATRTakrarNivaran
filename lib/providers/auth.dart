@@ -3,10 +3,11 @@ import 'dart:async';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/widgets.dart';
-import 'package:http/http.dart' as http;
+import 'package:http_interceptor/http_interceptor.dart';
 import 'package:package_info/package_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Interceptor/interceptor.dart';
 import '../models/profile.dart';
 import '../models/login.dart';
 import '../models/signup.dart';
@@ -22,6 +23,9 @@ class Auth with ChangeNotifier {
   String _uFname;
   String _uLname;
   String _fcmToken;
+  final http = InterceptedHttp.build(interceptors: [
+    HttpInterceptor(),
+  ]);
   Profile _userProfile = Profile(
       uid: null,
       mainclntofc: "",
@@ -101,7 +105,6 @@ class Auth with ChangeNotifier {
     final token = await _fcmMessaging.getToken(); // get FCM token here
     try {
       final response = await http.post(url,
-          headers: {"Content-Type": "application/json"},
           body: json.encode({
             "clntId": clntId,
             "uid": uid,
@@ -124,7 +127,6 @@ class Auth with ChangeNotifier {
     try {
       final response = await http.get(
         Uri.parse(targetURL),
-        headers: {"Content-Type": "application/json"},
       );
       if (response.contentLength == 0) {
         return;
@@ -144,11 +146,10 @@ class Auth with ChangeNotifier {
     var url = Uri.parse("$api/userapp/appversion");
     try {
       final response = await http.post(url,
-          headers: {
-            "Content-Type": "application/json",
-            "clntId": "4G0T337M"
-          }, // 4G0T337M   prod => YKV9BWUK
-          body: json.encode({"version": version}));
+          body: json.encode({
+            "version": version,
+            "clntId": "4G0T337M",
+          })); // 4G0T337M   prod => YKV9BWUK
       final result = json.decode(response.body);
       // If response is "NOK" means there is version mismatch
       if (result['Result'] == "NOK") {
@@ -165,7 +166,6 @@ class Auth with ChangeNotifier {
     try {
       final response = await http.post(
         url,
-        headers: {"Content-Type": "application/json"},
         body: json.encode({
           "act": "updtpwd",
           "clntId": _clntId,
@@ -188,7 +188,6 @@ class Auth with ChangeNotifier {
     try {
       final response = await http.post(
         url,
-        headers: {"Content-Type": "application/json"},
         body: json.encode({
           "act": "updtprofile",
           "clntId": _clntId,
@@ -219,7 +218,6 @@ class Auth with ChangeNotifier {
     try {
       final response = await http.post(
         url,
-        headers: {"Content-Type": "application/json"},
         body: json.encode({
           "act": "getprofile",
           "clntId": _clntId,
@@ -270,7 +268,6 @@ class Auth with ChangeNotifier {
     try {
       final response = await http.post(
         url,
-        headers: {"Content-Type": "application/json"},
         body: json.encode({
           "mainofcNm": userData.mainofcNm,
           "mainclntofc": userData.mainclntofc,
@@ -306,7 +303,6 @@ class Auth with ChangeNotifier {
     try {
       final response = await http.post(
         url,
-        headers: {"Content-Type": "application/json"},
         body: json.encode({"act": "verfyloginid", "uLogin": loginId}),
       );
       return json.decode(response.body);
@@ -320,7 +316,6 @@ class Auth with ChangeNotifier {
     try {
       final response = await http.post(
         url,
-        headers: {"Content-Type": "application/json"},
         body: json.encode(
           {
             'clntId': "4G0T337M",
@@ -348,6 +343,7 @@ class Auth with ChangeNotifier {
           prefs.setString("uFname", _uFname);
           prefs.setString("uLname", _uLname);
           prefs.setString("fcmToken", _fcmToken);
+          prefs.setString("loginToken", loginResp['token']);
           return 0;
         }
         return "Invalid Token";
@@ -389,6 +385,7 @@ class Auth with ChangeNotifier {
     prefs.remove('clntId');
     prefs.remove('uFname');
     prefs.remove('uLname');
+    prefs.remove('loginToken');
 
     // prefs.clear();
   }

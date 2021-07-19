@@ -6,7 +6,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
 import './translations/codegen_loader.g.dart';
-import './screens/data_management_screen.dart';
 import './screens/dashboard-screen.dart';
 import './screens/profile_screen.dart';
 import './screens/registration_List_screen.dart';
@@ -15,7 +14,6 @@ import './screens/registration_details_screen.dart';
 import './screens/raise_complain_screen.dart';
 import './screens/complaint_management_screen.dart';
 import './screens/complaint_details_screen.dart';
-import './screens/splash_screen.dart';
 import './providers/registered_users.dart';
 import './providers/designationsWorkOffices.dart';
 import './providers/divisions.dart';
@@ -147,17 +145,19 @@ class MyApp extends StatelessWidget {
             // accentColor: Colors.deepOrange,
             fontFamily: 'Lato',
           ),
-          // home: LoginSignupScreen(),
-          home: auth.isAuth
-              ? Dashboard()
-              : FutureBuilder(
-                  future: auth.tryAutoLogin(),
-                  builder: (ctx, authResultSnapshot) =>
-                      authResultSnapshot.connectionState ==
-                              ConnectionState.waiting
-                          ? SplashScreen()
-                          : LoginSignupScreen(),
-                ),
+          home: LoginSignupScreen(),
+          // home: auth.isAuth
+          //     ? Dashboard()
+          //     : FutureBuilder(
+          //         future: auth.tryAutoLogin(),
+          //         builder: (ctx, authResultSnapshot) =>
+          //             authResultSnapshot.connectionState ==
+          //                     ConnectionState.waiting
+          //                 ? Center(
+          //                     child: CircularProgressIndicator(),
+          //                   )
+          //                 : LoginSignupScreen(),
+          //       ),
           routes: {
             Dashboard.routeName: (ctx) => Dashboard(),
             ComplaintManagementScreen.routeName: (ctx) =>
@@ -166,7 +166,6 @@ class MyApp extends StatelessWidget {
             ProfilePageScreen.routeName: (ctx) => ProfilePageScreen(),
             RegistrationListScreen.routeName: (ctx) => RegistrationListScreen(),
             RaiseComplainScreen.routeName: (ctx) => RaiseComplainScreen(),
-            DataManagementScreen.routeName: (ctx) => DataManagementScreen(),
             RagistrationDetailsScreen.routeName: (ctx) =>
                 RagistrationDetailsScreen(),
             LoginSignupScreen.routeName: (ctx) => LoginSignupScreen(),

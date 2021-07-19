@@ -1,15 +1,19 @@
 import 'dart:convert';
 import 'dart:async';
 
-import 'package:http/http.dart' as http;
 import 'package:flutter/widgets.dart';
+import 'package:http_interceptor/http_interceptor.dart';
 
+import '../Interceptor/interceptor.dart';
 import '../models/reporting_officer.dart';
 import '../config/env.dart';
 
 class ReportingOfficers with ChangeNotifier {
   final api = Environment.url;
   List<ReportingOfficer> _reportingOfficers = [];
+  final http = InterceptedHttp.build(interceptors: [
+    HttpInterceptor(),
+  ]);
 
   List<ReportingOfficer> get reportingOfficers {
     // Returns the copy of _reportingOfficers
@@ -26,7 +30,6 @@ class ReportingOfficers with ChangeNotifier {
     try {
       final response = await http.post(
         url,
-        headers: {"Content-Type": "application/json"},
         body: json.encode({
           "act": "getreprtngofcr",
           "desigid": desigId,

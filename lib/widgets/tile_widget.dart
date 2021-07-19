@@ -28,8 +28,17 @@ class Tilewidget extends StatelessWidget {
       case "Solved":
         return Text("${LocaleKeys.solved.tr()}",
             style: TextStyle(color: Colors.white));
+      case "Closed":
+        return Text("${LocaleKeys.closed.tr()}",
+            style: TextStyle(color: Colors.white));
       case "Pending":
-        return Text("${LocaleKeys.pending_comp.tr()}",
+        return Text("${LocaleKeys.pending.tr()}",
+            style: TextStyle(color: Colors.white));
+      case "Not acted in 7 Days":
+        return Text("${LocaleKeys.not_acted_in_7_days.tr()}",
+            style: TextStyle(color: Colors.white));
+      case "On-Hold":
+        return Text("${LocaleKeys.on_hold.tr()}",
             style: TextStyle(color: Colors.white));
       default:
         return Text("${LocaleKeys.rejec.tr()}",
@@ -54,7 +63,7 @@ class Tilewidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            width: MediaQuery.of(context).size.width * 0.46,
+            width: MediaQuery.of(context).size.width * 0.53,
             child: Row(
               children: [
                 CircleAvatar(
@@ -70,7 +79,7 @@ class Tilewidget extends StatelessWidget {
             ),
           ),
           Container(
-            width: MediaQuery.of(context).size.width * 0.25,
+            width: MediaQuery.of(context).size.width * 0.21,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

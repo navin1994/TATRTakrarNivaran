@@ -190,7 +190,7 @@ class CodegenLoader extends AssetLoader{
   "raise_complaint": "Raise Complaint",
   "track_it": "Track Complaint",
   "total": "TOTAL",
-  "solved": "Approved",
+  "solved": "Solved",
   "error_while_downloading_updated_app": "Error while downloading updated app.",
   "downloading_updated_app": "Downloading updated version plesae wait...",
   "history": "View remarks",
@@ -207,7 +207,9 @@ class CodegenLoader extends AssetLoader{
   "back": "Back",
   "solve": "Solve",
   "do_you_want_to_solve": "Do you want to solve the complaint?",
-  "no_remarks_available": "No Remarks Available"
+  "no_remarks_available": "No Remarks Available",
+  "not_acted_in_7_days": "Not acted in 7 Days",
+  "comments_not_available": "Comments Not Available"
 };
 static const Map<String,dynamic> mr_IN = {
   "login": "लॉगिन",
@@ -402,7 +404,9 @@ static const Map<String,dynamic> mr_IN = {
   "back": "मागे",
   "solve": "निराकरण करा",
   "do_you_want_to_solve": "आपण तक्रार सोडवू इच्छिता?",
-  "no_remarks_available": "टिप्पण्या उपलब्ध नाहीत"
+  "no_remarks_available": "टिप्पण्या उपलब्ध नाहीत",
+  "not_acted_in_7_days": "७ दिवसांत कार्य न केलेले",
+  "comments_not_available": "टिप्पण्या उपलब्ध नाहीत"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"en_US": en_US, "mr_IN": mr_IN};
 }

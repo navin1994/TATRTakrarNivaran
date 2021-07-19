@@ -8,6 +8,7 @@ import 'package:swipedetector/swipedetector.dart';
 import '../translations/locale_keys.g.dart';
 import '../models/profile.dart';
 import '../widgets/app_drawer.dart';
+import '../widgets/session_alert.dart';
 import '../config/palette.dart';
 import '../widgets/form_field.dart' as padding;
 import '../widgets/change_password.dart';
@@ -68,12 +69,19 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
         // Set false to hide circular progress indicator data fetched from server
         _isLoading = false;
       });
-      if (resp['Result'] != "OK") {
+      if (resp['Result'] == "NOK") {
         // Show message if any error occurs while getting user profile details
         SweetAlertV2.show(context,
             title: '${LocaleKeys.svd.tr()}!',
             subtitle: resp['Msg'],
             style: SweetAlertV2Style.success);
+      } else if (resp['Result'] == "SESS") {
+        return showDialog(
+          context: context,
+          barrierDismissible: false,
+          barrierColor: Colors.black45,
+          builder: (context) => SessionAlert(resp['Msg']),
+        );
       }
     } catch (error) {
       if (error != null) {
@@ -128,7 +136,14 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
             title: "${LocaleKeys.svd.tr()}!",
             subtitle: respo['Msg'],
             style: SweetAlertV2Style.success);
-      } else {
+      } else if (respo['Result'] == "SESS") {
+        return showDialog(
+          context: context,
+          barrierDismissible: false,
+          barrierColor: Colors.black45,
+          builder: (context) => SessionAlert(respo['Msg']),
+        );
+      } else if (respo['Result'] == "NOK") {
 //  Show message if any error occures while updating the profile
         SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),
@@ -181,8 +196,7 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
   @override
   Widget build(BuildContext context) {
     // Get fetched user profile data from Auth provder class
-    final Profile profile =
-        Provider.of<Auth>(context, listen: false).userProfile;
+    final Profile profile = Provider.of<Auth>(context).userProfile;
     Widget _heading(String heading) {
       return Container(
         width: MediaQuery.of(context).size.width * 0.80, //80% of width,
@@ -208,18 +222,6 @@ class _ProfilePageScreenState extends State<ProfilePageScreen> {
                 ? Text(LocaleKeys.cancel.tr())
                 : Text(LocaleKeys.edit.tr()),
           ),
-          // if (!_isEditable)
-          // Button to toggle between profile form fields and profile details
-          // ElevatedButton.icon(
-          //   style: ElevatedButton.styleFrom(
-          //     elevation: 12,
-          //     primary: , // background
-          //     onPrimary: Colors.white, // foreground
-          //   ),
-          //   onPressed: _toggleEdit,
-          //   icon: ,
-          //   label: ,
-          // ),
         ]),
       );
     }

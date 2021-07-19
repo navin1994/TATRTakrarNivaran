@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:sweetalertv2/sweetalertv2.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+import '../widgets/session_alert.dart';
 import '../translations/locale_keys.g.dart';
 import '../providers/auth.dart';
 
@@ -54,7 +55,14 @@ class _ChangePasswordState extends State<ChangePassword> {
             title: "${LocaleKeys.updated.tr()}!",
             subtitle: respo['Msg'],
             style: SweetAlertV2Style.success);
-      } else {
+      } else if (respo['Result'] == "SESS") {
+        return showDialog(
+          context: context,
+          barrierDismissible: false,
+          barrierColor: Colors.black45,
+          builder: (context) => SessionAlert(respo['Msg']),
+        );
+      } else if (respo['Result'] == "NOK") {
         SweetAlertV2.show(context,
             title: LocaleKeys.error.tr(),
             subtitle: respo['Msg'],
