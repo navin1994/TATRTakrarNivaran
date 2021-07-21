@@ -23,7 +23,6 @@ class HttpInterceptor implements InterceptorContract {
 
   @override
   Future<ResponseData> interceptResponse({@required ResponseData data}) async {
-    print("Response From Server : ==> ${data.body}");
     return data;
   }
 

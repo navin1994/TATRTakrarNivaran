@@ -196,5 +196,11 @@ abstract class  LocaleKeys {
   static const no_remarks_available = 'no_remarks_available';
   static const not_acted_in_7_days = 'not_acted_in_7_days';
   static const comments_not_available = 'comments_not_available';
+  static const do_you_really_want_to_exit = 'do_you_really_want_to_exit';
+  static const under_me = 'under_me';
+  static const total_users_under = 'total_users_under';
+  static const error_while_getting_my_complaint_deails = 'error_while_getting_my_complaint_deails';
+  static const error_while_getting_under_my_authority_complaint = 'error_while_getting_under_my_authority_complaint';
+  static const error_while_getting_assigned_to_me_complaint = 'error_while_getting_assigned_to_me_complaint';
 
 }

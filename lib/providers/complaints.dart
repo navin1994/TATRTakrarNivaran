@@ -17,7 +17,10 @@ class Complaints with ChangeNotifier {
   final String api = Environment.url;
   List<Complaint> _complaints = [];
   Complaint _complaint = Complaint();
-  List<ComplaintSummary> _complaintSummary = [];
+  List<ComplaintSummary> _underMyAuthority = [];
+  List<ComplaintSummary> _assignedToMe = [];
+  List<ComplaintSummary> _myComplaints = [];
+  int _reportingCount = 0;
   List<Remark> _remarks = [];
   List<Comment> _comments = [];
   final http = InterceptedHttp.build(interceptors: [
@@ -45,9 +48,23 @@ class Complaints with ChangeNotifier {
     return _complaint;
   }
 
-  List<ComplaintSummary> get complaintSummary {
-    // returns the complaint summary to display on dashboard
-    return _complaintSummary;
+  List<ComplaintSummary> get underMyAuthority {
+    // returns the underMyAuthority complaint summary to display on dashboard
+    return [..._underMyAuthority];
+  }
+
+  List<ComplaintSummary> get assignedToMe {
+    // returns the assignedToMe complaint summary to display on dashboard
+    return [..._assignedToMe];
+  }
+
+  List<ComplaintSummary> get myComplaints {
+    // returns the myComplaints complaint summary to display on dashboard
+    return [..._myComplaints];
+  }
+
+  int get reportingUsers {
+    return _reportingCount;
   }
 
 // Method to find the complaint by it's id
@@ -163,7 +180,10 @@ class Complaints with ChangeNotifier {
   Future getComplaintSummary() async {
     var url = Uri.parse("$api/userapp/cmplntsmryrvc");
     Map<String, dynamic> sResult = {};
-    List<ComplaintSummary> loadedSummary = [];
+    List<ComplaintSummary> loadedUnderYouSummary = [];
+    List<ComplaintSummary> loadedAsignToMeSummary = [];
+    List<ComplaintSummary> loadedMyCmplSummary = [];
+    int userUnder = 0;
     try {
       final resp = await http.post(url,
           // headers: {"Content-Type": "application/json"},
@@ -178,8 +198,10 @@ class Complaints with ChangeNotifier {
       final result = json.decode(resp.body);
       sResult = result;
       if (result['Result'] == "OK") {
-        final summary = result['Records'] as List<dynamic>;
-        loadedSummary = summary
+        userUnder = result['Record'] as int;
+        _reportingCount = userUnder;
+        final underYou = result['Records'] as List<dynamic>;
+        loadedUnderYouSummary = underYou
             .map((summ) => ComplaintSummary(
                 value: summ['value'],
                 text: summ['text'],
@@ -187,12 +209,34 @@ class Complaints with ChangeNotifier {
                 extra: summ['extra'],
                 extrainfo: summ['extrainfo']))
             .toList();
-
-        _complaintSummary = loadedSummary;
+        _underMyAuthority = loadedUnderYouSummary;
+        final assignedYou = result['data'] as List<dynamic>;
+        loadedAsignToMeSummary = assignedYou
+            .map((summ) => ComplaintSummary(
+                value: summ['value'],
+                text: summ['text'],
+                no: summ['no'],
+                extra: summ['extra'],
+                extrainfo: summ['extrainfo']))
+            .toList();
+        _assignedToMe = loadedAsignToMeSummary;
+        final myCmpl = result['data1'] as List<dynamic>;
+        loadedMyCmplSummary = myCmpl
+            .map((summ) => ComplaintSummary(
+                value: summ['value'],
+                text: summ['text'],
+                no: summ['no'],
+                extra: summ['extra'],
+                extrainfo: summ['extrainfo']))
+            .toList();
+        _myComplaints = loadedMyCmplSummary;
         notifyListeners();
       }
     } catch (error) {
-      _complaintSummary = loadedSummary;
+      _reportingCount = userUnder;
+      _underMyAuthority = loadedUnderYouSummary;
+      _assignedToMe = loadedAsignToMeSummary;
+      _myComplaints = loadedMyCmplSummary;
       notifyListeners();
       throw error;
     }

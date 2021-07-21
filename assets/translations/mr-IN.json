@@ -192,6 +192,12 @@
   "solve": "निराकरण करा",
   "do_you_want_to_solve": "आपण तक्रार सोडवू इच्छिता?",
   "no_remarks_available": "टिप्पण्या उपलब्ध नाहीत",
-  "not_acted_in_7_days": "७ दिवसांत कार्य न केलेले",
-  "comments_not_available": "टिप्पण्या उपलब्ध नाहीत"
+  "not_acted_in_7_days": "७ दिवसात न केलेल्या",
+  "comments_not_available": "टिप्पण्या उपलब्ध नाहीत",
+  "do_you_really_want_to_exit": "आपण अनुप्रयोगातून बाहेर पडू इच्छिता?",
+  "under_me": "माझ्या अधिकाराखाली",
+  "total_users_under": "अंतर्गत एकूण वापरकर्ते",
+  "error_while_getting_my_complaint_deails": "माझ्या तक्रारींचा तपशील मिळवताना त्रुटी.",
+  "error_while_getting_under_my_authority_complaint": "माझ्या प्राधिकरणा अंतर्गत तक्रारींचा तपशील मिळवताना त्रुटी.",
+  "error_while_getting_assigned_to_me_complaint": "मला नियुक्त केलेल्या तक्रारींचा तपशील घेताना त्रुटी."
 }

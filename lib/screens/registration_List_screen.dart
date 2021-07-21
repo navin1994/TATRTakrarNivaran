@@ -20,6 +20,8 @@ class RegistrationListScreen extends StatefulWidget {
 }
 
 class _RegistrationListScreenState extends State<RegistrationListScreen> {
+  // _init is used to control the didChangeDependencies() methods executions
+  var _init = true;
   FSBStatus drawerStatus;
   final String _listType = "users";
   // Default criteria is pending
@@ -36,9 +38,7 @@ class _RegistrationListScreenState extends State<RegistrationListScreen> {
   // Fetch data based on fliter value selected according to index
   // it's sequence should be matched with _filters List
   void _filterData(index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    _selectedIndex = index;
     switch (_selectedIndex) {
       case 0:
         setState(() {
@@ -110,6 +110,19 @@ class _RegistrationListScreenState extends State<RegistrationListScreen> {
           ? FSBStatus.FSB_CLOSE
           : FSBStatus.FSB_OPEN;
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (!_init) {
+      return;
+    }
+    final filterIndex = ModalRoute.of(context).settings.arguments as int;
+    if (filterIndex != null) {
+      _filterData(filterIndex);
+    }
+    _init = false;
+    super.didChangeDependencies();
   }
 
   @override
