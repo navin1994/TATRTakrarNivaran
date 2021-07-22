@@ -27,65 +27,71 @@ class ComplaintsCount extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.white),
-      ),
+      // decoration: BoxDecoration(
+      //   border: Border.all(color: Colors.white),
+      // ),
       height: 300,
       child: Column(
         children: [
-          FittedBox(
-            child: Text(
-              "$title",
-              style: TextStyle(color: Colors.white, fontSize: 30),
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              FittedBox(
+                child: Text(
+                  "$title",
+                  textAlign: TextAlign.left,
+                  style: TextStyle(color: Colors.white, fontSize: 30),
+                ),
+              ),
+            ],
           ),
           SizedBox(height: 10),
           Expanded(
             child: GridView.count(
               crossAxisCount: 3,
               padding: const EdgeInsets.all(5),
-              crossAxisSpacing: 15,
-              mainAxisSpacing: 15,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
               children: [
                 ComplaintTypeCount(
                   LocaleKeys.total.tr(),
                   data[0].value,
-                  Colors.yellow,
+                  [Colors.green, Colors.yellow],
                   7,
                   _inclUnder,
                 ),
                 ComplaintTypeCount(
                   LocaleKeys.closed.tr(),
                   data[2].value,
-                  Colors.green[400],
+                  [Colors.blue, Colors.lightBlue],
                   4,
                   _inclUnder,
                 ),
                 ComplaintTypeCount(
                   LocaleKeys.solved.tr(),
                   data[1].value,
-                  Colors.cyan[300],
+                  [Colors.orangeAccent[700], Colors.pinkAccent[400]],
                   3,
                   _inclUnder,
                 ),
                 ComplaintTypeCount(
                   LocaleKeys.pending.tr(),
                   data[3].value,
-                  Colors.red,
+                  [Colors.pink[300], Colors.pink[100]],
                   2,
                   _inclUnder,
                 ),
                 ComplaintTypeCount(
                   LocaleKeys.on_hold.tr(),
                   data[5].value,
-                  Colors.grey[400],
+                  [Colors.cyanAccent[200], Colors.blueGrey[400]],
                   5,
                   _inclUnder,
                 ),
                 ComplaintTypeCount(
                   LocaleKeys.not_acted_in_7_days.tr(),
                   data[4].value,
-                  Colors.cyan[500],
+                  [Colors.lightGreen[400], Colors.pink[200]],
                   6,
                   _inclUnder,
                 )

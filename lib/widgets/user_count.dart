@@ -16,17 +16,28 @@ class UserCount extends StatelessWidget {
       splashColor: Colors.pink,
       borderRadius: BorderRadius.circular(15),
       child: Container(
-        margin: EdgeInsets.all(15),
-        height: 100,
-        width: 150,
-        padding: const EdgeInsets.all(15),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            FittedBox(
-              child: Text(
-                "$count",
-                style: TextStyle(color: Colors.white, fontSize: 24),
+            Container(
+              height: 100,
+              width: 100,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: LinearGradient(
+                  colors: [Colors.pink, Colors.blue],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+              padding: EdgeInsets.all(10),
+              child: FittedBox(
+                fit: BoxFit.none,
+                child: Text(
+                  "$count",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white, fontSize: 24),
+                ),
               ),
             ),
             FittedBox(
@@ -36,14 +47,6 @@ class UserCount extends StatelessWidget {
               ),
             ),
           ],
-        ),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.pink.withOpacity(0.7), Colors.blue],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(15),
         ),
       ),
     );

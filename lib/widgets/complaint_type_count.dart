@@ -5,7 +5,7 @@ import '../screens/complaint_management_screen.dart';
 
 class ComplaintTypeCount extends StatelessWidget {
   final String title;
-  final Color color;
+  final List<Color> color;
   final String count;
   final int indexFilter;
   final String inclUnder;
@@ -28,15 +28,28 @@ class ComplaintTypeCount extends StatelessWidget {
       splashColor: Theme.of(context).primaryColor,
       borderRadius: BorderRadius.circular(15),
       child: Container(
-        padding: const EdgeInsets.all(15),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            FittedBox(
-              child: Text(
-                count,
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white, fontSize: 25),
+            Container(
+              height: 80,
+              width: 80,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: LinearGradient(
+                  colors: color,
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+              padding: EdgeInsets.all(10),
+              child: FittedBox(
+                fit: BoxFit.none,
+                child: Text(
+                  count,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
               ),
             ),
             Text(
@@ -45,10 +58,6 @@ class ComplaintTypeCount extends StatelessWidget {
               style: TextStyle(color: Colors.white, fontSize: 14),
             ),
           ],
-        ),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(15),
         ),
       ),
     );

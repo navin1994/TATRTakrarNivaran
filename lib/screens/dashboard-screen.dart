@@ -174,119 +174,123 @@ class _DashboardState extends State<Dashboard> {
                     ? Center(
                         child: CircularProgressIndicator(),
                       )
-                    : SingleChildScrollView(
-                        physics: BouncingScrollPhysics(),
-                        child: Container(
-                          child: Consumer<Complaints>(
-                            builder: (ctx, cmpl, _) => Column(
-                              children: [
-                                SizedBox(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                    : Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              height: MediaQuery.of(context).size.height - 130,
+                              child: Consumer<Complaints>(
+                                builder: (ctx, cmpl, _) =>
+                                    SingleChildScrollView(
+                                  child: Column(
                                     children: [
-                                      // Button to navigate to the raise complaint screen
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          textStyle:
-                                              const TextStyle(fontSize: 14),
-                                          primary: Colors
-                                              .deepOrange[900], // background
-                                          onPrimary: Colors.white, // foreground
+                                      if (cmpl.reportingUsers > 0)
+                                        UserCount(cmpl.reportingUsers),
+                                      if (cmpl.reportingUsers > 0)
+                                        Consumer<Complaints>(
+                                          builder: (ctx, compl, _) => compl
+                                                  .assignedToMe.isEmpty
+                                              ? Center(
+                                                  child: Text(
+                                                    LocaleKeys
+                                                        .error_while_getting_assigned_to_me_complaint
+                                                        .tr(),
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                )
+                                              : ComplaintsCount(
+                                                  LocaleKeys.alloted_to_me.tr(),
+                                                  "AsnToMe",
+                                                  compl.assignedToMe),
                                         ),
-                                        onPressed: () => Navigator.of(context)
-                                            .pushNamed(
-                                                RaiseComplainScreen.routeName),
-                                        child: Text(
-                                            LocaleKeys.raise_complaint.tr()),
-                                      ),
-                                      SizedBox(width: 10),
-                                      // Navigate to the complaint management screen on all complaints in my complaints
-                                      ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          textStyle:
-                                              const TextStyle(fontSize: 14),
-                                          primary:
-                                              Colors.green[900], // background
-                                          onPrimary: Colors.white, // foreground
+                                      if (cmpl.reportingUsers > 0)
+                                        Consumer<Complaints>(
+                                          builder: (ctx, compl, _) => compl
+                                                  .underMyAuthority.isEmpty
+                                              ? Center(
+                                                  child: Text(
+                                                    LocaleKeys
+                                                        .error_while_getting_under_my_authority_complaint
+                                                        .tr(),
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                )
+                                              : ComplaintsCount(
+                                                  LocaleKeys.under_me.tr(),
+                                                  "UndrMe",
+                                                  compl.underMyAuthority),
                                         ),
-                                        onPressed: () => Navigator.of(context)
-                                            .pushNamed(
-                                                ComplaintManagementScreen
-                                                    .routeName,
-                                                arguments: FilterComplaintArgs(
-                                                    indx: 7, srcUnder: "R")),
-                                        child: Text(LocaleKeys.track_it.tr()),
+                                      Consumer<Complaints>(
+                                        builder: (ctx, compl, _) => compl
+                                                .myComplaints.isEmpty
+                                            ? Center(
+                                                child: Text(
+                                                  LocaleKeys
+                                                      .error_while_getting_my_complaint_deails
+                                                      .tr(),
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                              )
+                                            : ComplaintsCount(
+                                                LocaleKeys.my_complaints.tr(),
+                                                "Rsd",
+                                                compl.myComplaints),
                                       ),
                                     ],
                                   ),
                                 ),
-                                if (cmpl.reportingUsers > 0)
-                                  UserCount(cmpl.reportingUsers),
-                                if (cmpl.reportingUsers > 0)
-                                  Consumer<Complaints>(
-                                    builder: (ctx, compl, _) =>
-                                        compl.assignedToMe.isEmpty
-                                            ? Center(
-                                                child: Text(
-                                                  LocaleKeys
-                                                      .error_while_getting_assigned_to_me_complaint
-                                                      .tr(),
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 16,
-                                                  ),
-                                                ),
-                                              )
-                                            : ComplaintsCount(
-                                                LocaleKeys.alloted_to_me.tr(),
-                                                "AsnToMe",
-                                                compl.assignedToMe),
-                                  ),
-                                if (cmpl.reportingUsers > 0)
-                                  Consumer<Complaints>(
-                                    builder: (ctx, compl, _) =>
-                                        compl.underMyAuthority.isEmpty
-                                            ? Center(
-                                                child: Text(
-                                                  LocaleKeys
-                                                      .error_while_getting_under_my_authority_complaint
-                                                      .tr(),
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 16,
-                                                  ),
-                                                ),
-                                              )
-                                            : ComplaintsCount(
-                                                LocaleKeys.under_me.tr(),
-                                                "UndrMe",
-                                                compl.underMyAuthority),
-                                  ),
-                                Consumer<Complaints>(
-                                  builder: (ctx, compl, _) =>
-                                      compl.myComplaints.isEmpty
-                                          ? Center(
-                                              child: Text(
-                                                LocaleKeys
-                                                    .error_while_getting_my_complaint_deails
-                                                    .tr(),
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 16,
-                                                ),
-                                              ),
-                                            )
-                                          : ComplaintsCount(
-                                              LocaleKeys.my_complaints.tr(),
-                                              "Rsd",
-                                              compl.myComplaints),
-                                ),
-                              ],
+                              ),
                             ),
-                          ),
+                            SizedBox(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  // Button to navigate to the raise complaint screen
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      textStyle: const TextStyle(fontSize: 14),
+                                      primary:
+                                          Colors.deepOrange[900], // background
+                                      onPrimary: Colors.white, // foreground
+                                    ),
+                                    onPressed: () => Navigator.of(context)
+                                        .pushNamed(
+                                            RaiseComplainScreen.routeName),
+                                    child:
+                                        Text(LocaleKeys.raise_complaint.tr()),
+                                  ),
+                                  SizedBox(width: 10),
+                                  // Navigate to the complaint management screen on all complaints in my complaints
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      textStyle: const TextStyle(fontSize: 14),
+                                      primary: Colors.green[900], // background
+                                      onPrimary: Colors.white, // foreground
+                                    ),
+                                    onPressed: () => Navigator.of(context)
+                                        .pushNamed(
+                                            ComplaintManagementScreen.routeName,
+                                            arguments: FilterComplaintArgs(
+                                                indx: 7, srcUnder: "R")),
+                                    child: Text(LocaleKeys.track_it.tr()),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ),
               ),
