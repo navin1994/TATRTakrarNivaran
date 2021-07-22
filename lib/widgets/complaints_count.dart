@@ -48,6 +48,7 @@ class ComplaintsCount extends StatelessWidget {
           SizedBox(height: 10),
           Expanded(
             child: GridView.count(
+              physics: const NeverScrollableScrollPhysics(),
               crossAxisCount: 3,
               padding: const EdgeInsets.all(5),
               crossAxisSpacing: 10,

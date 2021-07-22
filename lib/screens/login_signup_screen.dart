@@ -462,6 +462,26 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
     );
   }
 
+  Future<bool> _onBackPressed() {
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(LocaleKeys.do_you_really_want_to_exit.tr()),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(LocaleKeys.no.tr())),
+          TextButton(
+              onPressed: () {
+                Provider.of<Auth>(context, listen: false).logout();
+                Navigator.of(context).pop(true);
+              },
+              child: Text(LocaleKeys.yes.tr())),
+        ],
+      ),
+    );
+  }
+
 // call dispose() method to clear memory occupied vaiables
   @override
   void dispose() {
@@ -476,238 +496,243 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Palette.backgroundColor,
-      body: _isUpdating
-          ?
-          // To show app update message and update the app
-          Center(
-              child: Container(
-                width: MediaQuery.of(context).size.width * .80,
-                height: MediaQuery.of(context).size.height * .30,
-                child: Card(
-                  elevation: 12,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text("${updateResp['Msg']}"),
-                      if (!_isDownloading)
-                        Flexible(
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.blueAccent, // background
-                              onPrimary: Colors.white, // foreground
-                              textStyle: TextStyle(fontSize: 18),
-                            ),
-                            onPressed: () => downloadUpdate(updateResp['rtyp']),
-                            child: Text(LocaleKeys.update.tr()),
-                          ),
-                        ),
-                      if (_isDownloading)
-                        Center(
-                          child: Container(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                CircularProgressIndicator(),
-                                Text(
-                                  "${LocaleKeys.downloading_updated_app.tr()}",
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
+        backgroundColor: Palette.backgroundColor,
+        body: _isUpdating
+            ?
+            // To show app update message and update the app
+            Center(
+                child: Container(
+                  width: MediaQuery.of(context).size.width * .80,
+                  height: MediaQuery.of(context).size.height * .30,
+                  child: Card(
+                    elevation: 12,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text("${updateResp['Msg']}"),
+                        if (!_isDownloading)
+                          Flexible(
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.blueAccent, // background
+                                onPrimary: Colors.white, // foreground
+                                textStyle: TextStyle(fontSize: 18),
+                              ),
+                              onPressed: () =>
+                                  downloadUpdate(updateResp['rtyp']),
+                              child: Text(LocaleKeys.update.tr()),
                             ),
                           ),
-                        )
-                    ],
-                  ),
-                ),
-              ),
-            )
-          :
-          //  Show this section if app version is correct
-          Stack(
-              children: [
-                Positioned(
-                  top: 0,
-                  right: 0,
-                  left: 0,
-                  child: Container(
-                    height: MediaQuery.of(context).size.height,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                          colorFilter: ColorFilter.mode(
-                              Colors.black.withOpacity(0.5), BlendMode.darken),
-                          // Set background image to the screen
-                          image: AssetImage("assets/images/bg3.jpg"),
-                          fit: BoxFit.fill),
-                    ),
-                    child: Container(
-                      padding: EdgeInsets.only(
-                          top: !isSignupScreen ? 125 : 30, left: 20),
-                      //color: Color(0xFF3b5999).withOpacity(.50),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          RichText(
-                            text: TextSpan(
-                                // text: "Welcome to",
-                                style: TextStyle(
-                                  fontSize: 25,
-                                  letterSpacing: 2,
-                                  color: Colors.yellow[700],
-                                ),
+                        if (_isDownloading)
+                          Center(
+                            child: Container(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  TextSpan(
-                                    text: isSignupScreen
-                                        ? "ताडोबा संवाद नोंदणी,"
-                                        : "ताडोबा संवाद लॉगिन,",
-                                    style: TextStyle(
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.yellow[700],
-                                    ),
-                                  )
-                                ]),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            isSignupScreen
-                                ? LocaleKeys.signup_to_continue.tr()
-                                : LocaleKeys.signin_to_continue.tr(),
-                            style: TextStyle(
-                              letterSpacing: 1,
-                              color: Colors.white,
+                                  CircularProgressIndicator(),
+                                  Text(
+                                    "${LocaleKeys.downloading_updated_app.tr()}",
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
                             ),
                           )
-                        ],
-                      ),
+                      ],
                     ),
                   ),
                 ),
-                if (!isSignupScreen)
-                  // Position the logo of TATR
+              )
+            :
+            //  Show this section if app version is correct
+            Stack(
+                children: [
                   Positioned(
-                    top: 23,
-                    left: 10,
+                    top: 0,
+                    right: 0,
+                    left: 0,
                     child: Container(
-                      height: 100,
-                      width: 100,
+                      height: MediaQuery.of(context).size.height,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                            image: AssetImage("assets/images/logo.png"),
+                            colorFilter: ColorFilter.mode(
+                                Colors.black.withOpacity(0.5),
+                                BlendMode.darken),
+                            // Set background image to the screen
+                            image: AssetImage("assets/images/bg3.jpg"),
                             fit: BoxFit.fill),
                       ),
-                    ),
-                  ),
-                // Trick to add the shadow for the submit button
-                if (!isSignupScreen) buildBottomHalfContainer(true),
-                //Main Contianer for Login and Signup
-                AnimatedPositioned(
-                  duration: Duration(milliseconds: 500),
-                  curve: Curves.bounceInOut,
-                  top: isSignupScreen ? 130 : 210,
-                  child: AnimatedContainer(
-                    duration: Duration(milliseconds: 500),
-                    curve: Curves.bounceInOut,
-                    height: isSignupScreen
-                        ? MediaQuery.of(context).size.height - 140
-                        : 310,
-                    padding: EdgeInsets.all(20),
-                    width: MediaQuery.of(context).size.width - 40,
-                    margin: EdgeInsets.symmetric(horizontal: 20),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.black.withOpacity(0.3),
-                              blurRadius: 15,
-                              spreadRadius: 5),
-                        ]),
-                    child: SingleChildScrollView(
-                      physics: BouncingScrollPhysics(),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              // Detect the tap on Login text
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    isSignupScreen = false;
-                                  });
-                                },
-                                child: Column(
+                      child: Container(
+                        padding: EdgeInsets.only(
+                            top: !isSignupScreen ? 125 : 30, left: 20),
+                        //color: Color(0xFF3b5999).withOpacity(.50),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            RichText(
+                              text: TextSpan(
+                                  // text: "Welcome to",
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                    letterSpacing: 2,
+                                    color: Colors.yellow[700],
+                                  ),
                                   children: [
-                                    Text(
-                                      LocaleKeys.login.tr(),
+                                    TextSpan(
+                                      text: isSignupScreen
+                                          ? "ताडोबा संवाद नोंदणी,"
+                                          : "ताडोबा संवाद लॉगिन,",
                                       style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: !isSignupScreen
-                                              ? Palette.activeColor
-                                              : Palette.textColor1),
-                                    ),
-                                    if (!isSignupScreen)
-                                      Container(
-                                        margin: EdgeInsets.only(top: 3),
-                                        height: 2,
-                                        width: 55,
-                                        color: Colors.orange,
-                                      )
-                                  ],
-                                ),
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.yellow[700],
+                                      ),
+                                    )
+                                  ]),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              isSignupScreen
+                                  ? LocaleKeys.signup_to_continue.tr()
+                                  : LocaleKeys.signin_to_continue.tr(),
+                              style: TextStyle(
+                                letterSpacing: 1,
+                                color: Colors.white,
                               ),
-                              // Detect the tap on Signup text
-                              GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    isSignupScreen = true;
-                                  });
-                                },
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      LocaleKeys.signup.tr(),
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: isSignupScreen
-                                              ? Palette.activeColor
-                                              : Palette.textColor1),
-                                    ).tr(),
-                                    if (isSignupScreen)
-                                      Container(
-                                        margin: EdgeInsets.only(top: 3),
-                                        height: 2,
-                                        width: 55,
-                                        color: Colors.orange,
-                                      )
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                          if (isSignupScreen)
-                            _isLoading
-                                ? Center(
-                                    child: CircularProgressIndicator(),
-                                  )
-                                : buildSignupSection(),
-                          if (!isSignupScreen) buildSigninSection()
-                        ],
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                // Trick to add the submit button
-                if (!isSignupScreen) buildBottomHalfContainer(false),
-                // Bottom buttons
-              ],
-            ),
+                  if (!isSignupScreen)
+                    // Position the logo of TATR
+                    Positioned(
+                      top: 23,
+                      left: 10,
+                      child: Container(
+                        height: 100,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage("assets/images/logo.png"),
+                              fit: BoxFit.fill),
+                        ),
+                      ),
+                    ),
+                  // Trick to add the shadow for the submit button
+                  if (!isSignupScreen) buildBottomHalfContainer(true),
+                  //Main Contianer for Login and Signup
+                  AnimatedPositioned(
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.bounceInOut,
+                    top: isSignupScreen ? 130 : 210,
+                    child: AnimatedContainer(
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.bounceInOut,
+                      height: isSignupScreen
+                          ? MediaQuery.of(context).size.height - 140
+                          : 310,
+                      padding: EdgeInsets.all(20),
+                      width: MediaQuery.of(context).size.width - 40,
+                      margin: EdgeInsets.symmetric(horizontal: 20),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black.withOpacity(0.3),
+                                blurRadius: 15,
+                                spreadRadius: 5),
+                          ]),
+                      child: SingleChildScrollView(
+                        physics: BouncingScrollPhysics(),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                // Detect the tap on Login text
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      isSignupScreen = false;
+                                    });
+                                  },
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        LocaleKeys.login.tr(),
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: !isSignupScreen
+                                                ? Palette.activeColor
+                                                : Palette.textColor1),
+                                      ),
+                                      if (!isSignupScreen)
+                                        Container(
+                                          margin: EdgeInsets.only(top: 3),
+                                          height: 2,
+                                          width: 55,
+                                          color: Colors.orange,
+                                        )
+                                    ],
+                                  ),
+                                ),
+                                // Detect the tap on Signup text
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      isSignupScreen = true;
+                                    });
+                                  },
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        LocaleKeys.signup.tr(),
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: isSignupScreen
+                                                ? Palette.activeColor
+                                                : Palette.textColor1),
+                                      ).tr(),
+                                      if (isSignupScreen)
+                                        Container(
+                                          margin: EdgeInsets.only(top: 3),
+                                          height: 2,
+                                          width: 55,
+                                          color: Colors.orange,
+                                        )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                            if (isSignupScreen)
+                              _isLoading
+                                  ? Center(
+                                      child: CircularProgressIndicator(),
+                                    )
+                                  : buildSignupSection(),
+                            if (!isSignupScreen) buildSigninSection()
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  // Trick to add the submit button
+                  if (!isSignupScreen) buildBottomHalfContainer(false),
+                  // Bottom buttons
+                ],
+              ),
+      ),
     );
   }
 
