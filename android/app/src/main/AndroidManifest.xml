@@ -4,7 +4,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <application
-        android:label="UAT"
+        android:label="ताडोबा संवाद"
         android:icon="@mipmap/applogo"
         android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true">
