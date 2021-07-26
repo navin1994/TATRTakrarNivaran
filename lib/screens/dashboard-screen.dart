@@ -188,54 +188,11 @@ class _DashboardState extends State<Dashboard> {
                                       if (cmpl.reportingUsers > 0)
                                         UserCount(cmpl.reportingUsers),
                                       if (cmpl.reportingUsers > 0)
-                                        Consumer<Complaints>(
-                                          builder: (ctx, compl, _) => compl
-                                                  .assignedToMe.isEmpty
-                                              ? Center(
-                                                  child: Text(
-                                                    LocaleKeys
-                                                        .error_while_getting_assigned_to_me_complaint
-                                                        .tr(),
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 16,
-                                                    ),
-                                                  ),
-                                                )
-                                              : ComplaintsCount(
-                                                  LocaleKeys.alloted_to_me.tr(),
-                                                  "AsnToMe",
-                                                  compl.assignedToMe),
-                                        ),
-                                      if (cmpl.reportingUsers > 0)
-                                        Consumer<Complaints>(
-                                          builder: (ctx, compl, _) => compl
-                                                  .underMyAuthority.isEmpty
-                                              ? Center(
-                                                  child: Text(
-                                                    LocaleKeys
-                                                        .error_while_getting_under_my_authority_complaint
-                                                        .tr(),
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 16,
-                                                    ),
-                                                  ),
-                                                )
-                                              : ComplaintsCount(
-                                                  LocaleKeys.under_me.tr(),
-                                                  "UndrMe",
-                                                  compl.underMyAuthority),
-                                        ),
-                                      Consumer<Complaints>(
-                                        builder: (ctx, compl, _) => compl
-                                                .myComplaints.isEmpty
+                                        cmpl.assignedToMe.isEmpty
                                             ? Center(
                                                 child: Text(
                                                   LocaleKeys
-                                                      .error_while_getting_my_complaint_deails
+                                                      .error_while_getting_assigned_to_me_complaint
                                                       .tr(),
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
@@ -245,10 +202,44 @@ class _DashboardState extends State<Dashboard> {
                                                 ),
                                               )
                                             : ComplaintsCount(
-                                                LocaleKeys.my_complaints.tr(),
-                                                "Rsd",
-                                                compl.myComplaints),
-                                      ),
+                                                LocaleKeys.alloted_to_me.tr(),
+                                                "AsnToMe",
+                                                cmpl.assignedToMe),
+                                      if (cmpl.reportingUsers > 0)
+                                        cmpl.underMyAuthority.isEmpty
+                                            ? Center(
+                                                child: Text(
+                                                  LocaleKeys
+                                                      .error_while_getting_under_my_authority_complaint
+                                                      .tr(),
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                              )
+                                            : ComplaintsCount(
+                                                LocaleKeys.under_me.tr(),
+                                                "UndrMe",
+                                                cmpl.underMyAuthority),
+                                      cmpl.myComplaints.isEmpty
+                                          ? Center(
+                                              child: Text(
+                                                LocaleKeys
+                                                    .error_while_getting_my_complaint_deails
+                                                    .tr(),
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
+                                            )
+                                          : ComplaintsCount(
+                                              LocaleKeys.my_complaints.tr(),
+                                              "Rsd",
+                                              cmpl.myComplaints),
                                     ],
                                   ),
                                 ),

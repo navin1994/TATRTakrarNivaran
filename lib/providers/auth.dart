@@ -148,7 +148,7 @@ class Auth with ChangeNotifier {
       final response = await http.post(url,
           body: json.encode({
             "version": version,
-            "clntId": "4G0T337M",
+            "clntId": "YKV9BWUK",
           })); // 4G0T337M   prod => YKV9BWUK
       final result = json.decode(response.body);
       // If response is "NOK" means there is version mismatch
@@ -318,7 +318,7 @@ class Auth with ChangeNotifier {
         url,
         body: json.encode(
           {
-            'clntId': "4G0T337M",
+            'clntId': "YKV9BWUK",
             'uLogin': loginData.uLogin,
             'uPwd': loginData.uPwd
           },
