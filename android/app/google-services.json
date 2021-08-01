@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "713602164788",
-    "project_id": "sparshtesting-44a91",
-    "storage_bucket": "sparshtesting-44a91.appspot.com"
+    "project_number": "211791486345",
+    "project_id": "forcomplmanage",
+    "storage_bucket": "forcomplmanage.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:713602164788:android:43d69dbe98e89a5ee5c261",
+        "mobilesdk_app_id": "1:211791486345:android:9c171724bfb7ad928f5558",
         "android_client_info": {
-          "package_name": "com.sparsh.app"
+          "package_name": "com.sparsh.cmplmange"
         }
       },
       "oauth_client": [
         {
-          "client_id": "713602164788-mkbfr4s5noqop3m1iqolfba4bcj7d5cp.apps.googleusercontent.com",
+          "client_id": "211791486345-kgu6l43s8c8qcqcscg0mqtm29u30ej2p.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAE6-EVAJsjeOKa18mD-Rb4kz4YFcGL3fo"
+          "current_key": "AIzaSyDVsm2mj5veNwG-E3LRPB209OkokCsBrY4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "713602164788-mkbfr4s5noqop3m1iqolfba4bcj7d5cp.apps.googleusercontent.com",
+              "client_id": "211791486345-kgu6l43s8c8qcqcscg0mqtm29u30ej2p.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
