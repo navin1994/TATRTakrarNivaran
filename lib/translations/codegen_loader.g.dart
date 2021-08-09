@@ -194,7 +194,7 @@ class CodegenLoader extends AssetLoader{
   "error_while_downloading_updated_app": "Error while downloading updated app.",
   "downloading_updated_app": "Downloading updated version plesae wait...",
   "history": "View remarks",
-  "transfered": "Transfered",
+  "transfered": "Transferred",
   "please_enter_remarks": "Please enter remarks",
   "forgot_password": "Forgot Password?",
   "rejec": "Rejected",
