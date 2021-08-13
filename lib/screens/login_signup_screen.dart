@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:open_file/open_file.dart';
@@ -100,6 +101,18 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
   ReportingOfficer selRprtOfcr;
   // Flag to manage displaying of login or regitration fields/widgets
   bool isSignupScreen = false;
+
+  static const platform = MethodChannel('checkAppInstalled');
+
+  Future<void> _uninstallApplicationByPackageName() async {
+    try {
+      await platform
+          .invokeMethod("uninstallPackage", {'packageName': "com.sparsh.app"});
+    } on PlatformException catch (e) {
+      // To do here on exception
+    }
+  }
+
 // Method to download the updated version app
   Future<void> downloadUpdate(String url) async {
     try {
@@ -155,6 +168,12 @@ class _LoginSignupScreenState extends State<LoginSignupScreen>
           subtitle: LocaleKeys.error_while_checking_app_version.tr(),
           style: SweetAlertV2Style.error);
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _uninstallApplicationByPackageName();
   }
 
 // didChangeAppLifecycleState() to observe the Login and signup screen widget lifecycle
